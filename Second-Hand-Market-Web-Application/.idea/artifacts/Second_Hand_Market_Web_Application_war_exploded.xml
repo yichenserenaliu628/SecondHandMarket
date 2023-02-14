@@ -1,0 +1,35 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="Second-Hand-Market-Web-Application:war exploded">
+    <output-path>$PROJECT_DIR$/target/Second-Hand-Market-Web-Application-1.0-SNAPSHOT</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <exploded>true</exploded>
+        <module>Second-Hand-Market-Web-Application</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="root">
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="Second-Hand-Market-Web-Application" />
+        </element>
+        <element id="directory" name="lib">
+          <element id="library" level="project" name="Maven: org.springframework:spring-webmvc:5.3.9" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-aop:5.3.9" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-beans:5.3.9" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-context:5.3.9" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-core:5.3.9" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-jcl:5.3.9" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-expression:5.3.9" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-web:5.3.9" />
+          <element id="library" level="project" name="Maven: org.json:json:20200518" />
+          <element id="library" level="project" name="Maven: commons-io:commons-io:2.7" />
+        </element>
+      </element>
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/target/Second-Hand-Market-Web-Application-1.0-SNAPSHOT/META-INF/MANIFEST.MF" />
+      </element>
+      <element id="javaee-facet-resources" facet="Second-Hand-Market-Web-Application/web/Web" />
+    </root>
+  </artifact>
+</component>
