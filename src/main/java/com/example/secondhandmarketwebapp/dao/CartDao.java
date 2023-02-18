@@ -2,7 +2,7 @@ package com.example.secondhandmarketwebapp.dao;
 
 
 import com.example.secondhandmarketwebapp.entity.Cart;
-import com.example.secondhandmarketwebapp.entity.ListedItems;
+import com.example.secondhandmarketwebapp.entity.OrderItem;
 import org.hibernate.SessionFactory;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,13 +17,13 @@ public class CartDao {
         Session session = null;
         try {
             session = sessionFactory.openSession();
-            ListedItems cartItem = session.get(ListedItems.class, itemId);
-            /*Cart cart = cartItem.getCart();
+            OrderItem cartItem = session.get(OrderItem.class, itemId);
+            Cart cart = cartItem.getCart();
             cart.getOrderItemList().remove(cartItem);
 
             session.beginTransaction();
             session.delete(cartItem);
-            session.getTransaction().commit();*/
+            session.getTransaction().commit();
 
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -39,9 +39,9 @@ public class CartDao {
     }
 
     public void removeAllCartItems(Cart cart) {
-/*        for (ListedItems item : cart.getListItem()) {
+        for (OrderItem item : cart.getOrderItemList()) {
             removeCartItem(item.getId());
-        }*/
+        }
     }
 }
 

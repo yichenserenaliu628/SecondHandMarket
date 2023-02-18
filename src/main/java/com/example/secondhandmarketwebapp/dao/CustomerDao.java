@@ -1,16 +1,16 @@
 package com.example.secondhandmarketwebapp.dao;
 
 
-import com.example.secondhandmarketwebapp.entity.Customer;
+import com.example.secondhandmarketwebapp.entity.User;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public class CustomerDao {
-    public void signUp(Customer customer) {
+    public void signUp(User customer) {
     }
 
-    public Customer getCustomer(String email) {
-        return new Customer();
+    public User getCustomer(String email) {
+        return new User();
     }
 
 }
