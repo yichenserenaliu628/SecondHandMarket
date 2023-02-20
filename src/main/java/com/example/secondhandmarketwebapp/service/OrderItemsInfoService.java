@@ -1,4 +1,4 @@
 package com.example.secondhandmarketwebapp.service;
 
-public class ListedItemsInfoService {
+public class OrderItemsInfoService {
 }
