@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="secondHandMarketWebApp:war">
+    <output-path>$PROJECT_DIR$/SecondHandMarket/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>secondHandMarketWebApp</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="secondHandMarketWebApp-1.0-SNAPSHOT.war">
+      <element id="artifact" artifact-name="secondHandMarketWebApp:war exploded" />
+    </root>
+  </artifact>
+</component>
