@@ -36,7 +36,6 @@ public class UserDao {
         }
     }
 
-    // https://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html
     public User getCustomer(String email) {
         User user = null;
         try (Session session = sessionFactory.openSession()) {

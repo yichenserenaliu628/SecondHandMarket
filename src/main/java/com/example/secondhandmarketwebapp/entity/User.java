@@ -21,9 +21,9 @@ public class User implements Serializable {
 
 
 	private String imageUrl;
-	@OneToMany(mappedBy = "user",  cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "user",  cascade = CascadeType.ALL)
 	private List<Post> postList;
-	@OneToMany(mappedBy = "user",  cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 	private List<Review> reviewList;
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(unique = true)
