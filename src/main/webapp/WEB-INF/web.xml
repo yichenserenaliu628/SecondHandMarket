@@ -4,15 +4,15 @@
 
 <web-app>
 
-    <display-name>OnlineOder WebSite</display-name>
+    <display-name>SecondHandMarketWebApp WebSite</display-name>
     <servlet>
-        <servlet-name>onlineOrder</servlet-name>
+        <servlet-name>SecondHandMarketWebApp</servlet-name>
         <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
         <load-on-startup>0</load-on-startup>
     </servlet>
 
     <servlet-mapping>
-        <servlet-name>onlineOrder</servlet-name>
+        <servlet-name>SecondHandMarketWebApp</servlet-name>
         <url-pattern>/</url-pattern>
     </servlet-mapping>
 

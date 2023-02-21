@@ -14,6 +14,11 @@ public class OrderItem  implements Serializable {
 	private int id;
 
 	private double price;
+	@ManyToOne
+	private Post post;
+
+
+	private int quantity;
 
 	@ManyToOne
 	@JsonIgnore
@@ -43,4 +48,21 @@ public class OrderItem  implements Serializable {
 	public void setCart(Cart cart) {
 		this.cart = cart;
 	}
+
+	public Post getPost() {
+		return post;
+	}
+
+	public void setPost(Post post) {
+		this.post = post;
+	}
+
+
+	public int getQuantity() {
+		return quantity;
+	}
+	public void setQuantity(int i) {
+	}
+
+
 }

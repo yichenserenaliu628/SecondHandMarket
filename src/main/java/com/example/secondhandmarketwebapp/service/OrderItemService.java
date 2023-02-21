@@ -1,8 +1,8 @@
 package com.example.secondhandmarketwebapp.service;
 
-import com.example.secondhandmarketwebapp.dao.CartDao;
-import com.example.secondhandmarketwebapp.entity.Cart;
+import com.example.secondhandmarketwebapp.dao.OrderItemDao;
 import com.example.secondhandmarketwebapp.entity.OrderItem;
+import com.example.secondhandmarketwebapp.entity.Post;
 import com.example.secondhandmarketwebapp.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -10,36 +10,40 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
-public class CartService {
+public class OrderItemService {
+
+    @Autowired
+    private PostService postService;
 
     @Autowired
     private UserService userService;
 
     @Autowired
-    private CartDao cartDao;
+    private OrderItemDao orderItemDao;
 
-    public Cart getCart() {
-        Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
-        String username = loggedInUser.getName();
-        User customer = userService.getUser(username);
+    public void saveOrderItem(int postId) {
+        OrderItem orderItem = new OrderItem();
+        Post post = postService.getPost(postId);
 
-        if (customer != null) {
-            Cart cart = customer.getCart();
-            double totalPrice = 0;
-            for (OrderItem item : cart.getOrderItemList()) {
-                totalPrice += item.getPrice() * item.getQuantity();
-            }
-            cart.setTotalPrice(totalPrice);
-            return cart;
-        }
-        return new Cart();
-    }
-
-    public void cleanCart() {
         Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
         String username = loggedInUser.getName();
         User user = userService.getUser(username);
-        if (user  != null) cartDao.removeAllCartItems(user.getCart());
+
+        orderItem.setPost(post);
+        orderItem.setCart(user.getCart());
+        orderItem.setQuantity(1);
+        orderItem.setPrice(post.getPrice());
+        orderItemDao.save(orderItem);
     }
 
+    public void deleteOrderItem(OrderItem orderItem) {
+
+        Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
+        String username = loggedInUser.getName();
+        User user = userService.getUser(username);
+
+        orderItem.setCart(user.getCart());
+        orderItem.setQuantity(-1);
+        orderItemDao.delete(orderItem);
+    }
 }
