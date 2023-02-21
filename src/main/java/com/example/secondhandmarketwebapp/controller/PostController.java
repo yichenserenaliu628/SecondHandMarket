@@ -23,7 +23,14 @@ public class PostController {
 
     @RequestMapping(value = "/user/{userId}/post", method = RequestMethod.GET)
     @ResponseBody
-    public List<Post> getMenus(@PathVariable(value = "userId") int userId) {
+    public List<Post> getPosts(@PathVariable(value = "userId") int userId) {
         return postService.getAllPost(userId);
     }
+
+
+
+
+
+
+
 }
