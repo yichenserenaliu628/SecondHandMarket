@@ -15,7 +15,11 @@ public class Cart implements Serializable {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
 
-	@OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(unique = true)
+	private User user;
+
+	@OneToMany(mappedBy = "cart", cascade = CascadeType.ALL)
 	private List<OrderItem> orderItemList;
 
 	private double totalPrice;
