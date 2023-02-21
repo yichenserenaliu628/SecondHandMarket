@@ -23,7 +23,7 @@ public class Post implements Serializable {
 	@ManyToOne
 	@JsonIgnore
 	private User user;
-	@OneToOne(cascade = CascadeType.ALL)
+	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(unique = true)
 	private OrderItem orderItem;
 

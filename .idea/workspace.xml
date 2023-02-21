@@ -4,19 +4,30 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0a06f4f4-a254-403f-8cce-253e9c414866" name="Changes" comment="merge dao and entity">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/ApplicationConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/controller/PostController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/dao/PostDao.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/dao/UserDao.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/service/PostService.java" afterDir="false" />
+    <list default="true" id="0a06f4f4-a254-403f-8cce-253e9c414866" name="Changes" comment="Sample of service and controller. Update dao">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/controller/CartController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/controller/CheckoutController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/controller/OrderItemController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/dao/CustomerDao.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/ApplicationConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/ApplicationConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/controller/AddToCartController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/controller/CheckOutController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/controller/CreateProductController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/controller/DeleteProductController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/controller/LogOffController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/controller/PostController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/controller/PostController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/controller/SearchByController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/controller/SignInController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/controller/SignInController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/controller/SignUpController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/controller/SignUpController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/dao/OrderItemsDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/dao/OrderItemDao.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/dao/UserDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/dao/UserDao.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/entity/OrderItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/entity/OrderItem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/entity/Post.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/entity/Post.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/entity/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/entity/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/service/OrderItemsInfoService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/service/OrderItemsService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/service/OrderItemsService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/service/CartService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/service/CartService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/service/OrderItemsService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/service/OrderItemService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/service/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/SecondHandMarketServlet.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/SecondHandMarketWebApp-Servlet.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -111,7 +122,8 @@
       <workItem from="1676598547138" duration="39000" />
       <workItem from="1676697878529" duration="356000" />
       <workItem from="1676960184354" duration="1670000" />
-      <workItem from="1676962568943" duration="2340000" />
+      <workItem from="1676962568943" duration="2473000" />
+      <workItem from="1676998135504" duration="4181000" />
     </task>
     <task id="LOCAL-00001" summary="dao and most entity finish">
       <created>1676598500478</created>
@@ -141,7 +153,14 @@
       <option name="project" value="LOCAL" />
       <updated>1676698230113</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Sample of service and controller. Update dao">
+      <created>1676965038986</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1676965038986</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -165,6 +184,7 @@
     </ignored-roots>
     <MESSAGE value="dao and most entity finish" />
     <MESSAGE value="merge dao and entity" />
-    <option name="LAST_COMMIT_MESSAGE" value="merge dao and entity" />
+    <MESSAGE value="Sample of service and controller. Update dao" />
+    <option name="LAST_COMMIT_MESSAGE" value="Sample of service and controller. Update dao" />
   </component>
 </project>

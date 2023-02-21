@@ -13,17 +13,17 @@ public class UserDao {
     @Autowired
     private SessionFactory sessionFactory;
 
-    public void signUp(User customer) {
+    public void signUp(User user) {
         Authorities authorities = new Authorities();
         authorities.setAuthorities("ROLE_USER");
-        authorities.setEmail(customer.getEmail());
+        authorities.setEmail(user.getEmail());
 
         Session session = null;
         try {
             session = sessionFactory.openSession();
             session.beginTransaction();
             session.save(authorities);
-            session.save(customer);
+            session.save(user);
             session.getTransaction().commit();
 
         } catch (Exception ex) {

@@ -18,6 +18,9 @@ public class User implements Serializable {
 	private String phone;
 	private String userName;
 	private String address;
+
+
+	private String imageUrl;
 	@OneToMany(mappedBy = "user",  cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<Post> postList;
 	@OneToMany(mappedBy = "user",  cascade = CascadeType.ALL, fetch = FetchType.EAGER)
@@ -106,6 +109,16 @@ public class User implements Serializable {
 		this.cart = cart;
 	}
 
+	//Todo
 	public void setEnabled(boolean b) {
 	}
+
+	public String getImageUrl() {
+		return imageUrl;
+	}
+
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
+	}
+
 }

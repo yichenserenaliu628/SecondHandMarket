@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class OrderItemsDao {
+public class OrderItemDao {
     @Autowired
     private SessionFactory sessionFactory;
 
@@ -28,5 +28,24 @@ public class OrderItemsDao {
             }
         }
     }
+
+    public void delete(OrderItem orderItem) {
+        Session session = null;
+        try {
+            session = sessionFactory.openSession();
+            session.beginTransaction();
+            session.delete(orderItem);
+            session.getTransaction().commit();
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            if (session != null) session.getTransaction().rollback();
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+    }
+
 
 }

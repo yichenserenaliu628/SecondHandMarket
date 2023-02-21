@@ -1,6 +1,6 @@
 package com.example.secondhandmarketwebapp.service;
 
-import com.example.secondhandmarketwebapp.dao.OrderItemsDao;
+import com.example.secondhandmarketwebapp.dao.OrderItemDao;
 import com.example.secondhandmarketwebapp.entity.OrderItem;
 import com.example.secondhandmarketwebapp.entity.Post;
 import com.example.secondhandmarketwebapp.entity.User;
@@ -10,7 +10,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
-public class OrderItemsService {
+public class OrderItemService {
 
     @Autowired
     private PostService postService;
@@ -19,7 +19,7 @@ public class OrderItemsService {
     private UserService userService;
 
     @Autowired
-    private OrderItemsDao orderItemsDao;
+    private OrderItemDao orderItemDao;
 
     public void saveOrderItem(int postId) {
         OrderItem orderItem = new OrderItem();
@@ -33,6 +33,17 @@ public class OrderItemsService {
         orderItem.setCart(user.getCart());
         orderItem.setQuantity(1);
         orderItem.setPrice(post.getPrice());
-        orderItemsDao.save(orderItem);
+        orderItemDao.save(orderItem);
+    }
+
+    public void deleteOrderItem(OrderItem orderItem) {
+
+        Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
+        String username = loggedInUser.getName();
+        User user = userService.getUser(username);
+
+        orderItem.setCart(user.getCart());
+        orderItem.setQuantity(-1);
+        orderItemDao.delete(orderItem);
     }
 }

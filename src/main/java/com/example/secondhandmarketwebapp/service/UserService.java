@@ -1,9 +1,12 @@
 package com.example.secondhandmarketwebapp.service;
 
+import com.example.secondhandmarketwebapp.dao.CartDao;
 import com.example.secondhandmarketwebapp.dao.UserDao;
 import com.example.secondhandmarketwebapp.entity.Cart;
 import com.example.secondhandmarketwebapp.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +15,7 @@ public class UserService {
 
     private UserDao userDao;
 
+    //todo
     private PasswordEncoder passwordEncoder;
 
     @Autowired
@@ -20,6 +24,7 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
+    //Todo edit
     public void signUp(User user) {
         Cart cart = new Cart();
         user.setCart(cart);
@@ -32,6 +37,7 @@ public class UserService {
     public User getUser(String email) {
         return userDao.getCustomer(email);
     }
+
 
 
 }

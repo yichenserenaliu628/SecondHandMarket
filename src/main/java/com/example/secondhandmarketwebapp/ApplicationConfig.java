@@ -10,13 +10,14 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
+//Todo edit
 @Configuration
 @EnableWebMvc
 public class ApplicationConfig {
 
     @Bean(name = "sessionFactory")
     public LocalSessionFactoryBean sessionFactory() {
-        String PACKAGE_NAME = "com.laioffer.onlineOrder.entity";
+        String PACKAGE_NAME = "com.example.secondhandmarketwebapp.entity";
         LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
         sessionFactory.setDataSource(dataSource());
         sessionFactory.setPackagesToScan(PACKAGE_NAME);
@@ -26,6 +27,7 @@ public class ApplicationConfig {
 
     @Bean(name = "dataSource")
     public DataSource dataSource() {
+        //todo
         String RDS_ENDPOINT = "database-1.cdcbbdljbe81.us-west-1.rds.amazonaws.com";
         String USERNAME = "admin";
         String PASSWORD = "12345678";
