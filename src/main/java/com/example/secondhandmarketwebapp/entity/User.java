@@ -10,15 +10,17 @@ public class User implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@Id
 	private int id;
+
 	private String email;
+
 	private String Name;
 	private String password;
 	private String phone;
 	private String userName;
 	private String address;
-	@OneToMany(mappedBy = "restaurant",  cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "user",  cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<Post> postList;
-	@OneToMany(mappedBy = "restaurant",  cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "user",  cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<Review> reviewList;
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(unique = true)
@@ -102,5 +104,8 @@ public class User implements Serializable {
 
 	public void setCart(Cart cart) {
 		this.cart = cart;
+	}
+
+	public void setEnabled(boolean b) {
 	}
 }

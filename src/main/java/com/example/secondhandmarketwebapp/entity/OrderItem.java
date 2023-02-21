@@ -43,4 +43,10 @@ public class OrderItem  implements Serializable {
 	public void setCart(Cart cart) {
 		this.cart = cart;
 	}
+
+	public void setPost(Post post) {
+	}
+
+	public void setQuantity(int i) {
+	}
 }
