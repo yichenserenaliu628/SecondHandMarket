@@ -11,6 +11,7 @@
   <component name="ChangeListManager">
     <list default="true" id="0a06f4f4-a254-403f-8cce-253e9c414866" name="Changes" comment="added s3client">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/applicaiton.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/applicaiton.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -238,7 +239,7 @@
       <workItem from="1676998135504" duration="4237000" />
       <workItem from="1677013780150" duration="9323000" />
       <workItem from="1677025914124" duration="343000" />
-      <workItem from="1677026392511" duration="22863000" />
+      <workItem from="1677026392511" duration="23453000" />
     </task>
     <task id="LOCAL-00001" summary="dao and most entity finish">
       <created>1676598500478</created>
@@ -332,6 +333,11 @@
         <entry key="MAIN">
           <value>
             <State>
+              <option name="CUSTOM_BOOLEAN_PROPERTIES">
+                <map>
+                  <entry key="Show.Git.Branches" value="true" />
+                </map>
+              </option>
               <option name="FILTERS">
                 <map>
                   <entry key="branch">
