@@ -11,10 +11,7 @@
       <user-name>admin</user-name>
       <schema-mapping>
         <introspection-scope>
-          <node kind="schema">
-            <name qname="@" />
-            <name qname="secondhandMarket" />
-          </node>
+          <node kind="schema" qname="secondhandMarket" />
         </introspection-scope>
       </schema-mapping>
     </data-source>
