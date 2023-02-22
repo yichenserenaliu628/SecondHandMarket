@@ -23,5 +23,5 @@ public class Authorities implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@Id //primary key
 	private String email;
-	private String authorities;
+	private String password;
 }
