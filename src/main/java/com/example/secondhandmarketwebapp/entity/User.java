@@ -3,24 +3,61 @@ package com.example.secondhandmarketwebapp.entity;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
+import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.*;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Builder(toBuilder = true)
+@AllArgsConstructor
+@NoArgsConstructor
+@Setter
+@Getter
 @Entity
-@Table(name = "user")
+@Table(name = "user",
+		uniqueConstraints = {
+		@UniqueConstraint(columnNames = "email")
+		})
 public class User implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
+	@NotBlank
+	@Email(message = "Email should be valid")
 	private String email;
+	@NotNull(message = "First Name cannot be null")
+	@Size(min=1, max=16)
+	private String firstname;
 
-	private String Name;
+	@NotNull(message = "Last Name cannot be null")
+	@Size(min=1, max=16)
+	private String lastname;
+
+	@NotBlank
+	@Size(max = 120)
 	private String password;
+
+	@NotBlank
+	@Pattern(regexp="\\(\\d{3}\\)\\d{3}-\\d{4}")
 	private String phone;
+	@NotBlank
+	@Size(min = 6, max = 10, message
+			= "Username must be between 6 and 10 characters")
 	private String userName;
+	@NotBlank
+	@Size(max = 150, message
+			= "Address must not be longer than 100 characters")
 	private String address;
 
-
-	private String imageUrl;
+	@AssertTrue
+	private boolean isEnabled;
+	//private String imageUrl;
 	@OneToMany(mappedBy = "user",  cascade = CascadeType.ALL)
 	private List<Post> postList;
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
@@ -28,97 +65,4 @@ public class User implements Serializable {
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(unique = true)
 	private Cart cart;
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public String getName() {
-		return Name;
-	}
-
-	public void setName(String name) {
-		Name = name;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public String getPhone() {
-		return phone;
-	}
-
-	public void setPhone(String phone) {
-		this.phone = phone;
-	}
-
-	public String getUserName() {
-		return userName;
-	}
-
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
-
-	public String getAddress() {
-		return address;
-	}
-
-	public void setAddress(String address) {
-		this.address = address;
-	}
-
-	public List<Post> getPostList() {
-		return postList;
-	}
-
-	public void setPostList(List<Post> postList) {
-		this.postList = postList;
-	}
-
-	public List<Review> getReviewList() {
-		return reviewList;
-	}
-
-	public void setReviewList(List<Review> reviewList) {
-		this.reviewList = reviewList;
-	}
-
-	public Cart getCart() {
-		return cart;
-	}
-
-	public void setCart(Cart cart) {
-		this.cart = cart;
-	}
-
-	//Todo
-	public void setEnabled(boolean b) {
-	}
-
-	public String getImageUrl() {
-		return imageUrl;
-	}
-
-	public void setImageUrl(String imageUrl) {
-		this.imageUrl = imageUrl;
-	}
-
 }
