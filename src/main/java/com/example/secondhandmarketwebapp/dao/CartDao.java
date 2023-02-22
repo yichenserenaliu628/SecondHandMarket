@@ -1,6 +1,5 @@
 package com.example.secondhandmarketwebapp.dao;
 
-
 import com.example.secondhandmarketwebapp.entity.Cart;
 import com.example.secondhandmarketwebapp.entity.OrderItem;
 import org.hibernate.SessionFactory;
