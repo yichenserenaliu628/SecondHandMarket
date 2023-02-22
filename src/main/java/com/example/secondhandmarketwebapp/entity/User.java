@@ -57,6 +57,7 @@ public class User implements Serializable {
 
 	@AssertTrue
 	private boolean isEnabled;
+
 	//private String imageUrl;
 	@OneToMany(mappedBy = "user",  cascade = CascadeType.ALL)
 	private List<Post> postList;

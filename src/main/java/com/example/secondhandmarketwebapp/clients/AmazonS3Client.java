@@ -22,7 +22,6 @@ import java.util.Objects;
 import static java.util.UUID.randomUUID;
 
 @Service
-@PropertySource("classpath:application.properties")
 @Repository
 public class AmazonS3Client {
     private AmazonS3 s3client;
