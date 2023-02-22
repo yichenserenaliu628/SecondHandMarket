@@ -1,0 +1,161 @@
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"ArtifactsWorkspaceSettings\">\r\n    <artifacts-to-build>\r\n      <artifact name=\"SecondHandMarket:war exploded\" />\r\n    </artifacts-to-build>\r\n  </component>\r\n  <component name=\"AutoImportSettings\">\r\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\r\n  </component>\r\n  <component name=\"ChangeListManager\">\r\n    <list default=\"true\" id=\"0a06f4f4-a254-403f-8cce-253e9c414866\" name=\"Changes\" comment=\"change controller and servel\">\r\n      <change afterPath=\"$PROJECT_DIR$/.idea/artifacts/SecondHandMarket_war_exploded.xml\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/SecurityConfig.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/artifacts/secondHandMarketWebApp_war.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/artifacts/SecondHandMarket_war.xml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/artifacts/secondHandMarketWebApp_war_exploded.xml\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/workspace.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/workspace.xml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/pom.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/pom.xml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/controller/SignInController.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/controller/SignInController.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/dao/PostDao.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/dao/PostDao.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/dao/UserDao.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/dao/UserDao.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/entity/Cart.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/entity/Cart.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/entity/User.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/entity/User.java\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/main/webapp/WEB-INF/SecondHandMarketWebApp-Servlet.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/main/webapp/WEB-INF/SecondHandMarketWebApp-servlet.xml\" afterDir=\"false\" />\r\n    </list>\r\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\r\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\r\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\r\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\r\n  </component>\r\n  <component name=\"FileTemplateManagerImpl\">\r\n    <option name=\"RECENT_TEMPLATES\">\r\n      <list>\r\n        <option value=\"Class\" />\r\n      </list>\r\n    </option>\r\n  </component>\r\n  <component name=\"Git.Settings\">\r\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\r\n  </component>\r\n  <component name=\"GitHubPullRequestSearchHistory\"><![CDATA[{\r\n  \"lastFilter\": {\r\n    \"state\": \"OPEN\"\r\n  }\r\n}]]></component>\r\n  <component name=\"GithubPullRequestsUISettings\">\r\n    <option name=\"selectedUrlAndAccountId\">\r\n      <UrlAndAccount>\r\n        <option name=\"accountId\" value=\"67f6b4e9-1b86-494f-9a1e-a89040693d15\" />\r\n        <option name=\"url\" value=\"https://github.com/yichenserenaliu628/SecondHandMarket.git\" />\r\n      </UrlAndAccount>\r\n    </option>\r\n  </component>\r\n  <component name=\"HighlightingSettingsPerFile\">\r\n    <setting file=\"file://$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/dao/PostDao.java\" root0=\"FORCE_HIGHLIGHTING\" />\r\n  </component>\r\n  <component name=\"LogFilters\">\r\n    <option name=\"FILTER_ERRORS\" value=\"false\" />\r\n    <option name=\"FILTER_WARNINGS\" value=\"false\" />\r\n    <option name=\"FILTER_INFO\" value=\"true\" />\r\n    <option name=\"FILTER_DEBUG\" value=\"true\" />\r\n    <option name=\"CUSTOM_FILTER\" />\r\n  </component>\r\n  <component name=\"MarkdownSettingsMigration\">\r\n    <option name=\"stateVersion\" value=\"1\" />\r\n  </component>\r\n  <component name=\"ProjectId\" id=\"2LizKvlOWBIzJyiUopzcPM8DLbm\" />\r\n  <component name=\"ProjectLevelVcsManager\" settingsEditedManually=\"true\">\r\n    <OptionsSetting value=\"false\" id=\"Update\" />\r\n    <ConfirmationsSetting value=\"2\" id=\"Add\" />\r\n  </component>\r\n  <component name=\"ProjectViewState\">\r\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\r\n    <option name=\"showLibraryContents\" value=\"true\" />\r\n  </component>\r\n  <component name=\"PropertiesComponent\"><![CDATA[{\r\n  \"keyToString\": {\r\n    \"ASKED_ADD_EXTERNAL_FILES\": \"true\",\r\n    \"ASKED_SHARE_PROJECT_CONFIGURATION_FILES\": \"true\",\r\n    \"RunOnceActivity.OpenProjectViewOnStart\": \"true\",\r\n    \"RunOnceActivity.ShowReadmeOnStart\": \"true\",\r\n    \"SHARE_PROJECT_CONFIGURATION_FILES\": \"true\",\r\n    \"WebServerToolWindowFactoryState\": \"false\",\r\n    \"last_opened_file_path\": \"D:/SCHOOL/CS 548/week4/Assignment-Code\",\r\n    \"node.js.detected.package.eslint\": \"true\",\r\n    \"node.js.detected.package.tslint\": \"true\",\r\n    \"node.js.selected.package.eslint\": \"(autodetect)\",\r\n    \"node.js.selected.package.tslint\": \"(autodetect)\",\r\n    \"settings.editor.selected.configurable\": \"project.propVCSSupport.DirectoryMappings\",\r\n    \"spring.configuration.checksum\": \"1e40af73ca0d91560262bf809ff06d62\",\r\n    \"vue.rearranger.settings.migration\": \"true\"\r\n  },\r\n  \"keyToStringList\": {\r\n    \"DatabaseDriversLRU\": [\r\n      \"mysql\"\r\n    ]\r\n  }\r\n}]]></component>\r\n  <component name=\"RunManager\" selected=\"Tomcat Server.Tomcat 9.0.71\">\r\n    <configuration default=\"true\" type=\"AZURE_FUNCTION_SUPPORT\" factoryName=\"Run Functions\">\r\n      <option name=\"appName\" />\r\n      <option name=\"appServicePlanName\" />\r\n      <option name=\"appServicePlanResourceGroup\" />\r\n      <option name=\"appSettingsKey\" value=\"40e7c8c5-5c69-4e9d-9419-cd82e0290f5c\" />\r\n      <option name=\"artifact\" />\r\n      <option name=\"autoPort\" value=\"true\" />\r\n      <option name=\"debugOptions\" />\r\n      <option name=\"deployment\" />\r\n      <option name=\"deploymentStagingDirectoryPath\" />\r\n      <option name=\"funcPath\" />\r\n      <option name=\"funcPort\" value=\"0\" />\r\n      <option name=\"hostJsonPath\" />\r\n      <option name=\"insightsName\" />\r\n      <option name=\"instrumentationKey\" />\r\n      <option name=\"javaVersion\" />\r\n      <option name=\"localSettingsJsonPath\" />\r\n      <option name=\"moduleName\" />\r\n      <option name=\"os\" />\r\n      <option name=\"pricingTier\" />\r\n      <option name=\"providerMap\">\r\n        <map />\r\n      </option>\r\n      <option name=\"region\" />\r\n      <option name=\"resourceGroup\" />\r\n      <option name=\"stagingFolder\" />\r\n      <option name=\"subscription\" />\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <configuration name=\"App\" type=\"Application\" factoryName=\"Application\" temporary=\"true\" nameIsGenerated=\"true\">\r\n      <option name=\"MAIN_CLASS_NAME\" value=\"com.example.secondhandmarketwebapp.App\" />\r\n      <module name=\"SecondHandMarket\" />\r\n      <extension name=\"coverage\">\r\n        <pattern>\r\n          <option name=\"PATTERN\" value=\"com.example.secondhandmarketwebapp.*\" />\r\n          <option name=\"ENABLED\" value=\"true\" />\r\n        </pattern>\r\n      </extension>\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <configuration name=\"Tomcat 9.0.71\" type=\"#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory\" factoryName=\"Local\" APPLICATION_SERVER_NAME=\"Tomcat 9.0.71\" ALTERNATIVE_JRE_ENABLED=\"false\" nameIsGenerated=\"true\">\r\n      <option name=\"UPDATING_POLICY\" value=\"restart-server\" />\r\n      <deployment>\r\n        <artifact name=\"SecondHandMarket:war exploded\">\r\n          <settings>\r\n            <option name=\"CONTEXT_PATH\" value=\"/\" />\r\n          </settings>\r\n        </artifact>\r\n      </deployment>\r\n      <server-settings>\r\n        <option name=\"BASE_DIRECTORY_NAME\" value=\"8efef2d8-e4b3-4f7f-899f-9881212ac29e\" />\r\n      </server-settings>\r\n      <predefined_log_file enabled=\"true\" id=\"Tomcat\" />\r\n      <predefined_log_file enabled=\"true\" id=\"Tomcat Catalina\" />\r\n      <predefined_log_file id=\"Tomcat Manager\" />\r\n      <predefined_log_file id=\"Tomcat Host Manager\" />\r\n      <predefined_log_file id=\"Tomcat Localhost Access\" />\r\n      <RunnerSettings RunnerId=\"Debug\">\r\n        <option name=\"DEBUG_PORT\" value=\"7796\" />\r\n      </RunnerSettings>\r\n      <ConfigurationWrapper VM_VAR=\"JAVA_OPTS\" RunnerId=\"Cover\">\r\n        <option name=\"USE_ENV_VARIABLES\" value=\"true\" />\r\n        <STARTUP>\r\n          <option name=\"USE_DEFAULT\" value=\"true\" />\r\n          <option name=\"SCRIPT\" value=\"\" />\r\n          <option name=\"VM_PARAMETERS\" value=\"\" />\r\n          <option name=\"PROGRAM_PARAMETERS\" value=\"\" />\r\n        </STARTUP>\r\n        <SHUTDOWN>\r\n          <option name=\"USE_DEFAULT\" value=\"true\" />\r\n          <option name=\"SCRIPT\" value=\"\" />\r\n          <option name=\"VM_PARAMETERS\" value=\"\" />\r\n          <option name=\"PROGRAM_PARAMETERS\" value=\"\" />\r\n        </SHUTDOWN>\r\n      </ConfigurationWrapper>\r\n      <ConfigurationWrapper VM_VAR=\"JAVA_OPTS\" RunnerId=\"Debug\">\r\n        <option name=\"USE_ENV_VARIABLES\" value=\"true\" />\r\n        <STARTUP>\r\n          <option name=\"USE_DEFAULT\" value=\"true\" />\r\n          <option name=\"SCRIPT\" value=\"\" />\r\n          <option name=\"VM_PARAMETERS\" value=\"\" />\r\n          <option name=\"PROGRAM_PARAMETERS\" value=\"\" />\r\n        </STARTUP>\r\n        <SHUTDOWN>\r\n          <option name=\"USE_DEFAULT\" value=\"true\" />\r\n          <option name=\"SCRIPT\" value=\"\" />\r\n          <option name=\"VM_PARAMETERS\" value=\"\" />\r\n          <option name=\"PROGRAM_PARAMETERS\" value=\"\" />\r\n        </SHUTDOWN>\r\n      </ConfigurationWrapper>\r\n      <ConfigurationWrapper VM_VAR=\"JAVA_OPTS\" RunnerId=\"Profile\">\r\n        <option name=\"USE_ENV_VARIABLES\" value=\"true\" />\r\n        <STARTUP>\r\n          <option name=\"USE_DEFAULT\" value=\"true\" />\r\n          <option name=\"SCRIPT\" value=\"\" />\r\n          <option name=\"VM_PARAMETERS\" value=\"\" />\r\n          <option name=\"PROGRAM_PARAMETERS\" value=\"\" />\r\n        </STARTUP>\r\n        <SHUTDOWN>\r\n          <option name=\"USE_DEFAULT\" value=\"true\" />\r\n          <option name=\"SCRIPT\" value=\"\" />\r\n          <option name=\"VM_PARAMETERS\" value=\"\" />\r\n          <option name=\"PROGRAM_PARAMETERS\" value=\"\" />\r\n        </SHUTDOWN>\r\n      </ConfigurationWrapper>\r\n      <ConfigurationWrapper VM_VAR=\"JAVA_OPTS\" RunnerId=\"Run\">\r\n        <option name=\"USE_ENV_VARIABLES\" value=\"true\" />\r\n        <STARTUP>\r\n          <option name=\"USE_DEFAULT\" value=\"true\" />\r\n          <option name=\"SCRIPT\" value=\"\" />\r\n          <option name=\"VM_PARAMETERS\" value=\"\" />\r\n          <option name=\"PROGRAM_PARAMETERS\" value=\"\" />\r\n        </STARTUP>\r\n        <SHUTDOWN>\r\n          <option name=\"USE_DEFAULT\" value=\"true\" />\r\n          <option name=\"SCRIPT\" value=\"\" />\r\n          <option name=\"VM_PARAMETERS\" value=\"\" />\r\n          <option name=\"PROGRAM_PARAMETERS\" value=\"\" />\r\n        </SHUTDOWN>\r\n      </ConfigurationWrapper>\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n        <option name=\"BuildArtifacts\" enabled=\"true\">\r\n          <artifact name=\"SecondHandMarket:war exploded\" />\r\n        </option>\r\n      </method>\r\n    </configuration>\r\n    <configuration default=\"true\" type=\"#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory\" factoryName=\"Local\" ALTERNATIVE_JRE_ENABLED=\"false\">\r\n      <deployment />\r\n      <server-settings />\r\n      <predefined_log_file enabled=\"true\" id=\"Tomcat\" />\r\n      <predefined_log_file enabled=\"true\" id=\"Tomcat Catalina\" />\r\n      <predefined_log_file id=\"Tomcat Manager\" />\r\n      <predefined_log_file id=\"Tomcat Host Manager\" />\r\n      <predefined_log_file id=\"Tomcat Localhost Access\" />\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <list>\r\n      <item itemvalue=\"Application.App\" />\r\n      <item itemvalue=\"Tomcat Server.Tomcat 9.0.71\" />\r\n    </list>\r\n    <recent_temporary>\r\n      <list>\r\n        <item itemvalue=\"Application.App\" />\r\n      </list>\r\n    </recent_temporary>\r\n  </component>\r\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"application-level\" UseSingleDictionary=\"true\" transferred=\"true\" />\r\n  <component name=\"TaskManager\">\r\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\r\n      <changelist id=\"0a06f4f4-a254-403f-8cce-253e9c414866\" name=\"Changes\" comment=\"\" />\r\n      <created>1676368632882</created>\r\n      <option name=\"number\" value=\"Default\" />\r\n      <option name=\"presentableId\" value=\"Default\" />\r\n      <updated>1676368632882</updated>\r\n      <workItem from=\"1676368634411\" duration=\"640000\" />\r\n      <workItem from=\"1676419175630\" duration=\"3943000\" />\r\n      <workItem from=\"1676593394178\" duration=\"29000\" />\r\n      <workItem from=\"1676597865575\" duration=\"672000\" />\r\n      <workItem from=\"1676598547138\" duration=\"39000\" />\r\n      <workItem from=\"1676697878529\" duration=\"356000\" />\r\n      <workItem from=\"1676960184354\" duration=\"1670000\" />\r\n      <workItem from=\"1676962568943\" duration=\"2473000\" />\r\n      <workItem from=\"1676998135504\" duration=\"4237000\" />\r\n      <workItem from=\"1677013780150\" duration=\"9323000\" />\r\n    </task>\r\n    <task id=\"LOCAL-00001\" summary=\"dao and most entity finish\">\r\n      <created>1676598500478</created>\r\n      <option name=\"number\" value=\"00001\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00001\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1676598500478</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00002\" summary=\"dao and most entity finish\">\r\n      <created>1676598563032</created>\r\n      <option name=\"number\" value=\"00002\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00002\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1676598563032</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00003\" summary=\"merge dao and entity\">\r\n      <created>1676698207431</created>\r\n      <option name=\"number\" value=\"00003\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00003\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1676698207431</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00004\" summary=\"merge dao and entity\">\r\n      <created>1676698230113</created>\r\n      <option name=\"number\" value=\"00004\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00004\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1676698230113</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00005\" summary=\"Sample of service and controller. Update dao\">\r\n      <created>1676965038986</created>\r\n      <option name=\"number\" value=\"00005\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00005\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1676965038986</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00006\" summary=\"CheckoutController, orderitem dao controller service\">\r\n      <created>1677009137919</created>\r\n      <option name=\"number\" value=\"00006\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00006\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1677009137919</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00007\" summary=\"CheckoutController, orderitem dao controller service\">\r\n      <created>1677013791233</created>\r\n      <option name=\"number\" value=\"00007\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00007\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1677013791233</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00008\" summary=\"change controller and servel\">\r\n      <created>1677016765356</created>\r\n      <option name=\"number\" value=\"00008\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00008\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1677016765356</updated>\r\n    </task>\r\n    <option name=\"localTasksCounter\" value=\"9\" />\r\n    <servers />\r\n  </component>\r\n  <component name=\"TypeScriptGeneratedFilesManager\">\r\n    <option name=\"version\" value=\"3\" />\r\n  </component>\r\n  <component name=\"Vcs.Log.Tabs.Properties\">\r\n    <option name=\"TAB_STATES\">\r\n      <map>\r\n        <entry key=\"MAIN\">\r\n          <value>\r\n            <State>\r\n              <option name=\"FILTERS\">\r\n                <map>\r\n                  <entry key=\"branch\">\r\n                    <value>\r\n                      <list>\r\n                        <option value=\"Dao_part\" />\r\n                      </list>\r\n                    </value>\r\n                  </entry>\r\n                </map>\r\n              </option>\r\n            </State>\r\n          </value>\r\n        </entry>\r\n      </map>\r\n    </option>\r\n  </component>\r\n  <component name=\"VcsManagerConfiguration\">\r\n    <option name=\"ADD_EXTERNAL_FILES_SILENTLY\" value=\"true\" />\r\n    <ignored-roots>\r\n      <path value=\"$PROJECT_DIR$/../..\" />\r\n    </ignored-roots>\r\n    <MESSAGE value=\"dao and most entity finish\" />\r\n    <MESSAGE value=\"merge dao and entity\" />\r\n    <MESSAGE value=\"Sample of service and controller. Update dao\" />\r\n    <MESSAGE value=\"CheckoutController, orderitem dao controller service\" />\r\n    <MESSAGE value=\"change controller and servel\" />\r\n    <option name=\"LAST_COMMIT_MESSAGE\" value=\"change controller and servel\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision 3e1e19bff75b0becafc03b3be81ad78d910ed057)
++++ b/.idea/workspace.xml	(date 1677101796161)
+@@ -9,19 +9,8 @@
+     <option name="autoReloadType" value="SELECTIVE" />
+   </component>
+   <component name="ChangeListManager">
+-    <list default="true" id="0a06f4f4-a254-403f-8cce-253e9c414866" name="Changes" comment="change controller and servel">
+-      <change afterPath="$PROJECT_DIR$/.idea/artifacts/SecondHandMarket_war_exploded.xml" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/SecurityConfig.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/.idea/artifacts/secondHandMarketWebApp_war.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/artifacts/SecondHandMarket_war.xml" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/.idea/artifacts/secondHandMarketWebApp_war_exploded.xml" beforeDir="false" />
++    <list default="true" id="0a06f4f4-a254-403f-8cce-253e9c414866" name="Changes" comment="correct dao and entity">
+       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/controller/SignInController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/controller/SignInController.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/dao/PostDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/dao/PostDao.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/dao/UserDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/dao/UserDao.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/entity/Cart.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/entity/Cart.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/entity/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/entity/User.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/SecondHandMarketWebApp-Servlet.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/SecondHandMarketWebApp-servlet.xml" afterDir="false" />
+     </list>
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+@@ -38,11 +27,11 @@
+   <component name="Git.Settings">
+     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+   </component>
+-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+-  "lastFilter": {
+-    "state": "OPEN"
++  <component name="GitHubPullRequestSearchHistory">{
++  &quot;lastFilter&quot;: {
++    &quot;state&quot;: &quot;OPEN&quot;
+   }
+-}]]></component>
++}</component>
+   <component name="GithubPullRequestsUISettings">
+     <option name="selectedUrlAndAccountId">
+       <UrlAndAccount>
+@@ -73,29 +62,29 @@
+     <option name="hideEmptyMiddlePackages" value="true" />
+     <option name="showLibraryContents" value="true" />
+   </component>
+-  <component name="PropertiesComponent"><![CDATA[{
+-  "keyToString": {
+-    "ASKED_ADD_EXTERNAL_FILES": "true",
+-    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+-    "RunOnceActivity.OpenProjectViewOnStart": "true",
+-    "RunOnceActivity.ShowReadmeOnStart": "true",
+-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+-    "WebServerToolWindowFactoryState": "false",
+-    "last_opened_file_path": "D:/SCHOOL/CS 548/week4/Assignment-Code",
+-    "node.js.detected.package.eslint": "true",
+-    "node.js.detected.package.tslint": "true",
+-    "node.js.selected.package.eslint": "(autodetect)",
+-    "node.js.selected.package.tslint": "(autodetect)",
+-    "settings.editor.selected.configurable": "project.propVCSSupport.DirectoryMappings",
+-    "spring.configuration.checksum": "1e40af73ca0d91560262bf809ff06d62",
+-    "vue.rearranger.settings.migration": "true"
++  <component name="PropertiesComponent">{
++  &quot;keyToString&quot;: {
++    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
++    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
++    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
++    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
++    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
++    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
++    &quot;last_opened_file_path&quot;: &quot;D:/SCHOOL/CS 548/week4/Assignment-Code&quot;,
++    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
++    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
++    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
++    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
++    &quot;settings.editor.selected.configurable&quot;: &quot;project.propVCSSupport.DirectoryMappings&quot;,
++    &quot;spring.configuration.checksum&quot;: &quot;1e40af73ca0d91560262bf809ff06d62&quot;,
++    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+   },
+-  "keyToStringList": {
+-    "DatabaseDriversLRU": [
+-      "mysql"
++  &quot;keyToStringList&quot;: {
++    &quot;DatabaseDriversLRU&quot;: [
++      &quot;mysql&quot;
+     ]
+   }
+-}]]></component>
++}</component>
+   <component name="RunManager" selected="Tomcat Server.Tomcat 9.0.71">
+     <configuration default="true" type="AZURE_FUNCTION_SUPPORT" factoryName="Run Functions">
+       <option name="appName" />
+@@ -228,18 +217,6 @@
+         </option>
+       </method>
+     </configuration>
+-    <configuration default="true" type="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory" factoryName="Local" ALTERNATIVE_JRE_ENABLED="false">
+-      <deployment />
+-      <server-settings />
+-      <predefined_log_file enabled="true" id="Tomcat" />
+-      <predefined_log_file enabled="true" id="Tomcat Catalina" />
+-      <predefined_log_file id="Tomcat Manager" />
+-      <predefined_log_file id="Tomcat Host Manager" />
+-      <predefined_log_file id="Tomcat Localhost Access" />
+-      <method v="2">
+-        <option name="Make" enabled="true" />
+-      </method>
+-    </configuration>
+     <list>
+       <item itemvalue="Application.App" />
+       <item itemvalue="Tomcat Server.Tomcat 9.0.71" />
+@@ -267,7 +244,8 @@
+       <workItem from="1676960184354" duration="1670000" />
+       <workItem from="1676962568943" duration="2473000" />
+       <workItem from="1676998135504" duration="4237000" />
+-      <workItem from="1677013780150" duration="9323000" />
++      <workItem from="1677013780150" duration="9919000" />
++      <workItem from="1677100067393" duration="1690000" />
+     </task>
+     <task id="LOCAL-00001" summary="dao and most entity finish">
+       <created>1676598500478</created>
+@@ -325,7 +303,14 @@
+       <option name="project" value="LOCAL" />
+       <updated>1677016765356</updated>
+     </task>
+-    <option name="localTasksCounter" value="9" />
++    <task id="LOCAL-00009" summary="correct dao and entity">
++      <created>1677023396780</created>
++      <option name="number" value="00009" />
++      <option name="presentableId" value="LOCAL-00009" />
++      <option name="project" value="LOCAL" />
++      <updated>1677023396780</updated>
++    </task>
++    <option name="localTasksCounter" value="10" />
+     <servers />
+   </component>
+   <component name="TypeScriptGeneratedFilesManager">
+@@ -342,7 +327,7 @@
+                   <entry key="branch">
+                     <value>
+                       <list>
+-                        <option value="Dao_part" />
++                        <option value="master" />
+                       </list>
+                     </value>
+                   </entry>
+@@ -364,6 +349,7 @@
+     <MESSAGE value="Sample of service and controller. Update dao" />
+     <MESSAGE value="CheckoutController, orderitem dao controller service" />
+     <MESSAGE value="change controller and servel" />
+-    <option name="LAST_COMMIT_MESSAGE" value="change controller and servel" />
++    <MESSAGE value="correct dao and entity" />
++    <option name="LAST_COMMIT_MESSAGE" value="correct dao and entity" />
+   </component>
+ </project>
+\ No newline at end of file
