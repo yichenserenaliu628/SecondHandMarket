@@ -36,7 +36,7 @@ public class UserDao {
         }
     }
 
-    public User getCustomer(String email) {
+    public User getUser(String email) {
         User user = null;
         try (Session session = sessionFactory.openSession()) {
             user = session.get(User.class, email);
