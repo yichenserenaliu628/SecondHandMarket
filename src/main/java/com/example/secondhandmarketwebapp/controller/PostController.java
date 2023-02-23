@@ -4,6 +4,8 @@ import com.example.secondhandmarketwebapp.entity.Post;
 import com.example.secondhandmarketwebapp.entity.User;
 import com.example.secondhandmarketwebapp.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,5 +31,11 @@ public class PostController {
     @ResponseBody
     public List<Post> createPost(@PathVariable(value = "userId") int userId) {
         return postService.getAllPost(userId);
+    }
+    @RequestMapping(value = "/addPost", method = RequestMethod.POST)
+    @ResponseBody
+    public void addPost(@AuthenticationPrincipal UserDetails userDetails, @RequestBody Post post) {
+        System.out.println("the username is" + userDetails.getUsername());
+        postService.addPost(userDetails.getUsername(), post);
     }
 }
