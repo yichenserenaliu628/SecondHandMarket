@@ -12,15 +12,11 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @Controller
 public class SignUpController {
-
-
     private UserService userService;
-
     @Autowired
     public SignUpController(UserService userService) {
         this.userService = userService;
     }
-
     @RequestMapping(value = "/signup", method = RequestMethod.POST)
     @ResponseStatus(value = HttpStatus.CREATED)
     public void signUp(@RequestBody User user) {

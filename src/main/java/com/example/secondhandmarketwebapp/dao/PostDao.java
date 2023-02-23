@@ -13,10 +13,8 @@ import java.util.List;
 
 @Repository
 public class PostDao {
-
     @Autowired
     private SessionFactory sessionFactory;
-
     // https://www.baeldung.com/hibernate-criteria-queries
     public List<User> getUsers() {
         try (Session session = sessionFactory.openSession()) {
@@ -27,11 +25,8 @@ public class PostDao {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-
         return new ArrayList<>();
     }
-
-
 
     public List<Post> getAllPost(int userId) {
         try (Session session = sessionFactory.openSession()) {

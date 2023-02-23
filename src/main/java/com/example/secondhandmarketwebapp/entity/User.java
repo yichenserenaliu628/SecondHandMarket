@@ -50,7 +50,7 @@ public class User implements Serializable {
 	@NotBlank
 	@Size(min = 6, max = 10, message
 			= "Username must be between 6 and 10 characters")
-	private String userName;
+	private String username;
 	@NotBlank
 	@Size(max = 150, message
 			= "Address must not be longer than 150 characters")

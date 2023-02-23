@@ -21,7 +21,7 @@ import lombok.Setter;
 public class Authorities implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	@Id //primary key
+	@Id
 	private String email;
 	private String authorities;
 }

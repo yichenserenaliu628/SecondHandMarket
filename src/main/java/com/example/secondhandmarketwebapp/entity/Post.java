@@ -49,7 +49,7 @@ public class Post implements Serializable {
 	@Size(max = 20, message
 			= "Product title should not be longer than 20 characters")
 	private String title;
-	@Column(name = "is_sold")
+	@Column
 	private boolean isSold;
 	private String category;
 	@ManyToOne

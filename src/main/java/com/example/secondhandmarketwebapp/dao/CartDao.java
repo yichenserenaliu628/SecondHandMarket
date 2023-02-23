@@ -34,7 +34,6 @@ public class CartDao {
                 session.close();
             }
         }
-
     }
 
     public void removeAllCartItems(Cart cart) {

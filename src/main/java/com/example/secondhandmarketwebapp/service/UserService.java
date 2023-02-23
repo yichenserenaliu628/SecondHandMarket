@@ -33,11 +33,15 @@ public class UserService {
     public void signUp(User user) {
         Cart cart = new Cart();
         user.setCart(cart);
+
         List<Post> post = new ArrayList<>();
         user.setPostList(post);
+
         List<Review> review = new ArrayList<>();
         user.setReviewList(review);
+
         user.setEnabled(true);
+
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userDao.signUp(user);
     }
