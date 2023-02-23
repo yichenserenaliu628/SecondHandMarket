@@ -4,6 +4,7 @@ import com.example.secondhandmarketwebapp.entity.Post;
 import com.example.secondhandmarketwebapp.entity.User;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -47,5 +48,20 @@ public class PostDao {
             ex.printStackTrace();
         }
         return null;
+    }
+    public void addPost(int userId, Post post) {
+        try (Session session = sessionFactory.openSession()) {
+            Transaction tx = session.beginTransaction();
+            User user = session.get(User.class, userId);
+            if (user != null) {
+                user.getPostList().size();
+                user.getPostList().add(post);
+                post.setUser(user);
+                session.save(post);
+                tx.commit();
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 }

@@ -7,6 +7,8 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.Query;
+
 @Repository
 public class UserDao {
 
@@ -44,5 +46,13 @@ public class UserDao {
             ex.printStackTrace();
         }
         return user;
+    }
+    public int getUserIdByEmail(String email) {
+        Session session = sessionFactory.openSession();
+        Query query = session.createQuery("SELECT u.id FROM User u WHERE u.email = :email");
+        query.setParameter("email", email);
+        int userId = (int) query.getSingleResult();
+        session.close();
+        return userId;
     }
 }
