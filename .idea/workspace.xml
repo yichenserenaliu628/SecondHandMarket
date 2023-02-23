@@ -15,20 +15,16 @@
       <change afterPath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/controller/SearchItemController.java" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/controller/SignOffController.java" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/controller/SortItemController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/controller/CartController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/controller/GetCartController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/controller/OrderItemController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/controller/OrderItemController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/controller/PostController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/controller/PostController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/controller/SignInController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/controller/SignInController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/controller/SignUpController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/controller/SignUpController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/dao/CartDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/dao/CartDao.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/dao/PostDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/dao/PostDao.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/entity/Authorities.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/entity/Authorities.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/entity/Post.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/entity/Post.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/entity/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/entity/User.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/service/CartService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/service/CartService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/service/OrderItemService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/service/OrderItemService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/service/PostService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/service/PostService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/service/UserService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -396,7 +392,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="origin/yichen" />
+                        <option value="steve" />
                       </list>
                     </value>
                   </entry>
