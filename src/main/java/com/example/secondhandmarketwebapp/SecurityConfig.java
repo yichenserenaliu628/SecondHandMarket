@@ -41,8 +41,8 @@ public class SecurityConfig extends WebSecurityConfiguration {
                 .jdbcAuthentication()
                 .dataSource(dataSource)
                 .passwordEncoder(passwordEncoder)
-                .usersByUsernameQuery("SELECT email, password, enabled FROM customers WHERE email=?")
-                .authoritiesByUsernameQuery("SELECT email, authorities FROM authorities WHERE email=?");
+                .usersByUsernameQuery("SELECT email, password, isEnabled FROM user WHERE id=?")
+                .authoritiesByUsernameQuery("SELECT email, authorities FROM authorities WHERE id=?");
 
     }
 }

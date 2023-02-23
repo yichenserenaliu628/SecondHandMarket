@@ -1182,148 +1182,186 @@ sys|schema||mysql.sys|localhost|TRIGGER|G</Grants>
       <DasType>int|0s</DasType>
       <Position>10</Position>
     </column>
-    <foreign-key id="331" parent="290" name="FKqbitxio9e3gwkkkhjhtntf16v">
+    <column id="331" parent="290" name="categories">
+      <DasType>varchar(255)|0s</DasType>
+      <Position>11</Position>
+    </column>
+    <column id="332" parent="290" name="imageUrl">
+      <DasType>varchar(255)|0s</DasType>
+      <Position>12</Position>
+    </column>
+    <column id="333" parent="290" name="status">
+      <DasType>bit(1)|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>13</Position>
+    </column>
+    <column id="334" parent="290" name="orderItem_id">
+      <DasType>int|0s</DasType>
+      <Position>14</Position>
+    </column>
+    <foreign-key id="335" parent="290" name="FKqbitxio9e3gwkkkhjhtntf16v">
       <ColNames>image_id</ColNames>
       <RefColNames>id</RefColNames>
       <RefTableName>image</RefTableName>
     </foreign-key>
-    <foreign-key id="332" parent="290" name="FK72mt33dhhs48hf9gcqrq4fxte">
+    <foreign-key id="336" parent="290" name="FK72mt33dhhs48hf9gcqrq4fxte">
       <ColNames>user_id</ColNames>
       <RefColNames>id</RefColNames>
       <RefTableName>user</RefTableName>
     </foreign-key>
-    <index id="333" parent="290" name="PRIMARY">
+    <foreign-key id="337" parent="290" name="FKeo5objv9h3wim6a11a593sg8k">
+      <ColNames>orderItem_id</ColNames>
+      <RefColNames>id</RefColNames>
+      <RefTableName>orderitem</RefTableName>
+    </foreign-key>
+    <index id="338" parent="290" name="PRIMARY">
       <ColNames>id</ColNames>
       <Type>btree</Type>
       <Unique>1</Unique>
     </index>
-    <index id="334" parent="290" name="UK_qwq5kr1eoh86viudr15x567jm">
+    <index id="339" parent="290" name="UK_qwq5kr1eoh86viudr15x567jm">
       <ColNames>image_id</ColNames>
       <Type>btree</Type>
       <Unique>1</Unique>
     </index>
-    <index id="335" parent="290" name="FK72mt33dhhs48hf9gcqrq4fxte">
+    <index id="340" parent="290" name="UK_4om9c1v58j7d02o04ux8actys">
+      <ColNames>orderItem_id</ColNames>
+      <Type>btree</Type>
+      <Unique>1</Unique>
+    </index>
+    <index id="341" parent="290" name="FK72mt33dhhs48hf9gcqrq4fxte">
       <ColNames>user_id</ColNames>
       <Type>btree</Type>
     </index>
-    <key id="336" parent="290" name="PRIMARY">
+    <key id="342" parent="290" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <Primary>1</Primary>
       <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
     </key>
-    <key id="337" parent="290" name="UK_qwq5kr1eoh86viudr15x567jm">
+    <key id="343" parent="290" name="UK_qwq5kr1eoh86viudr15x567jm">
       <UnderlyingIndexName>UK_qwq5kr1eoh86viudr15x567jm</UnderlyingIndexName>
     </key>
-    <column id="338" parent="291" name="id">
+    <key id="344" parent="290" name="UK_4om9c1v58j7d02o04ux8actys">
+      <UnderlyingIndexName>UK_4om9c1v58j7d02o04ux8actys</UnderlyingIndexName>
+    </key>
+    <column id="345" parent="291" name="id">
       <AutoIncrement>1</AutoIncrement>
       <DasType>int|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
     </column>
-    <column id="339" parent="291" name="comment">
+    <column id="346" parent="291" name="comment">
       <DasType>varchar(255)|0s</DasType>
       <Position>2</Position>
     </column>
-    <column id="340" parent="291" name="rating">
+    <column id="347" parent="291" name="rating">
       <DasType>double|0s</DasType>
       <NotNull>1</NotNull>
       <Position>3</Position>
     </column>
-    <column id="341" parent="291" name="user_id">
+    <column id="348" parent="291" name="user_id">
       <DasType>int|0s</DasType>
       <Position>4</Position>
     </column>
-    <foreign-key id="342" parent="291" name="FKiyf57dy48lyiftdrf7y87rnxi">
+    <foreign-key id="349" parent="291" name="FKiyf57dy48lyiftdrf7y87rnxi">
       <ColNames>user_id</ColNames>
       <RefColNames>id</RefColNames>
       <RefTableName>user</RefTableName>
     </foreign-key>
-    <index id="343" parent="291" name="PRIMARY">
+    <index id="350" parent="291" name="PRIMARY">
       <ColNames>id</ColNames>
       <Type>btree</Type>
       <Unique>1</Unique>
     </index>
-    <index id="344" parent="291" name="FKiyf57dy48lyiftdrf7y87rnxi">
+    <index id="351" parent="291" name="FKiyf57dy48lyiftdrf7y87rnxi">
       <ColNames>user_id</ColNames>
       <Type>btree</Type>
     </index>
-    <key id="345" parent="291" name="PRIMARY">
+    <key id="352" parent="291" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <Primary>1</Primary>
       <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
     </key>
-    <column id="346" parent="292" name="id">
+    <column id="353" parent="292" name="id">
       <AutoIncrement>1</AutoIncrement>
       <DasType>int|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
     </column>
-    <column id="347" parent="292" name="address">
+    <column id="354" parent="292" name="address">
       <DasType>varchar(255)|0s</DasType>
       <Position>2</Position>
     </column>
-    <column id="348" parent="292" name="email">
+    <column id="355" parent="292" name="email">
       <DasType>varchar(255)|0s</DasType>
       <Position>3</Position>
     </column>
-    <column id="349" parent="292" name="firstname">
+    <column id="356" parent="292" name="firstname">
       <DasType>varchar(255)|0s</DasType>
       <Position>4</Position>
     </column>
-    <column id="350" parent="292" name="isEnabled">
+    <column id="357" parent="292" name="isEnabled">
       <DasType>bit(1)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>5</Position>
     </column>
-    <column id="351" parent="292" name="lastname">
+    <column id="358" parent="292" name="lastname">
       <DasType>varchar(255)|0s</DasType>
       <Position>6</Position>
     </column>
-    <column id="352" parent="292" name="password">
+    <column id="359" parent="292" name="password">
       <DasType>varchar(255)|0s</DasType>
       <Position>7</Position>
     </column>
-    <column id="353" parent="292" name="phone">
+    <column id="360" parent="292" name="phone">
       <DasType>varchar(255)|0s</DasType>
       <Position>8</Position>
     </column>
-    <column id="354" parent="292" name="userName">
+    <column id="361" parent="292" name="userName">
       <DasType>varchar(255)|0s</DasType>
       <Position>9</Position>
     </column>
-    <column id="355" parent="292" name="cart_id">
+    <column id="362" parent="292" name="cart_id">
       <DasType>int|0s</DasType>
       <Position>10</Position>
     </column>
-    <foreign-key id="356" parent="292" name="FKtqa69bib34k2c0jhe7afqsao6">
+    <column id="363" parent="292" name="Name">
+      <DasType>varchar(255)|0s</DasType>
+      <Position>11</Position>
+    </column>
+    <column id="364" parent="292" name="imageUrl">
+      <DasType>varchar(255)|0s</DasType>
+      <Position>12</Position>
+    </column>
+    <foreign-key id="365" parent="292" name="FKtqa69bib34k2c0jhe7afqsao6">
       <ColNames>cart_id</ColNames>
       <RefColNames>id</RefColNames>
       <RefTableName>cart</RefTableName>
     </foreign-key>
-    <index id="357" parent="292" name="PRIMARY">
+    <index id="366" parent="292" name="PRIMARY">
       <ColNames>id</ColNames>
       <Type>btree</Type>
       <Unique>1</Unique>
     </index>
-    <index id="358" parent="292" name="UKob8kqyqqgmefl0aco34akdtpe">
+    <index id="367" parent="292" name="UKob8kqyqqgmefl0aco34akdtpe">
       <ColNames>email</ColNames>
       <Type>btree</Type>
       <Unique>1</Unique>
     </index>
-    <index id="359" parent="292" name="UK_47dq8urpj337d3o65l3fsjph3">
+    <index id="368" parent="292" name="UK_47dq8urpj337d3o65l3fsjph3">
       <ColNames>cart_id</ColNames>
       <Type>btree</Type>
       <Unique>1</Unique>
     </index>
-    <key id="360" parent="292" name="PRIMARY">
+    <key id="369" parent="292" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <Primary>1</Primary>
       <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
     </key>
-    <key id="361" parent="292" name="UKob8kqyqqgmefl0aco34akdtpe">
+    <key id="370" parent="292" name="UKob8kqyqqgmefl0aco34akdtpe">
       <UnderlyingIndexName>UKob8kqyqqgmefl0aco34akdtpe</UnderlyingIndexName>
     </key>
-    <key id="362" parent="292" name="UK_47dq8urpj337d3o65l3fsjph3">
+    <key id="371" parent="292" name="UK_47dq8urpj337d3o65l3fsjph3">
       <UnderlyingIndexName>UK_47dq8urpj337d3o65l3fsjph3</UnderlyingIndexName>
     </key>
   </database-model>

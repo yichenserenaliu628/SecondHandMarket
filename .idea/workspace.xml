@@ -9,39 +9,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0a06f4f4-a254-403f-8cce-253e9c414866" name="Changes" comment="test">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/WebMvcConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/controller/S3Controller.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/artifacts/secondHandMarketWebApp_war.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/artifacts/SecondHandMarket_war.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/artifacts/secondHandMarketWebApp_war_exploded.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/artifacts/SecondHandMarket_war_exploded.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/048bd6b4-a23a-4cff-b6f4-dd4bc10d358f.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/048bd6b4-a23a-4cff-b6f4-dd4bc10d358f/storage_v2/_src_/schema/information_schema.FNRwLQ.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/048bd6b4-a23a-4cff-b6f4-dd4bc10d358f/storage_v2/_src_/schema/information_schema.FNRwLQ.zip" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/048bd6b4-a23a-4cff-b6f4-dd4bc10d358f/storage_v2/_src_/schema/mysql.osA4Bg.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/048bd6b4-a23a-4cff-b6f4-dd4bc10d358f/storage_v2/_src_/schema/performance_schema.kIw0nw.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/048bd6b4-a23a-4cff-b6f4-dd4bc10d358f/storage_v2/_src_/schema/sys.zb4BAA.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/0fafa165-cb0b-4575-89b7-39e3b74fc05b.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/0fafa165-cb0b-4575-89b7-39e3b74fc05b/storage_v2/_src_/schema/information_schema.FNRwLQ.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/0fafa165-cb0b-4575-89b7-39e3b74fc05b/storage_v2/_src_/schema/information_schema.FNRwLQ.zip" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/0fafa165-cb0b-4575-89b7-39e3b74fc05b/storage_v2/_src_/schema/mysql.osA4Bg.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/0fafa165-cb0b-4575-89b7-39e3b74fc05b/storage_v2/_src_/schema/performance_schema.kIw0nw.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/0fafa165-cb0b-4575-89b7-39e3b74fc05b/storage_v2/_src_/schema/sys.zb4BAA.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/d654c5f9-170e-424c-92cd-0b55bb1c314b.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/d654c5f9-170e-424c-92cd-0b55bb1c314b/storage_v2/_src_/schema/information_schema.FNRwLQ.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/d654c5f9-170e-424c-92cd-0b55bb1c314b/storage_v2/_src_/schema/information_schema.FNRwLQ.zip" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/d654c5f9-170e-424c-92cd-0b55bb1c314b/storage_v2/_src_/schema/mysql.osA4Bg.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/d654c5f9-170e-424c-92cd-0b55bb1c314b/storage_v2/_src_/schema/mysql.osA4Bg.zip" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/d654c5f9-170e-424c-92cd-0b55bb1c314b/storage_v2/_src_/schema/performance_schema.kIw0nw.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/d654c5f9-170e-424c-92cd-0b55bb1c314b/storage_v2/_src_/schema/sys.zb4BAA.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/d654c5f9-170e-424c-92cd-0b55bb1c314b/storage_v2/_src_/schema/sys.zb4BAA.zip" beforeDir="false" />
+    <list default="true" id="0a06f4f4-a254-403f-8cce-253e9c414866" name="Changes" comment="entity and s3partially">
       <change beforePath="$PROJECT_DIR$/.idea/dataSources/db68f6ca-27be-4a78-8053-4ce1d3b5bb42.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/db68f6ca-27be-4a78-8053-4ce1d3b5bb42.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/clients/AmazonS3Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/clients/AmazonS3Client.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/entity/OrderItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/entity/OrderItem.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/entity/Post.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/entity/Post.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/entity/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/entity/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/applicaiton.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/applicaiton.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/service/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/web.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/web.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -307,7 +280,7 @@
       <workItem from="1677025914124" duration="343000" />
       <workItem from="1677026392511" duration="28628000" />
       <workItem from="1677102103619" duration="13000" />
-      <workItem from="1677102126374" duration="4804000" />
+      <workItem from="1677102126374" duration="9346000" />
     </task>
     <task id="LOCAL-00001" summary="dao and most entity finish">
       <created>1676598500478</created>
@@ -386,7 +359,14 @@
       <option name="project" value="LOCAL" />
       <updated>1677097521883</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="entity and s3partially">
+      <created>1677107101863</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1677107101863</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -437,7 +417,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="origin/yichen" />
+                        <option value="origin/Dao_part" />
                       </list>
                     </value>
                   </entry>
@@ -466,7 +446,8 @@
     <MESSAGE value="change controller and servel" />
     <MESSAGE value="added s3client" />
     <MESSAGE value="Updated ER diagram" />
-    <option name="LAST_COMMIT_MESSAGE" value="Updated ER diagram" />
+    <MESSAGE value="entity and s3partially" />
+    <option name="LAST_COMMIT_MESSAGE" value="entity and s3partially" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
