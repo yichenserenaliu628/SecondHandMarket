@@ -11,11 +11,9 @@ import java.util.List;
 
 @Controller
 public class PostController {
-
     @Autowired
     private PostService postService;
-
-    @RequestMapping(value = "/Users", method = RequestMethod.GET)
+    @RequestMapping(value = "/users", method = RequestMethod.GET)
     @ResponseBody
     public List<User> getUser() {
         return postService.getUsers();
@@ -24,6 +22,12 @@ public class PostController {
     @RequestMapping(value = "/user/{userId}/post", method = RequestMethod.GET)
     @ResponseBody
     public List<Post> getPosts(@PathVariable(value = "userId") int userId) {
+        return postService.getAllPost(userId);
+    }
+
+    @RequestMapping(value = "/user/{userId}/post", method = RequestMethod.POST)
+    @ResponseBody
+    public List<Post> createPost(@PathVariable(value = "userId") int userId) {
         return postService.getAllPost(userId);
     }
 }

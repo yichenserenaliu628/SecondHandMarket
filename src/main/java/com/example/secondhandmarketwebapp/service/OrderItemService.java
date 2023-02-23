@@ -11,17 +11,13 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class OrderItemService {
-
     @Autowired
     private PostService postService;
-
     @Autowired
     private UserService userService;
-
     @Autowired
     private OrderItemDao orderItemDao;
-
-    public void saveOrderItem(int postId) {
+    public void saveOrderItem(int postId, int quantity) {
         OrderItem orderItem = new OrderItem();
         Post post = postService.getPost(postId);
 
@@ -31,7 +27,7 @@ public class OrderItemService {
 
         orderItem.setPost(post);
         orderItem.setCart(user.getCart());
-        orderItem.setQuantity(1);
+        orderItem.setQuantity(quantity);
         orderItem.setPrice(post.getPrice());
         orderItemDao.save(orderItem);
     }
@@ -43,7 +39,7 @@ public class OrderItemService {
         User user = userService.getUser(username);
 
         orderItem.setCart(user.getCart());
-        orderItem.setQuantity(-1);
+        orderItem.setQuantity(0);
         orderItemDao.delete(orderItem);
     }
 }

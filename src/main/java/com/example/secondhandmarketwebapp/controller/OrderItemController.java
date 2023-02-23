@@ -5,10 +5,7 @@ import com.example.secondhandmarketwebapp.service.OrderItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 public class OrderItemController {
@@ -16,15 +13,17 @@ public class OrderItemController {
     @Autowired
     private OrderItemService orderItemService;
 
-    @RequestMapping(value = "/post/{postId}", method = RequestMethod.POST)
+    @RequestMapping(value = "/addtocart/{postId}/{quantity}", method = RequestMethod.POST)
     @ResponseStatus(value = HttpStatus.CREATED)
-    public void addItemCart(@PathVariable("postId") int postId) {
-        orderItemService.saveOrderItem(postId);
+    public void addItemToCart(@PathVariable("postId") int postId,
+                              @PathVariable("quantity") int quantity) {
+        orderItemService.saveOrderItem(postId, quantity);
+
     }
 
     @RequestMapping(value = "/cart/{orderItemId}", method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
-    public void deleteItemCart(@PathVariable("orderItemId") OrderItem orderItem) {
+    public void deleteItemFromCart(@PathVariable("orderItemId") OrderItem orderItem) {
         orderItemService.deleteOrderItem(orderItem);
     }
 }

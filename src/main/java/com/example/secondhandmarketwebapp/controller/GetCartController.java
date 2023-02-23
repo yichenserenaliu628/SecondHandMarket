@@ -9,12 +9,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
-public class CartController {
-
+public class GetCartController {
     @Autowired
     private CartService cartService;
-
-
     @RequestMapping(value = "/cart", method = RequestMethod.GET)
     @ResponseBody
     public Cart getCart(){

@@ -14,7 +14,6 @@ public class CartService {
 
     @Autowired
     private UserService userService;
-
     @Autowired
     private CartDao cartDao;
 
@@ -39,7 +38,7 @@ public class CartService {
         Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
         String username = loggedInUser.getName();
         User user = userService.getUser(username);
-        if (user  != null) cartDao.removeAllCartItems(user.getCart());
+        if (user != null) cartDao.removeAllCartItems(user.getCart());
     }
 
 }

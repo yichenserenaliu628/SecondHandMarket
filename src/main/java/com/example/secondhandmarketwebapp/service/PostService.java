@@ -9,22 +9,18 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-
 public class PostService {
     @Autowired
     private PostDao postDao;
-
-
     public List<User> getUsers() {
         return postDao.getUsers();
     }
-
     public List<Post> getAllPost(int userId) {
         return postDao.getAllPost(userId);
     }
-
     public Post getPost (int postId) {
         return postDao.getPost(postId);
     }
+
 }
 
