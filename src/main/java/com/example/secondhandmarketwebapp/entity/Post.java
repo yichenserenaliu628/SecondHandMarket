@@ -39,8 +39,10 @@ public class Post implements Serializable {
 	private String description;
 
 	@NotBlank
+	@Min(0)
 	private double price;
 	//private String imageUrl;
+	@NotBlank
 	@Min(1)
 	private int quantity;
 	@NotBlank
@@ -53,11 +55,9 @@ public class Post implements Serializable {
 	@ManyToOne
 	@JsonIgnore
 	private User user;
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(unique = true)
-	private OrderItem orderItem;
+	@OneToMany(mappedBy ="post", cascade = CascadeType.ALL)
+	private List<OrderItem> orderItem;
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(unique = true)
-	@JsonIgnore
 	private ProductImage image;
 }

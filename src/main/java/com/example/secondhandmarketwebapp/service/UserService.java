@@ -9,6 +9,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import com.example.secondhandmarketwebapp.entity.Post;
+import com.example.secondhandmarketwebapp.entity.Review;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class UserService {
@@ -28,14 +33,17 @@ public class UserService {
     public void signUp(User user) {
         Cart cart = new Cart();
         user.setCart(cart);
-
+        List<Post> post = new ArrayList<>();
+        user.setPostList(post);
+        List<Review> review = new ArrayList<>();
+        user.setReviewList(review);
         user.setEnabled(true);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userDao.signUp(user);
     }
 
     public User getUser(String email) {
-        return userDao.getCustomer(email);
+        return userDao.getUser(email);
     }
 
 

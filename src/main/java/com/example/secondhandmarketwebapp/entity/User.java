@@ -6,6 +6,7 @@ import java.util.List;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -52,15 +53,17 @@ public class User implements Serializable {
 	private String userName;
 	@NotBlank
 	@Size(max = 150, message
-			= "Address must not be longer than 100 characters")
+			= "Address must not be longer than 150 characters")
 	private String address;
 
 	@AssertTrue
 	private boolean isEnabled;
 	//private String imageUrl;
 	@OneToMany(mappedBy = "user",  cascade = CascadeType.ALL)
+	@JsonIgnore
 	private List<Post> postList;
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+	@JsonIgnore
 	private List<Review> reviewList;
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(unique = true)

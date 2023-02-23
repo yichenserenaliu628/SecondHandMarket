@@ -26,11 +26,4 @@ public class PostController {
     public List<Post> getPosts(@PathVariable(value = "userId") int userId) {
         return postService.getAllPost(userId);
     }
-
-
-
-
-
-
-
 }
