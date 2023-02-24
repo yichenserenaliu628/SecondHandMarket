@@ -28,5 +28,10 @@ public class PostService {
         int userId = userDao.getUserIdByEmail(userEmail);
         postDao.addPost(userId,post);
     }
+    public void deletePost(String userEmail, int id) {
+//        require to interact with user or not?
+        int userId = userDao.getUserIdByEmail(userEmail);
+        postDao.deletePost(userId, id);
+    }
 }
 

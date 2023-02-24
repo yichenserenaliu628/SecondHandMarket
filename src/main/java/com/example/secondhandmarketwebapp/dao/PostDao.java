@@ -64,4 +64,17 @@ public class PostDao {
             ex.printStackTrace();
         }
     }
+
+    public void deletePost(int userId, int postId) {
+        try (Session session = sessionFactory.openSession()) {
+            Transaction tx = session.beginTransaction();
+            Post post = session.get(Post.class, postId);
+            if (post != null && post.getUser().getId() == userId) {
+                session.delete(post);
+                tx.commit();
+            }
+        } catch (Exception ex) {
+        ex.printStackTrace();
+        }
+    }
 }
