@@ -24,13 +24,13 @@ public class PostController {
     @RequestMapping(value = "/user/{userId}/post", method = RequestMethod.GET)
     @ResponseBody
     public List<Post> getPosts(@PathVariable(value = "userId") int userId) {
-        return postService.getAllPost(userId);
+        return postService.getAllPostUnderOneUser(userId);
     }
 
     @RequestMapping(value = "/user/{userId}/post", method = RequestMethod.POST)
     @ResponseBody
     public List<Post> createPost(@PathVariable(value = "userId") int userId) {
-        return postService.getAllPost(userId);
+        return postService.getAllPostUnderOneUser(userId);
     }
     @RequestMapping(value = "/addPost", method = RequestMethod.POST)
     @ResponseBody
