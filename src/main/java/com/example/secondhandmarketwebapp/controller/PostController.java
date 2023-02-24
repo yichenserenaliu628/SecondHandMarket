@@ -35,7 +35,16 @@ public class PostController {
     @RequestMapping(value = "/addPost", method = RequestMethod.POST)
     @ResponseBody
     public void addPost(@AuthenticationPrincipal UserDetails userDetails, @RequestBody Post post) {
-        System.out.println("the username is" + userDetails.getUsername());
+        System.out.println("the username is " + userDetails.getUsername());
         postService.addPost(userDetails.getUsername(), post);
     }
+
+
+    @DeleteMapping("/deletePost/{id}")
+    @ResponseBody
+    public void deletePostById(@AuthenticationPrincipal UserDetails userDetails, @PathVariable int id) {
+
+        postService.deletePost(userDetails.getUsername(), id);
+    }
+
 }
