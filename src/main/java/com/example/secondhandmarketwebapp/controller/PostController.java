@@ -27,11 +27,7 @@ public class PostController {
         return postService.getAllPost(userId);
     }
 
-    @RequestMapping(value = "/user/{userId}/post", method = RequestMethod.POST)
-    @ResponseBody
-    public List<Post> createPost(@PathVariable(value = "userId") int userId) {
-        return postService.getAllPost(userId);
-    }
+
     @RequestMapping(value = "/addPost", method = RequestMethod.POST)
     @ResponseBody
     public void addPost(@AuthenticationPrincipal UserDetails userDetails, @RequestBody Post post) {
@@ -40,11 +36,12 @@ public class PostController {
     }
 
 
+    /*
     @DeleteMapping("/deletePost/{id}")
     @ResponseBody
     public void deletePostById(@AuthenticationPrincipal UserDetails userDetails, @PathVariable int id) {
 
         postService.deletePost(userDetails.getUsername(), id);
-    }
+    }*/
 
 }
