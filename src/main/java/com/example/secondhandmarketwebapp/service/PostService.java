@@ -1,19 +1,15 @@
 package com.example.secondhandmarketwebapp.service;
 
-import com.amazonaws.services.securityhub.model.Product;
 import com.example.secondhandmarketwebapp.dao.PostDao;
 import com.example.secondhandmarketwebapp.dao.UserDao;
 import com.example.secondhandmarketwebapp.entity.Post;
-import com.example.secondhandmarketwebapp.entity.ProductImage;
 import com.example.secondhandmarketwebapp.entity.User;
 import com.example.secondhandmarketwebapp.payload.response.PostResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Service
 public class PostService {
@@ -65,4 +61,17 @@ public class PostService {
         return postDao.sortProductByPriceHighToLow(allPost);
     }
 
+    public List<PostResponse> filterProductByCategory(String category) {
+        List<Post> allPost = getAllPost();
+        return postDao.filterProductByCategory(allPost, category);
+    }
+
+    public List<PostResponse> filterProductByMaxPrice(Double max) {
+        List<Post> allPost = getAllPost();
+        return postDao.filterProductByMaxPrice(allPost, max);
+    }
+    public List<PostResponse> filterProductByPriceRange(Double min, Double max) {
+        List<Post> allPost = getAllPost();
+        return postDao.filterProductByPriceRange(allPost, min, max);
+    }
 }

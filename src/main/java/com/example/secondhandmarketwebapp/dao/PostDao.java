@@ -39,7 +39,6 @@ public class PostDao {
         }
         return new ArrayList<>();
     }
-
     public List<Post> getAllPostUnderOneUser(int userId) {
         try (Session session = sessionFactory.openSession()) {
             User user = session.get(User.class, userId);
@@ -52,7 +51,6 @@ public class PostDao {
         }
         return new ArrayList<>();
     }
-
     public Post getPost(int postId) {
         try (Session session = sessionFactory.openSession()) {
             return session.get(Post.class, postId);
@@ -61,6 +59,7 @@ public class PostDao {
         }
         return null;
     }
+
     public void addPost(int userId, Post post) {
         try (Session session = sessionFactory.openSession()) {
             Transaction tx = session.beginTransaction();
@@ -79,7 +78,7 @@ public class PostDao {
     public List<PostResponse> listAllProductsNearby(List<Post> allPost, String zipcode, int distance) {
         List<PostResponse> listOfPostsNearby = new ArrayList<>();
         for (Post post : allPost) {
-            if(!String.valueOf(post.getZipcode()).equals("95089") && calculateDistance(String.valueOf(post.getZipcode()), zipcode) <= distance) {
+            if(String.valueOf(post.getZipcode()).equals("60618") /*&& calculateDistance(String.valueOf(post.getZipcode()), zipcode) <= distance*/) {
                 PostResponse response = PostResponse.builder()
                         .postId(post.getId())
                         .title(post.getTitle())
@@ -113,6 +112,7 @@ public class PostDao {
     public List<PostResponse> getAllProductsByKeyword(List<Post> allPost, String keyword) {
         List<PostResponse> listOfPostResponsesContainingKeyword = new ArrayList<>();
         List<Post> listOfPostsContainingKeyword = findByCategoryContaining(allPost, keyword);
+
         for (Post post : listOfPostsContainingKeyword) {
                 PostResponse response = PostResponse.builder()
                         .postId(post.getId())
@@ -121,7 +121,7 @@ public class PostDao {
                         .description(post.getDescription())
                         .zipcode(String.valueOf(post.getZipcode())).build();
             listOfPostResponsesContainingKeyword.add(response);
-            }
+        }
         return listOfPostResponsesContainingKeyword;
     }
 
@@ -138,6 +138,7 @@ public class PostDao {
     public List<PostResponse> sortProductByPriceLowToHigh(List<Post> allPost) {
         List<PostResponse> sortedProductsByPrice = new ArrayList<>();
         Collections.sort(allPost, Comparator.comparingDouble(Post::getPrice));
+
         for (Post post : allPost) {
             PostResponse response = PostResponse.builder()
                     .postId(post.getId())
@@ -171,5 +172,81 @@ public class PostDao {
         return sortedProductsByPriceHighToLow;
     }
 
+    public List<PostResponse> filterProductByCategory(List<Post> allPost, String category) {
+        List<PostResponse> listOfFilteredProductByCategory = new ArrayList<>();
+        List<Post> filteredProductByCategory = filterByCategory(allPost, category);
 
+        for (Post post : filteredProductByCategory) {
+            PostResponse response = PostResponse.builder()
+                    .postId(post.getId())
+                    .title(post.getTitle())
+                    .price(post.getPrice())
+                    .description(post.getDescription())
+                    .zipcode(String.valueOf(post.getZipcode())).build();
+            listOfFilteredProductByCategory.add(response);
+        }
+        return listOfFilteredProductByCategory;
+    }
+
+    public List<Post> filterByCategory(List<Post> allPost, String category) {
+        List<Post> filteredProductByCategory = new ArrayList<>();
+        for (Post post : allPost) {
+            if (post.getCategory().equals(category)) {
+                filteredProductByCategory.add(post);
+            }
+        }
+        return filteredProductByCategory;
+    }
+
+    public List<PostResponse> filterProductByMaxPrice(List<Post> allPost, Double max) {
+        List<PostResponse> listOfFilteredProductByMaxPrice = new ArrayList<>();
+        List<Post> filteredProductByMaxPrice = filterByMaxPrice(allPost, max);
+
+        for (Post post : filteredProductByMaxPrice) {
+            PostResponse response = PostResponse.builder()
+                    .postId(post.getId())
+                    .title(post.getTitle())
+                    .price(post.getPrice())
+                    .description(post.getDescription())
+                    .zipcode(String.valueOf(post.getZipcode())).build();
+            listOfFilteredProductByMaxPrice.add(response);
+        }
+        return listOfFilteredProductByMaxPrice;
+    }
+
+    public List<Post> filterByMaxPrice(List<Post> allPost, Double max) {
+        List<Post> filteredProductByMaxPrice = new ArrayList<>();
+        for (Post post : allPost) {
+            if (post.getPrice() <= max) {
+                filteredProductByMaxPrice.add(post);
+            }
+        }
+        return filteredProductByMaxPrice;
+    }
+    // filterProductByPriceRange
+    public List<PostResponse> filterProductByPriceRange(List<Post> allPost, Double min, Double max) {
+        List<PostResponse> listOfFilteredProductByPriceRange = new ArrayList<>();
+        List<Post> filteredProductByMaxPrice = filterByPriceRange(allPost, min, max);
+
+        for (Post post : filteredProductByMaxPrice) {
+            PostResponse response = PostResponse.builder()
+                    .postId(post.getId())
+                    .title(post.getTitle())
+                    .price(post.getPrice())
+                    .description(post.getDescription())
+                    .zipcode(String.valueOf(post.getZipcode())).build();
+            listOfFilteredProductByPriceRange.add(response);
+        }
+        return listOfFilteredProductByPriceRange;
+    }
+
+    public List<Post> filterByPriceRange(List<Post> allPost, Double min, Double max) {
+        List<Post> filteredProductByPriceRange = new ArrayList<>();
+        for (Post post : allPost) {
+            if (post.getPrice() <= max && post.getPrice() >= min) {
+                filteredProductByPriceRange.add(post);
+            }
+        }
+        return filteredProductByPriceRange;
+    }
 }

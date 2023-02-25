@@ -26,7 +26,7 @@ public class SearchItemController {
             }
             return new ResponseEntity<>(allNearbyPosts, HttpStatus.OK);
         } catch (RuntimeException e) {
-//            logger.error("Failed to list all posts nearby zipcode :" + e);
+//          logger.error("Failed to list all posts nearby zipcode :" + e);
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
