@@ -15,6 +15,9 @@ public class CheckoutController {
     @RequestMapping(value = "/checkout", method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
     public void checkout() {
-        cartService.cleanCart();
+        if (!cartService.stockSufficient()) {
+            System.out.println("手慢了 or stock not sufficient");
+        }
+
     }
 }

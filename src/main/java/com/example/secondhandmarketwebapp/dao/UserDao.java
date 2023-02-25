@@ -1,6 +1,7 @@
 package com.example.secondhandmarketwebapp.dao;
 
 import com.example.secondhandmarketwebapp.entity.Authorities;
+import com.example.secondhandmarketwebapp.entity.Cart;
 import com.example.secondhandmarketwebapp.entity.User;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -54,5 +55,13 @@ public class UserDao {
         int userId = (int) query.getSingleResult();
         session.close();
         return userId;
+    }
+    public User getUserByEmail(String email) {
+        Session session = sessionFactory.openSession();
+        Query query = session.createQuery("SELECT u FROM User u WHERE u.email = :email");
+        query.setParameter("email", email);
+        User user = (User) query.getSingleResult();
+        session.close();
+        return user;
     }
 }

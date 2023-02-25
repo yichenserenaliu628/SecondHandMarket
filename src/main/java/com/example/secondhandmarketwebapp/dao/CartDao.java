@@ -6,11 +6,17 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
+import java.util.*;
+
 @Repository
 public class CartDao {
 
     @Autowired
     private SessionFactory sessionFactory;
+
+    @Autowired
+    private PostDao postDao;
 
     public void removeCartItem(int itemId) {
         Session session = null;
@@ -36,10 +42,21 @@ public class CartDao {
         }
     }
 
-    public void removeAllCartItems(Cart cart) {
-        for (OrderItem item : cart.getOrderItemList()) {
+    public void removeAllCartItems(List<OrderItem> itemList) {
+        for (OrderItem item : itemList) {
             removeCartItem(item.getId());
         }
+    }
+
+    public boolean stockSufficient(List<OrderItem> itemList) {
+        System.out.println("stockSufficient starts");
+        for (OrderItem item : itemList) {
+            if (item.getQuantity() > postDao.getPostQuantity(item.getPost().getId())) {
+                return false;
+            }
+        }
+        removeAllCartItems(itemList);
+        return true;
     }
 }
 

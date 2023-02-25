@@ -1,6 +1,9 @@
 package com.example.secondhandmarketwebapp.service;
 
+import com.amazonaws.services.ec2.model.UserBucketDetails;
 import com.example.secondhandmarketwebapp.dao.CartDao;
+import com.example.secondhandmarketwebapp.dao.OrderItemDao;
+import com.example.secondhandmarketwebapp.dao.UserDao;
 import com.example.secondhandmarketwebapp.entity.Cart;
 import com.example.secondhandmarketwebapp.entity.OrderItem;
 import com.example.secondhandmarketwebapp.entity.User;
@@ -17,13 +20,17 @@ public class CartService {
     @Autowired
     private CartDao cartDao;
 
-    public Cart getCart() {
-        Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
-        String username = loggedInUser.getName();
-        User customer = userService.getUser(username);
+    @Autowired
+    private UserDao userDao;
 
-        if (customer != null) {
-            Cart cart = customer.getCart();
+    @Autowired
+    private OrderItemDao orderItemDao;
+
+    public Cart getCart(String userEmail) {
+
+        User user = userDao.getUserByEmail(userEmail);
+        if (user != null) {
+            Cart cart = user.getCart();
             double totalPrice = 0;
             for (OrderItem item : cart.getOrderItemList()) {
                 totalPrice += item.getPrice() * item.getQuantity();
@@ -34,11 +41,25 @@ public class CartService {
         return new Cart();
     }
 
+
     public void cleanCart() {
+//        Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
+//        String username = loggedInUser.getName();
+//        User user = userService.getUser(username);
+//        if (user != null) {
+//            cartDao.removeAllCartItems(user.getCart());
+//        }
+        return;
+    }
+
+
+
+
+    public boolean stockSufficient() {
         Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
         String username = loggedInUser.getName();
         User user = userService.getUser(username);
-        if (user != null) cartDao.removeAllCartItems(user.getCart());
+        return cartDao.stockSufficient(orderItemDao.getItemsList(user.getCart().getId()));
     }
 
 }

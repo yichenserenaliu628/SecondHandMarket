@@ -8,6 +8,7 @@ import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.Query;
 import javax.persistence.criteria.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -77,4 +78,24 @@ public class PostDao {
         ex.printStackTrace();
         }
     }
+
+    public Post getPostById(int postId) {
+        Session session = sessionFactory.openSession();
+        Query query = session.createQuery("FROM Post WHERE id = :postId");
+        query.setParameter("postId", postId);
+        Post post = (Post) query.getSingleResult();
+        session.close();
+        return post;
+    }
+
+    public int getPostQuantity(int postId) {
+        Session session = sessionFactory.openSession();
+        Query query = session.createQuery("SELECT p.quantity FROM Post p WHERE p.id = :postId");
+        query.setParameter("postId", postId);
+        int quantity = (int) query.getSingleResult();
+        session.close();
+        return quantity;
+    }
+
+
 }
