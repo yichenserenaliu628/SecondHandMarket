@@ -8,9 +8,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
-
 @Controller
 public class PostController {
     @Autowired
@@ -20,28 +18,21 @@ public class PostController {
     public List<User> getUser() {
         return postService.getUsers();
     }
-
     @RequestMapping(value = "/user/{userId}/post", method = RequestMethod.GET)
     @ResponseBody
     public List<Post> getPosts(@PathVariable(value = "userId") int userId) {
-        return postService.getAllPost(userId);
+        return postService.getAllPostUnderOneUser(userId);
     }
 
-
+    @RequestMapping(value = "/user/{userId}/post", method = RequestMethod.POST)
+    @ResponseBody
+    public List<Post> createPost(@PathVariable(value = "userId") int userId) {
+        return postService.getAllPostUnderOneUser(userId);
+    }
     @RequestMapping(value = "/addPost", method = RequestMethod.POST)
     @ResponseBody
     public void addPost(@AuthenticationPrincipal UserDetails userDetails, @RequestBody Post post) {
-        System.out.println("the username is " + userDetails.getUsername());
+        System.out.println("the username is" + userDetails.getUsername());
         postService.addPost(userDetails.getUsername(), post);
     }
-
-
-    /*
-    @DeleteMapping("/deletePost/{id}")
-    @ResponseBody
-    public void deletePostById(@AuthenticationPrincipal UserDetails userDetails, @PathVariable int id) {
-
-        postService.deletePost(userDetails.getUsername(), id);
-    }*/
-
 }

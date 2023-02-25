@@ -24,7 +24,6 @@ public class OrderItem  implements Serializable {
 	private int id;
 	private double price;
 	@ManyToOne
-	//@JsonIgnore
 	private Post post;
 	private int quantity;
 	@ManyToOne

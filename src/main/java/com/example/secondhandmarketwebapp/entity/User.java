@@ -13,6 +13,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import com.example.secondhandmarketwebapp.entity.Post;
+
 @Builder(toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
@@ -21,7 +23,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "user",
 		uniqueConstraints = {
-		@UniqueConstraint(columnNames = "email")
+				@UniqueConstraint(columnNames = "email")
 		})
 public class User implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -58,12 +60,11 @@ public class User implements Serializable {
 
 	@AssertTrue
 	private boolean isEnabled;
-	//private String imageUrl;
-	@OneToMany(mappedBy = "user",  cascade = CascadeType.ALL)
-	@JsonIgnore
-	private List<Post> postList;
+	//private String imageUrl
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-	@JsonIgnore
+	private List<Post> postList;
+
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 	private List<Review> reviewList;
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(unique = true)

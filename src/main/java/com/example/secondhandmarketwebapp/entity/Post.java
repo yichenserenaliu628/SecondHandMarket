@@ -49,15 +49,17 @@ public class Post implements Serializable {
 	@Size(max = 20, message
 			= "Product title should not be longer than 20 characters")
 	private String title;
-	@Column
+
+	@Column(name = "isSold", nullable = false, columnDefinition = "boolean default false")
 	private boolean isSold;
 	private String category;
 	@ManyToOne
 	@JsonIgnore
 	private User user;
-	@OneToMany(mappedBy ="post", cascade = CascadeType.ALL)
-	private List<OrderItem> orderItem;
-	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+
+	/*@OneToMany(mappedBy ="post", cascade = CascadeType.ALL)
+	private List<OrderItem> orderItem;*/
+	@OneToOne(cascade = CascadeType.ALL /*, fetch = FetchType.LAZY*/)
 	@JoinColumn(unique = true)
 	private ProductImage image;
 }
