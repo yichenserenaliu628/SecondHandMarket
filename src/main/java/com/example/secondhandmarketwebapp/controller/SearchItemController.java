@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import java.util.List;
 
 @Controller
-public class SearchItemSortController {
+public class SearchItemController {
     //    private static final Logger logger = LoggerFactory.getLogger(SearchItemController.class);
     @Autowired
     private PostService postService;
