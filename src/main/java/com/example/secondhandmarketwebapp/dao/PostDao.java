@@ -39,6 +39,17 @@ public class PostDao {
         }
         return new ArrayList<>();
     }
+    public List<Post> getPosts() {
+        try (Session session = sessionFactory.openSession()) {
+            CriteriaBuilder builder = session.getCriteriaBuilder();
+            CriteriaQuery<Post> criteria = builder.createQuery(Post.class);
+            criteria.from(Post.class);
+            return session.createQuery(criteria).getResultList();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return new ArrayList<>();
+    }
     public List<Post> getAllPostUnderOneUser(int userId) {
         try (Session session = sessionFactory.openSession()) {
             User user = session.get(User.class, userId);
@@ -84,7 +95,10 @@ public class PostDao {
                         .title(post.getTitle())
                         .price(post.getPrice())
                         .description(post.getDescription())
-                        .zipcode(String.valueOf(post.getZipcode())).build();
+                        .zipcode(String.valueOf(post.getZipcode()))
+                        .quantity(post.getQuantity())
+                        .category(post.getCategory())
+                        .isSold(post.isSold()).build();
                 listOfPostsNearby.add(response);
             }
         }
@@ -114,12 +128,15 @@ public class PostDao {
         List<Post> listOfPostsContainingKeyword = findByCategoryContaining(allPost, keyword);
 
         for (Post post : listOfPostsContainingKeyword) {
-                PostResponse response = PostResponse.builder()
-                        .postId(post.getId())
-                        .title(post.getTitle())
-                        .price(post.getPrice())
-                        .description(post.getDescription())
-                        .zipcode(String.valueOf(post.getZipcode())).build();
+            PostResponse response = PostResponse.builder()
+                    .postId(post.getId())
+                    .title(post.getTitle())
+                    .price(post.getPrice())
+                    .description(post.getDescription())
+                    .zipcode(String.valueOf(post.getZipcode()))
+                    .quantity(post.getQuantity())
+                    .category(post.getCategory())
+                    .isSold(post.isSold()).build();
             listOfPostResponsesContainingKeyword.add(response);
         }
         return listOfPostResponsesContainingKeyword;
@@ -145,7 +162,10 @@ public class PostDao {
                     .title(post.getTitle())
                     .price(post.getPrice())
                     .description(post.getDescription())
-                    .zipcode(String.valueOf(post.getZipcode())).build();
+                    .zipcode(String.valueOf(post.getZipcode()))
+                    .quantity(post.getQuantity())
+                    .category(post.getCategory())
+                    .isSold(post.isSold()).build();
             sortedProductsByPrice.add(response);
         }
         return sortedProductsByPrice;
@@ -166,7 +186,10 @@ public class PostDao {
                     .title(post.getTitle())
                     .price(post.getPrice())
                     .description(post.getDescription())
-                    .zipcode(String.valueOf(post.getZipcode())).build();
+                    .zipcode(String.valueOf(post.getZipcode()))
+                    .quantity(post.getQuantity())
+                    .category(post.getCategory())
+                    .isSold(post.isSold()).build();
             sortedProductsByPriceHighToLow.add(response);
         }
         return sortedProductsByPriceHighToLow;
@@ -182,7 +205,10 @@ public class PostDao {
                     .title(post.getTitle())
                     .price(post.getPrice())
                     .description(post.getDescription())
-                    .zipcode(String.valueOf(post.getZipcode())).build();
+                    .zipcode(String.valueOf(post.getZipcode()))
+                    .quantity(post.getQuantity())
+                    .category(post.getCategory())
+                    .isSold(post.isSold()).build();
             listOfFilteredProductByCategory.add(response);
         }
         return listOfFilteredProductByCategory;
@@ -208,7 +234,10 @@ public class PostDao {
                     .title(post.getTitle())
                     .price(post.getPrice())
                     .description(post.getDescription())
-                    .zipcode(String.valueOf(post.getZipcode())).build();
+                    .zipcode(String.valueOf(post.getZipcode()))
+                    .quantity(post.getQuantity())
+                    .category(post.getCategory())
+                    .isSold(post.isSold()).build();
             listOfFilteredProductByMaxPrice.add(response);
         }
         return listOfFilteredProductByMaxPrice;
@@ -234,7 +263,10 @@ public class PostDao {
                     .title(post.getTitle())
                     .price(post.getPrice())
                     .description(post.getDescription())
-                    .zipcode(String.valueOf(post.getZipcode())).build();
+                    .zipcode(String.valueOf(post.getZipcode()))
+                    .quantity(post.getQuantity())
+                    .category(post.getCategory())
+                    .isSold(post.isSold()).build();
             listOfFilteredProductByPriceRange.add(response);
         }
         return listOfFilteredProductByPriceRange;

@@ -62,9 +62,11 @@ public class User implements Serializable {
 	private boolean isEnabled;
 	//private String imageUrl
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL /*, fetch = FetchType.EAGER*/)
+	@JsonIgnore
 	private List<Post> postList;
 
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+	@JsonIgnore
 	private List<Review> reviewList;
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(unique = true)

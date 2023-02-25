@@ -23,7 +23,8 @@ public class PostService {
     public List<Post> getAllPostUnderOneUser(int userId) {
         return postDao.getAllPostUnderOneUser(userId);
     }
-    public List<Post> getAllPost() {
+    public List<Post> getAllPost() { return postDao.getPosts(); }
+    /*public List<Post> getAllPostNew() {
         List<User> allUsers = postDao.getUsers();
         List<Post> allPosts = new ArrayList<>();
         for(User user : allUsers) {
@@ -33,7 +34,7 @@ public class PostService {
             }
         }
         return allPosts;
-    }
+    }*/
     public Post getPost (int postId) {
         return postDao.getPost(postId);
     }

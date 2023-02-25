@@ -954,10 +954,10 @@ sys|schema||mysql.sys|localhost|TRIGGER|G</Grants>
     <schema id="278" parent="1" name="secondhandMarket">
       <CollationName>utf8mb4_0900_ai_ci</CollationName>
     </schema>
-    <schema id="279" parent="1" name="secondhandMarketDB">
+    <schema id="279" parent="1" name="sys">
       <CollationName>utf8mb4_0900_ai_ci</CollationName>
     </schema>
-    <schema id="280" parent="1" name="sys">
+    <schema id="280" parent="1" name="secondhandMarketDB">
       <CollationName>utf8mb4_0900_ai_ci</CollationName>
     </schema>
     <user id="281" parent="1" name="admin"/>
@@ -1256,7 +1256,7 @@ sys|schema||mysql.sys|localhost|TRIGGER|G</Grants>
       <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
     </key>
     <column id="347" parent="293" name="id">
-      <AutoIncrement>3</AutoIncrement>
+      <AutoIncrement>8</AutoIncrement>
       <DasType>int|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>

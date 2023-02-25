@@ -42,7 +42,6 @@ public class FilterItemController {
         }
     }
 
-
     @GetMapping("/products/filter/{category}")
     public ResponseEntity<List<PostResponse>> filterProductByCategory(@PathVariable String category) {
         try {

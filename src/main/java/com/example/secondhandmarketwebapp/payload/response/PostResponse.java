@@ -1,5 +1,6 @@
 package com.example.secondhandmarketwebapp.payload.response;
 
+import com.example.secondhandmarketwebapp.entity.ProductImage;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,5 +14,8 @@ public class PostResponse {
     double price;
     String description;
     String zipcode;
-    String uuid;
+    int quantity;
+    String category;
+    boolean isSold;
+    //ProductImage image;
 }
