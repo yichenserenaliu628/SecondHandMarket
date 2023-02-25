@@ -54,4 +54,15 @@ public class PostService {
         List<Post> allPost = getAllPost();
         return postDao.getAllProductsByKeyword(allPost, keyword);
     }
+
+    public List<PostResponse> sortProductByPriceLowToHigh() {
+        List<Post> allPost = getAllPost();
+        return postDao.sortProductByPriceLowToHigh(allPost);
+    }
+
+    public List<PostResponse> sortProductByPriceHighToLow() {
+        List<Post> allPost = getAllPost();
+        return postDao.sortProductByPriceHighToLow(allPost);
+    }
+
 }

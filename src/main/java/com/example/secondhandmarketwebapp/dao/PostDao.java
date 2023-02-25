@@ -18,6 +18,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import javax.json.JsonReader;
 
@@ -133,45 +135,41 @@ public class PostDao {
         return listOfPostsCategoryContainingKeyword;
     }
 
-
-/*
-        List<Product> listC = productRepository.findByCategoryContaining(keyword);
-        List<Product> listD = productRepository.findByDescriptionContaining(keyword);
-        List<Product> listM = productRepository.findByManufacturerContaining(keyword);
-        List<Product> listN = productRepository.findByTitleContaining(keyword);
-        // Deduplication
-        List<Product> finalList = new ArrayList<>();
-        Set<Integer> idSet = new HashSet<>();
-        updateFinalList(listC, finalList, idSet);
-        updateFinalList(listD, finalList, idSet);
-        updateFinalList(listM, finalList, idSet);
-        updateFinalList(listN, finalList, idSet);
-        // Convert the list of Product to list of ProductResponse
-        List<ProductResponse> finalResponse = new ArrayList<>();
-        for (Product product : finalList) {
-            String uuid = "";
-            Set<ProductImage> images = product.getImage();
-            if (images.size() > 0) {
-                uuid = images.iterator().next().getUuid();
-            }
-            finalResponse.add(ProductResponse.builder()
-                    .title(product.getTitle())
-                    .uuid(uuid)
-                    .build());
+    public List<PostResponse> sortProductByPriceLowToHigh(List<Post> allPost) {
+        List<PostResponse> sortedProductsByPrice = new ArrayList<>();
+        Collections.sort(allPost, Comparator.comparingDouble(Post::getPrice));
+        for (Post post : allPost) {
+            PostResponse response = PostResponse.builder()
+                    .postId(post.getId())
+                    .title(post.getTitle())
+                    .price(post.getPrice())
+                    .description(post.getDescription())
+                    .zipcode(String.valueOf(post.getZipcode())).build();
+            sortedProductsByPrice.add(response);
         }
-        return finalResponse;
+        return sortedProductsByPrice;
     }
 
-    private void updateFinalList(List<Product> rawList, List<Product> finalList, Set<Integer> idSet) {
-        if (rawList == null || rawList.size() == 0) {
-            return;
-        }
-        for (Product product : rawList) {
-            if (!idSet.contains(product.getId())) {
-                idSet.add(product.getId());
-                finalList.add(product);
+    public List<PostResponse> sortProductByPriceHighToLow(List<Post> allPost) {
+        List<PostResponse> sortedProductsByPriceHighToLow = new ArrayList<>();
+        Collections.sort(allPost, new Comparator<Post>() {
+            @Override
+            public int compare(Post o1, Post o2) {
+                if (o1.getPrice() == o2.getPrice()) return 0;
+                return o1.getPrice() < o2.getPrice() ? 1 : -1;
             }
+        });
+        for (Post post : allPost) {
+            PostResponse response = PostResponse.builder()
+                    .postId(post.getId())
+                    .title(post.getTitle())
+                    .price(post.getPrice())
+                    .description(post.getDescription())
+                    .zipcode(String.valueOf(post.getZipcode())).build();
+            sortedProductsByPriceHighToLow.add(response);
         }
-    }*/
+        return sortedProductsByPriceHighToLow;
+    }
+
 
 }
