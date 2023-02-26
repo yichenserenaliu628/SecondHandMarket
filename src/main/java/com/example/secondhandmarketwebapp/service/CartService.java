@@ -9,6 +9,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.Set;
+
 @Service
 public class CartService {
 
@@ -34,11 +36,12 @@ public class CartService {
         return new Cart();
     }
 
-    public void cleanCart() {
+    public Set<Integer> cleanCart() {
         Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
         String username = loggedInUser.getName();
         User user = userService.getUser(username);
-        if (user != null) cartDao.removeAllCartItems(user.getCart());
+        if (user != null) return cartDao.removeAllCartItems(user.getCart());
+        return null;
     }
 
 }

@@ -6,6 +6,10 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
+import java.util.HashSet;
+import java.util.Set;
+
 @Repository
 public class CartDao {
 
@@ -36,10 +40,13 @@ public class CartDao {
         }
     }
 
-    public void removeAllCartItems(Cart cart) {
+    public Set<Integer> removeAllCartItems(Cart cart) {
+        Set<Integer> sellerSets = new HashSet<>();
         for (OrderItem item : cart.getOrderItemList()) {
+            sellerSets.add(item.getPost().getUser().getId());
             removeCartItem(item.getId());
         }
+        return sellerSets;
     }
 }
 

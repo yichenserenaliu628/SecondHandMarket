@@ -8,13 +8,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import java.util.Set;
+
 @Controller
 public class CheckoutController {
     @Autowired
     private CartService cartService;
     @RequestMapping(value = "/checkout", method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
-    public void checkout() {
-        cartService.cleanCart();
+    //ToDO
+    public String checkout() {
+        Set<Integer> sellerList = cartService.cleanCart();
+        return "redirect:/checkout?reveiewuser";
     }
 }
