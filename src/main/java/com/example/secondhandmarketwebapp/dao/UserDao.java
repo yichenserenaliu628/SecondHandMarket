@@ -55,4 +55,12 @@ public class UserDao {
         session.close();
         return userId;
     }
+    public User getUserByEmail(String email) {
+        Session session = sessionFactory.openSession();
+        Query query = session.createQuery("SELECT u FROM User u WHERE u.email = :email");
+        query.setParameter("email", email);
+        User user = (User) query.getSingleResult();
+        session.close();
+        return user;
+    }
 }

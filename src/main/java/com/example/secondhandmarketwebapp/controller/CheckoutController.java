@@ -16,9 +16,17 @@ public class CheckoutController {
     private CartService cartService;
     @RequestMapping(value = "/checkout", method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
-    //ToDO
     public String checkout() {
-        Set<Integer> sellerList = cartService.cleanCart();
-        return "redirect:/checkout?reveiewuser";
+        if (!cartService.stockSufficient()) {
+            // TODO: how to report error message to users
+            System.out.println("手慢了 or stock not sufficient");
+        } else {
+            Set<Integer> sellerList = cartService.cleanCart();
+            // test passed. sellerId 可以被打印出来 :)
+            for (int sellerId : sellerList) {
+                System.out.println(sellerId);
+            }
+        }
+        return "redirect:/checkout?reviewuser";
     }
 }
