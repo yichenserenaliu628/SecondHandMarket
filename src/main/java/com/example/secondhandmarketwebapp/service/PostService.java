@@ -40,7 +40,7 @@ public class PostService {
     }
     public void addPost(String userEmail, Post post) {
         int userId = userDao.getUserIdByEmail(userEmail);
-        postDao.addPost(userId,post);
+        postDao.addPost(userId, post);
     }
     public List<PostResponse> listAllProductsNearby(String zipcode, int distance) {
         List<Post> allPost = getAllPost();
@@ -74,5 +74,14 @@ public class PostService {
     public List<PostResponse> filterProductByPriceRange(Double min, Double max) {
         List<Post> allPost = getAllPost();
         return postDao.filterProductByPriceRange(allPost, min, max);
+    }
+
+    public void deletePost(String userEmail, int id) {
+        int userId = userDao.getUserIdByEmail(userEmail);
+        postDao.deletePost(userId, id);
+    }
+
+    public boolean isSoldOut(int postId) {
+        return postDao.isSoldOut(postId);
     }
 }

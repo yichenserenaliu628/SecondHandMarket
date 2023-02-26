@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.json.Json;
 import javax.json.JsonObject;
+import javax.persistence.Query;
 import javax.persistence.criteria.*;
 import java.io.IOException;
 import java.io.InputStream;
@@ -280,5 +281,55 @@ public class PostDao {
             }
         }
         return filteredProductByPriceRange;
+    }
+
+
+    public void deletePost(int userId, int postId) {
+        try (Session session = sessionFactory.openSession()) {
+            Transaction tx = session.beginTransaction();
+            Post post = session.get(Post.class, postId);
+            if (post != null && post.getUser().getId() == userId) {
+                session.delete(post);
+                tx.commit();
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void updatePostQuantity(Post post, int quantity) {
+        try (Session session = sessionFactory.openSession()) {
+            Transaction tx = session.beginTransaction();
+            int newQuantity = post.getQuantity() - quantity;
+            post.setQuantity(newQuantity);
+            if (newQuantity == 0) {
+                post.setSold(true);
+            }
+            session.update(post);
+            tx.commit();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public boolean isSoldOut(int postId) {
+        try (Session session = sessionFactory.openSession()) {
+            Post post = session.get(Post.class, postId);
+            if (post != null) {
+                return post.isSold();
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return false;
+    }
+
+    public Post getPostById(int postId) {
+        Session session = sessionFactory.openSession();
+        Query query = session.createQuery("FROM Post WHERE id = :postId");
+        query.setParameter("postId", postId);
+        Post post = (Post) query.getSingleResult();
+        session.close();
+        return post;
     }
 }

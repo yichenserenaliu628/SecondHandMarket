@@ -22,10 +22,10 @@ public class CartService {
     public Cart getCart() {
         Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
         String username = loggedInUser.getName();
-        User customer = userService.getUser(username);
+        User user = userService.getUserByEmail(username);
 
-        if (customer != null) {
-            Cart cart = customer.getCart();
+        if (user != null) {
+            Cart cart = user.getCart();
             double totalPrice = 0;
             for (OrderItem item : cart.getOrderItemList()) {
                 totalPrice += item.getPrice() * item.getQuantity();
@@ -39,9 +39,16 @@ public class CartService {
     public Set<Integer> cleanCart() {
         Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
         String username = loggedInUser.getName();
-        User user = userService.getUser(username);
+        User user = userService.getUserByEmail(username);
         if (user != null) return cartDao.removeAllCartItems(user.getCart());
         return null;
+    }
+
+    public boolean stockSufficient() {
+        Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
+        String username = loggedInUser.getName();
+        User user = userService.getUserByEmail(username);
+        return cartDao.stockSufficient(user.getCart().getOrderItemList());
     }
 
 }

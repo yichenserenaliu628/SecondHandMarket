@@ -4,6 +4,7 @@ import com.example.secondhandmarketwebapp.entity.Post;
 import com.example.secondhandmarketwebapp.entity.User;
 import com.example.secondhandmarketwebapp.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -34,5 +35,10 @@ public class PostController {
     public void addPost(@AuthenticationPrincipal UserDetails userDetails, @RequestBody Post post) {
         System.out.println("the username is" + userDetails.getUsername());
         postService.addPost(userDetails.getUsername(), post);
+    }
+    @DeleteMapping("/deletePost/{id}")
+    @ResponseBody
+    public void deletePostById(@AuthenticationPrincipal UserDetails userDetails, @PathVariable int id) {
+        postService.deletePost(userDetails.getUsername(), id);
     }
 }
