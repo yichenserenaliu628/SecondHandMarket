@@ -1,28 +1,27 @@
 package com.example.secondhandmarketwebapp.service;
 
-import com.example.secondhandmarketwebapp.repository.MessageRepository;
+import com.example.secondhandmarketwebapp.dao.MessageDao;
+import com.example.secondhandmarketwebapp.entity.Message;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.secondhandmarketwebapp.entity.Message;
-
 import java.util.Date;
-import java.util.List;
 
 @Service
 public class MessageService {
     @Autowired
-    private MessageRepository messageRepository;
+    private MessageDao messageDao;
 
     public void sendMessage(Message message) {
         message.setTimestamp(new Date());
-        messageRepository.save(message);
+        messageDao.save(message);
     }
-    public List<Message> getMessagesBySenderId(int senderId) {
-        return messageRepository.findBySenderId(senderId);
+    public String getMessagesBySenderId(int senderId) {
+        return messageDao.findBySenderId(senderId);
     }
 
-    public List<Message> getMessagesByReceiverId(int receiverId) {
-        return messageRepository.findByReceiverId(receiverId);
+    public String getMessagesByReceiverId(int receiverId) {
+        return messageDao.findByReceiverId(receiverId);
     }
 }

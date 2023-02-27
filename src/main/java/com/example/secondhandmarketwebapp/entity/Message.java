@@ -1,10 +1,17 @@
 package com.example.secondhandmarketwebapp.entity;
 
-import lombok.*;
+import java.io.Serializable;
+import java.util.Date;
+import java.util.List;
 
 import javax.persistence.*;
-import java.util.Date;
 
+import com.amazonaws.services.dynamodbv2.xspec.S;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 @Builder(toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
@@ -13,7 +20,6 @@ import java.util.Date;
 @Entity
 @Table(name = "message")
 public class Message {
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -32,7 +38,6 @@ public class Message {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false)
     private Date timestamp;
-
 
 }
 
