@@ -5,7 +5,6 @@ import com.example.secondhandmarketwebapp.entity.User;
 import com.example.secondhandmarketwebapp.service.PostService;
 import com.example.secondhandmarketwebapp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,6 +22,13 @@ public class PostController {
     public List<User> getUser() {
         return postService.getUsers();
     }
+
+    @RequestMapping(value = "/posts", method = RequestMethod.GET)
+    @ResponseBody
+    public List<Post> getPost() {
+        return postService.getAllPost();
+    }
+
     @RequestMapping(value = "/user/{email}/post", method = RequestMethod.GET)
     @ResponseBody
     public List<Post> getPosts(@PathVariable(value = "email") String email) {

@@ -4,6 +4,7 @@ import com.example.secondhandmarketwebapp.dao.CartDao;
 import com.example.secondhandmarketwebapp.entity.Cart;
 import com.example.secondhandmarketwebapp.entity.OrderItem;
 import com.example.secondhandmarketwebapp.entity.User;
+import com.example.secondhandmarketwebapp.exception.CheckoutException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -34,6 +35,14 @@ public class CartService {
             return cart;
         }
         return new Cart();
+    }
+
+    public Set<Integer> checkOut() throws CheckoutException {
+        Set<Integer> sellerIds = cleanCart();
+        if (!stockSufficient()) {
+            throw new CheckoutException("Sorry. The seller does not have sufficent stock.");
+        }
+        return sellerIds;
     }
 
     public Set<Integer> cleanCart() {
