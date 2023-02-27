@@ -90,7 +90,7 @@ public class PostDao {
     public List<PostResponse> listAllProductsNearby(List<Post> allPost, String zipcode, int distance) {
         List<PostResponse> listOfPostsNearby = new ArrayList<>();
         for (Post post : allPost) {
-            if(String.valueOf(post.getZipcode()).equals("60618") /*&& calculateDistance(String.valueOf(post.getZipcode()), zipcode) <= distance*/) {
+            if(calculateDistance(String.valueOf(post.getZipcode()), zipcode) <= distance) {
                 PostResponse response = PostResponse.builder()
                         .postId(post.getId())
                         .title(post.getTitle())

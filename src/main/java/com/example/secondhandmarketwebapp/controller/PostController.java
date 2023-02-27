@@ -5,6 +5,7 @@ import com.example.secondhandmarketwebapp.entity.User;
 import com.example.secondhandmarketwebapp.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -32,9 +33,12 @@ public class PostController {
     }
     @RequestMapping(value = "/addPost", method = RequestMethod.POST)
     @ResponseBody
-    public void addPost(@AuthenticationPrincipal UserDetails userDetails, @RequestBody Post post) {
-        System.out.println("the username is" + userDetails.getUsername());
+    public ResponseEntity<String> addPost(@AuthenticationPrincipal UserDetails userDetails, @RequestBody Post post) {
+        if (!postService.isValidZipCode((String.valueOf(post.getZipcode())))) {
+            return ResponseEntity.badRequest().body("Invalid zipcode. Please provide a valid zipcode.");
+        }
         postService.addPost(userDetails.getUsername(), post);
+        return ResponseEntity.ok("Post added successfully.");
     }
     @DeleteMapping("/deletePost/{id}")
     @ResponseBody
