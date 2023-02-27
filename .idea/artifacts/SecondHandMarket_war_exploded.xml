@@ -1,5 +1,6 @@
 <component name="ArtifactManager">
   <artifact type="exploded-war" name="SecondHandMarket:war exploded">
+<<<<<<< HEAD
     <output-path>$PROJECT_DIR$/target/secondHandMarketWebApp-1.0-SNAPSHOT</output-path>
     <properties id="maven-jee-properties">
       <options>
@@ -8,6 +9,9 @@
         <packaging>war</packaging>
       </options>
     </properties>
+=======
+    <output-path>$PROJECT_DIR$/out/artifacts/SecondHandMarket_war_exploded</output-path>
+>>>>>>> 4a7827790d31ae2e962585bbc4f47670025dcbe2
     <root id="root">
       <element id="directory" name="WEB-INF">
         <element id="directory" name="classes">
@@ -297,9 +301,12 @@
           <element id="library" level="project" name="Maven: org.springframework:spring-messaging:5.3.25" />
         </element>
       </element>
+<<<<<<< HEAD
       <element id="directory" name="META-INF">
         <element id="file-copy" path="$PROJECT_DIR$/target/secondHandMarketWebApp-1.0-SNAPSHOT/META-INF/MANIFEST.MF" />
       </element>
+=======
+>>>>>>> 4a7827790d31ae2e962585bbc4f47670025dcbe2
       <element id="javaee-facet-resources" facet="SecondHandMarket/web/Web" />
     </root>
   </artifact>
