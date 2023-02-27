@@ -8,8 +8,12 @@ import com.example.secondhandmarketwebapp.payload.response.PostResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 @Service
 public class PostService {
@@ -83,5 +87,21 @@ public class PostService {
 
     public boolean isSoldOut(int postId) {
         return postDao.isSoldOut(postId);
+    }
+
+    public boolean isValidZipCode(String zipCode) {
+        try {
+            String url = "https://www.mapquestapi.com/geocoding/v1/address?key=2EsrDBJE7aeBUgday06d7Grj84ccUvfY&postalCode=" + zipCode;
+            HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+            connection.setRequestMethod("GET");
+            connection.setRequestProperty("Accept", "application/json");
+            Scanner scanner = new Scanner(connection.getInputStream());
+            String response = scanner.useDelimiter("\\A").next();
+            scanner.close();
+            return response.contains("\"postalCode\":\"" + zipCode + "\",\"geocodeQualityCode\"");
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }
