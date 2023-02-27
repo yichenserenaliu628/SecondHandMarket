@@ -28,17 +28,7 @@ public class PostService {
         return postDao.getAllPostUnderOneUser(userId);
     }
     public List<Post> getAllPost() { return postDao.getPosts(); }
-    /*public List<Post> getAllPostNew() {
-        List<User> allUsers = postDao.getUsers();
-        List<Post> allPosts = new ArrayList<>();
-        for(User user : allUsers) {
-            List<Post> userPosts = postDao.getAllPostUnderOneUser(user.getId());
-            if(userPosts != null) {
-                allPosts.addAll(userPosts);
-            }
-        }
-        return allPosts;
-    }*/
+
     public Post getPost (int postId) {
         return postDao.getPost(postId);
     }

@@ -3,6 +3,7 @@ package com.example.secondhandmarketwebapp.controller;
 import com.example.secondhandmarketwebapp.entity.Post;
 import com.example.secondhandmarketwebapp.entity.User;
 import com.example.secondhandmarketwebapp.service.PostService;
+import com.example.secondhandmarketwebapp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,22 +16,20 @@ import java.util.List;
 public class PostController {
     @Autowired
     private PostService postService;
+    @Autowired
+    private UserService userService;
     @RequestMapping(value = "/users", method = RequestMethod.GET)
     @ResponseBody
     public List<User> getUser() {
         return postService.getUsers();
     }
-    @RequestMapping(value = "/user/{userId}/post", method = RequestMethod.GET)
+    @RequestMapping(value = "/user/{email}/post", method = RequestMethod.GET)
     @ResponseBody
-    public List<Post> getPosts(@PathVariable(value = "userId") int userId) {
-        return postService.getAllPostUnderOneUser(userId);
+    public List<Post> getPosts(@PathVariable(value = "email") String email) {
+        User user = userService.getUserByEmail(email);
+        return postService.getAllPostUnderOneUser(user.getId());
     }
 
-    @RequestMapping(value = "/user/{userId}/post", method = RequestMethod.POST)
-    @ResponseBody
-    public List<Post> createPost(@PathVariable(value = "userId") int userId) {
-        return postService.getAllPostUnderOneUser(userId);
-    }
     @RequestMapping(value = "/addPost", method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<String> addPost(@AuthenticationPrincipal UserDetails userDetails, @RequestBody Post post) {

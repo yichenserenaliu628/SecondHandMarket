@@ -63,6 +63,7 @@ public class PostDao {
         }
         return new ArrayList<>();
     }
+
     public Post getPost(int postId) {
         try (Session session = sessionFactory.openSession()) {
             return session.get(Post.class, postId);
