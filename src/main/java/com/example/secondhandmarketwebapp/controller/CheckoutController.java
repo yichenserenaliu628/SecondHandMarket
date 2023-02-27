@@ -30,12 +30,9 @@ public class CheckoutController {
             Set<Integer> sellerList = cartService.checkOut();
             model.addAttribute("sellerIdLists", sellerList);
             redirectAttributes.addFlashAttribute("sellerIdLists", sellerList);
-            //System.out.println("cheout okay");
-            //System.out.println(sellerList);
             return "redirect:/review";
         } catch (CheckoutException e) {
             model.addAttribute("error", "Checkout failed: " + e.getMessage());
-            //System.out.println("sold out");
             return "checkout";
         }
     }
