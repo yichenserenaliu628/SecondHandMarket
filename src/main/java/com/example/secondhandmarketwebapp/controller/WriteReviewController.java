@@ -15,12 +15,9 @@ import java.util.Set;
 public class WriteReviewController {
     @Autowired
     private ReviewService reviewService;
-
     @RequestMapping(value = "/review", method = RequestMethod.POST)
-    @ResponseStatus(value = HttpStatus.OK)
+    @ResponseBody
     public void writeReview(@RequestBody List<Review> reviewList){
         reviewService.addReview(reviewList);
-
     }
-
 }

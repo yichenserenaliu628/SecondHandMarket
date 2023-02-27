@@ -22,13 +22,10 @@ import lombok.Setter;
 @Entity
 @Table(name = "review")
 public class Review implements Serializable {
-
 	private static final long serialVersionUID = 1L;
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-
 	@Min(value = 0, message = "Rating should not be less than 0")
 	@Max(value = 5, message = "Rating should not be greater than 5.0")
 	private double rating;

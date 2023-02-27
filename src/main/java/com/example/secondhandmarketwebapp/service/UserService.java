@@ -50,6 +50,11 @@ public class UserService {
         return userDao.getUser(email);
     }
 
+    public int getCurrentUserId() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User principal = (User) authentication.getPrincipal();
+        return principal.getId();
+    }
 
 
 }

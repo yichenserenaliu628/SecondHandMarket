@@ -1,4 +1,4 @@
-package com.example.secondhandmarketwebapp;
+package com.example.secondhandmarketwebapp.config;
 
 import java.util.Properties;
 import javax.sql.DataSource;

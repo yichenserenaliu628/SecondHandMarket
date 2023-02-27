@@ -11,12 +11,9 @@ import java.util.List;
 public class ReviewService {
     @Autowired
     private ReviewDao reviewDao;
-
     public void addReview(List<Review> reviewList){
         for(Review review : reviewList){
             reviewDao.addReview(review);
         }
     }
-
-
 }
