@@ -293,6 +293,12 @@
           <element id="library" level="project" name="Maven: org.springframework.security:spring-security-config:5.5.2" />
           <element id="library" level="project" name="Maven: org.springframework:spring-websocket:5.3.25" />
           <element id="library" level="project" name="Maven: org.springframework:spring-messaging:5.3.25" />
+          <element id="library" level="project" name="Maven: org.apache.tomcat:tomcat-util:11.0.0-M3" />
+          <element id="library" level="project" name="Maven: org.apache.tomcat:tomcat-juli:11.0.0-M3" />
+          <element id="library" level="project" name="Maven: org.apache.tomcat.embed:tomcat-embed-core:10.1.5" />
+          <element id="library" level="project" name="Maven: org.apache.tomcat:tomcat-annotations-api:10.1.5" />
+          <element id="library" level="project" name="Maven: org.springframework.boot:spring-boot:3.0.3" />
+          <element id="library" level="project" name="Maven: org.springframework.boot:spring-boot-configuration-processor:3.0.3" />
         </element>
       </element>
       <element id="directory" name="META-INF">
