@@ -149,8 +149,6 @@
             <artifactId>spring-security-config</artifactId>
             <version>5.5.2</version>
         </dependency>
-<<<<<<< HEAD
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-websocket</artifactId>
@@ -165,8 +163,6 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-
-=======
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot</artifactId>
@@ -187,9 +183,6 @@
             <artifactId>spring-messaging</artifactId>
             <version>5.3.25</version>
         </dependency>
->>>>>>> f7f1e5b70efdd7279437bb5f89e400b022983481
-
-
     </dependencies>
 
 
