@@ -2,9 +2,12 @@ package com.example.secondhandmarketwebapp.controller;
 
 import com.example.secondhandmarketwebapp.entity.Post;
 import com.example.secondhandmarketwebapp.entity.User;
+import com.example.secondhandmarketwebapp.exception.InvalidPostException;
+import com.example.secondhandmarketwebapp.exception.InvalidUserException;
 import com.example.secondhandmarketwebapp.service.PostService;
 import com.example.secondhandmarketwebapp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -39,12 +42,14 @@ public class PostController {
     @RequestMapping(value = "/addPost", method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<String> addPost(@AuthenticationPrincipal UserDetails userDetails, @RequestBody Post post) {
-        if (!postService.isValidZipCode((String.valueOf(post.getZipcode())))) {
-            return ResponseEntity.badRequest().body("Invalid zipcode. Please provide a valid zipcode.");
-        }
-        postService.addPost(userDetails.getUsername(), post);
-        return ResponseEntity.ok("Post added successfully.");
+        return postService.addPost(userDetails.getUsername(), post);
     }
+
+    @ExceptionHandler(InvalidPostException.class)
+    public ResponseEntity<String> handleInvalidPostException(InvalidPostException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getErrorMessage());
+    }
+
     @DeleteMapping("/deletePost/{id}")
     @ResponseBody
     public void deletePostById(@AuthenticationPrincipal UserDetails userDetails, @PathVariable int id) {
