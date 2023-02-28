@@ -4,8 +4,10 @@ import com.example.secondhandmarketwebapp.dao.PostDao;
 import com.example.secondhandmarketwebapp.dao.UserDao;
 import com.example.secondhandmarketwebapp.entity.Post;
 import com.example.secondhandmarketwebapp.entity.User;
+import com.example.secondhandmarketwebapp.exception.InvalidPostException;
 import com.example.secondhandmarketwebapp.payload.response.PostResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -32,9 +34,28 @@ public class PostService {
     public Post getPost (int postId) {
         return postDao.getPost(postId);
     }
-    public void addPost(String userEmail, Post post) {
+    public ResponseEntity<String> addPost(String userEmail, Post post) throws InvalidPostException {
+        if (!isValidZipCode(String.valueOf(post.getZipcode()))) {
+            throw new InvalidPostException("Invalid zipcode");
+        }
+        if (post.getDescription() == null || post.getDescription().isEmpty()) {
+            throw new InvalidPostException("Description is required");
+        }
+        if (post.getPrice() < 0) {
+            throw new InvalidPostException("Price must be greater than or equal to zero");
+        }
+        if (post.getQuantity() <= 0) {
+            throw new InvalidPostException("Quantity must be greater than zero");
+        }
+        if (post.getTitle() == null || post.getTitle().isEmpty()) {
+            throw new InvalidPostException("Title is required");
+        }
+        if (post.getCategory() == null || post.getCategory().isEmpty()) {
+            throw new InvalidPostException("Category is required");
+        }
         int userId = userDao.getUserIdByEmail(userEmail);
         postDao.addPost(userId, post);
+        return ResponseEntity.ok("Post added successfully.");
     }
     public List<PostResponse> listAllProductsNearby(String zipcode, int distance) {
         List<Post> allPost = getAllPost();
