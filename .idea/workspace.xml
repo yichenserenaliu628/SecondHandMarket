@@ -11,7 +11,6 @@
   <component name="ChangeListManager">
     <list default="true" id="0a06f4f4-a254-403f-8cce-253e9c414866" name="Changes" comment="getPosts by user email">
       <change afterPath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/WebsocketConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/controller/ChatController.java" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/entity/Message.java" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/entity/Status.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/artifacts/secondHandMarketWebApp_war_exploded.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/artifacts/secondHandMarketWebApp_war_exploded.xml" afterDir="false" />
@@ -19,6 +18,7 @@
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/controller/ChatController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/controller/ChatController.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -337,7 +337,7 @@
       <workItem from="1677391242513" duration="9757000" />
       <workItem from="1677482406721" duration="2161000" />
       <workItem from="1677488420373" duration="7778000" />
-      <workItem from="1677566210341" duration="969000" />
+      <workItem from="1677566210341" duration="1591000" />
     </task>
     <task id="LOCAL-00001" summary="dao and most entity finish">
       <created>1676598500478</created>

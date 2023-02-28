@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="@laiflagcomp-instance.cfs56ldxvzwh.us-west-1.rds.amazonaws.com" uuid="db68f6ca-27be-4a78-8053-4ce1d3b5bb42">
+    <data-source source="LOCAL" name="rds" uuid="db68f6ca-27be-4a78-8053-4ce1d3b5bb42">
       <driver-ref>mysql.8</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>

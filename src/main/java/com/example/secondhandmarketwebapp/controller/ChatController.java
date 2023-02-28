@@ -7,6 +7,10 @@ import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
+<<<<<<< HEAD
+=======
+import org.springframework.web.bind.annotation.RequestMapping;
+>>>>>>> f7f1e5b70efdd7279437bb5f89e400b022983481
 
 @Controller
 public class ChatController {
