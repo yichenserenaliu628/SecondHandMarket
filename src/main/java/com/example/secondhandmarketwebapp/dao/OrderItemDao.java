@@ -76,25 +76,21 @@ public class OrderItemDao {
         return exists;
     }
 
-
-    public void updateOrderItem(int orderItemId) {
+    public void deleteOrderItem(int orderItemId) {
         try (Session session = sessionFactory.openSession()) {
             Transaction tx = session.beginTransaction();
             OrderItem orderItem = session.get(OrderItem.class, orderItemId);
             Cart cart = orderItem.getCart();
             if (orderItem != null) {
-                cart.setTotalPrice(cart.getTotalPrice() - orderItem.getPrice());
-                if (orderItem.getQuantity() > 1) {
-                    orderItem.setQuantity(orderItem.getQuantity() - 1);
-                    session.update(orderItem);
-                } else {
-                    session.delete(orderItem);
-                }
+                cart.setTotalPrice(cart.getTotalPrice() - orderItem.getQuantity() * orderItem.getPrice());
+                cart.getOrderItemList().remove(orderItem); // remove the order item from the cart
+                session.delete(orderItem);
                 tx.commit();
             }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
+
 
 }

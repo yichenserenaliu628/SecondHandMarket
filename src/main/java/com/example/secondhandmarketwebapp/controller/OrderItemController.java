@@ -18,9 +18,7 @@ public class OrderItemController {
     @Autowired
     private PostService postService;
 
-
-    // TODO: bug, this method can not be called
-    @RequestMapping(value = "/updatecart/{orderItemId}", method = RequestMethod.POST)
+    @RequestMapping(value = "/deletefromcart/{orderItemId}", method = RequestMethod.DELETE)
     @ResponseStatus(value = HttpStatus.CREATED)
     public void deleteItemFromCart(@PathVariable("orderItemId") int orderItemId) {
         orderItemService.deleteOrderItem(orderItemId);
