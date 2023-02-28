@@ -2,6 +2,7 @@ package com.example.secondhandmarketwebapp.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 import java.io.Serializable;
 
 import lombok.AllArgsConstructor;
@@ -29,5 +30,4 @@ public class OrderItem  implements Serializable {
 	@ManyToOne
 	@JsonIgnore
 	private Cart cart;
-
 }
