@@ -2,11 +2,9 @@ package com.example.secondhandmarketwebapp.controller;
 
 import com.example.secondhandmarketwebapp.service.S3Service;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
-import org.springframework.http.ContentDisposition;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -26,23 +24,23 @@ public class S3Controller {
         return this.amazonClient.uploadFile(file);
     }
 
-/*    @GetMapping("/getFile")
-    public ResponseEntity<Resource> getFile(@RequestParam(value = "fileUrl") String fileUrl) {
-        // Download the file from Amazon S3
-        Resource file = amazonClient.getFileFromS3Bucket(fileUrl);
 
-        // Set the headers for the HTTP response
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-        headers.setContentDisposition(ContentDisposition.builder("attachment").filename(file.getFilename()).build());
+    @GetMapping(value= "/download")
+    public ResponseEntity<ByteArrayResource> downloadFile(@RequestParam(value= "fileName") final String keyName) {
+        final byte[] data = amazonClient.downloadFile(keyName);
+        final ByteArrayResource resource = new ByteArrayResource(data);
+        return ResponseEntity
+                .ok()
+                .contentLength(data.length)
+                .header("Content-type", "application/octet-stream")
+                .header("Content-disposition", "attachment; filename=\"" + keyName + "\"")
+                .body(resource);
+    }
 
-        // Return the file as an HTTP response
-        return ResponseEntity.ok().headers(headers).body(file);
-    }*/
-
-
-    @DeleteMapping("/deleteFile")
-        public String deleteFile(@RequestPart(value = "url") String fileUrl) {
-        return this.amazonClient.deleteFileFromS3Bucket(fileUrl);
+    @DeleteMapping(value= "/delete")
+    public ResponseEntity<String> deleteFile(@RequestParam(value= "fileName") final String keyName) {
+        amazonClient.deleteFile(keyName);
+        final String response = "[" + keyName + "] deleted successfully.";
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
