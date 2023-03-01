@@ -3,19 +3,20 @@ package com.example.secondhandmarketwebapp.service;
 import com.example.secondhandmarketwebapp.dao.PostDao;
 import com.example.secondhandmarketwebapp.dao.UserDao;
 import com.example.secondhandmarketwebapp.entity.Post;
+import com.example.secondhandmarketwebapp.entity.ProductImage;
 import com.example.secondhandmarketwebapp.entity.User;
 import com.example.secondhandmarketwebapp.exception.InvalidPostException;
+import com.example.secondhandmarketwebapp.payload.request.AddProductRequest;
 import com.example.secondhandmarketwebapp.payload.response.PostResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 @Service
 public class PostService {
@@ -23,6 +24,10 @@ public class PostService {
     private PostDao postDao;
     @Autowired
     private UserDao userDao;
+
+    @Autowired
+    private UserService userService;
+
     public List<User> getUsers() {
         return postDao.getUsers();
     }
@@ -119,5 +124,31 @@ public class PostService {
     public List<PostResponse> filterProductBySellerRating(Double minRating) {
         List<Post> allPost = getAllPost();
         return postDao.filterProductBySellerRating(allPost, minRating);
+    }
+
+    @Transactional
+    public ResponseEntity<String> createPost(String userEmail, AddProductRequest addProductRequest) throws InvalidPostException {
+        if (!isValidZipCode(String.valueOf(addProductRequest.getZipcode()))) {
+            throw new InvalidPostException("Invalid zipcode");
+        }
+        if (addProductRequest.getDescription() == null || addProductRequest.getDescription().isEmpty()) {
+            throw new InvalidPostException("Description is required");
+        }
+        if (addProductRequest.getPrice() < 0) {
+            throw new InvalidPostException("Price must be greater than or equal to zero");
+        }
+        if (addProductRequest.getQuantity() <= 0) {
+            throw new InvalidPostException("Quantity must be greater than zero");
+        }
+        if (addProductRequest.getTitle() == null || addProductRequest.getTitle().isEmpty()) {
+            throw new InvalidPostException("Title is required");
+        }
+        if (addProductRequest.getCategory() == null || addProductRequest.getCategory().isEmpty()) {
+            throw new InvalidPostException("Category is required");
+        }
+
+        int userId = userDao.getUserIdByEmail(userEmail);
+        postDao.createPost(userId, addProductRequest);
+        return ResponseEntity.ok("Post added successfully.");
     }
 }

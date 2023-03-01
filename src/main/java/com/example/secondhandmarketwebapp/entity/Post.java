@@ -8,9 +8,6 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -52,6 +49,7 @@ public class Post implements Serializable {
 
 	@Column(name = "isSold", nullable = false, columnDefinition = "boolean default false")
 	private boolean isSold;
+	@NotBlank
 	private String category;
 	@ManyToOne
 	@JsonIgnore

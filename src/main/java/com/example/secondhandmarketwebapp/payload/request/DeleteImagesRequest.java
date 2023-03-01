@@ -10,6 +10,6 @@ import java.util.List;
 @Getter
 public class DeleteImagesRequest {
     @NotNull
-    List<String> uuids;
+    String uuids;
 
 }

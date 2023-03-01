@@ -3,7 +3,9 @@ package com.example.secondhandmarketwebapp.controller;
 import com.example.secondhandmarketwebapp.entity.Post;
 import com.example.secondhandmarketwebapp.entity.User;
 import com.example.secondhandmarketwebapp.exception.InvalidPostException;
-import com.example.secondhandmarketwebapp.exception.InvalidUserException;
+import com.example.secondhandmarketwebapp.payload.request.AddProductRequest;
+import com.example.secondhandmarketwebapp.payload.response.MessageResponse;
+import com.example.secondhandmarketwebapp.payload.response.PostResponse;
 import com.example.secondhandmarketwebapp.service.PostService;
 import com.example.secondhandmarketwebapp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +15,15 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.validation.Valid;
 import java.util.List;
 @Controller
 public class PostController {
+
+    private static final Logger logger = LoggerFactory.getLogger(PostController.class);
     @Autowired
     private PostService postService;
     @Autowired
@@ -43,6 +51,18 @@ public class PostController {
     @ResponseBody
     public ResponseEntity<String> addPost(@AuthenticationPrincipal UserDetails userDetails, @RequestBody Post post) {
         return postService.addPost(userDetails.getUsername(), post);
+    }
+
+    // new addPost method that enables uploading an image S3
+    @PostMapping("/createPost")
+    public ResponseEntity<?> createPost(@Valid @AuthenticationPrincipal UserDetails userDetails, @RequestBody AddProductRequest addProductRequest) {
+        try {
+            postService.createPost(userDetails.getUsername(), addProductRequest);
+            return ResponseEntity.ok(new MessageResponse("Product Added successfully!"));
+        } catch (RuntimeException e) {
+            logger.error("Failed to add new product " + e);
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(e.getMessage());
+        }
     }
 
     @ExceptionHandler(InvalidPostException.class)

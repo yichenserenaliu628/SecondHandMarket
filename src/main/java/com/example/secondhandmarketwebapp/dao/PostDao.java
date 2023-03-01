@@ -1,9 +1,11 @@
 package com.example.secondhandmarketwebapp.dao;
 
 import com.example.secondhandmarketwebapp.entity.Post;
+import com.example.secondhandmarketwebapp.entity.ProductImage;
 import com.example.secondhandmarketwebapp.entity.Review;
 import com.example.secondhandmarketwebapp.entity.User;
 import com.example.secondhandmarketwebapp.exception.CheckoutException;
+import com.example.secondhandmarketwebapp.payload.request.AddProductRequest;
 import com.example.secondhandmarketwebapp.payload.response.PostResponse;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -106,6 +108,7 @@ public class PostDao {
                         .isSold(post.isSold())
                         .sellerEmail(post.getUser().getEmail())
                         .sellerRating(rating)
+                        //.uuid(post.getImage().getUuid())
                         .build();
                 listOfPostsNearby.add(response);
             }
@@ -168,6 +171,7 @@ public class PostDao {
                     .isSold(post.isSold())
                     .sellerEmail(post.getUser().getEmail())
                     .sellerRating(rating)
+                    //.uuid(post.getImage().getUuid())
                     .build();
             listOfPostResponsesContainingKeyword.add(response);
         }
@@ -201,6 +205,7 @@ public class PostDao {
                     .isSold(post.isSold())
                     .sellerEmail(post.getUser().getEmail())
                     .sellerRating(rating)
+                    //.uuid(post.getImage().getUuid())
                     .build();
             sortedProductsByPrice.add(response);
         }
@@ -229,6 +234,7 @@ public class PostDao {
                     .isSold(post.isSold())
                     .sellerEmail(post.getUser().getEmail())
                     .sellerRating(rating)
+                    //.uuid(post.getImage().getUuid())
                     .build();
             sortedProductsByPriceHighToLow.add(response);
         }
@@ -252,6 +258,7 @@ public class PostDao {
                     .isSold(post.isSold())
                     .sellerEmail(post.getUser().getEmail())
                     .sellerRating(rating)
+                    //.uuid(post.getImage().getUuid())
                     .build();
             listOfFilteredProductByCategory.add(response);
         }
@@ -285,6 +292,7 @@ public class PostDao {
                     .isSold(post.isSold())
                     .sellerEmail(post.getUser().getEmail())
                     .sellerRating(rating)
+                    //.uuid(post.getImage().getUuid())
                     .build();
             listOfFilteredProductByMaxPrice.add(response);
         }
@@ -317,6 +325,7 @@ public class PostDao {
                     .isSold(post.isSold())
                     .sellerEmail(post.getUser().getEmail())
                     .sellerRating(rating)
+                    //.uuid(post.getImage().getUuid())
                     .build();
             listOfFilteredProductByPriceRange.add(response);
         }
@@ -412,10 +421,39 @@ public class PostDao {
                         .isSold(post.isSold())
                         .sellerEmail(post.getUser().getEmail())
                         .sellerRating(rating)
+                        //.uuid(post.getImage().getUuid())
                         .build();
                 listOfPostResponsesBySellerRating.add(response);
             }
         }
         return listOfPostResponsesBySellerRating;
+    }
+
+    public void createPost(int userId, AddProductRequest addProductRequest) {
+        try (Session session = sessionFactory.openSession()) {
+            Transaction tx = session.beginTransaction();
+            User user = session.get(User.class, userId);
+            if (user != null) {
+                ProductImage image = new ProductImage().toBuilder().uuid(addProductRequest.getUuid()).build();
+
+                user.getPostList().size();
+                Post newPost = Post.builder()
+                        .zipcode(addProductRequest.getZipcode())
+                        .description(addProductRequest.getDescription())
+                        .price(addProductRequest.getPrice())
+                        .quantity(addProductRequest.getQuantity())
+                        .title(addProductRequest.getTitle())
+                        .isSold(false)
+                        .user(user)
+                        .category(addProductRequest.getCategory())
+                        .image(image).build();
+
+                user.getPostList().add(newPost);
+                session.save(newPost);
+                tx.commit();
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 }
