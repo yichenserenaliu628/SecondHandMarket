@@ -37,15 +37,15 @@ public class CartService {
         return new Cart();
     }
 
-    public Set<Integer> checkOut() throws CheckoutException {
-        Set<Integer> sellerIds = cleanCart();
+    public Set<String> checkOut() throws CheckoutException {
+        Set<String> sellerUsernames = cleanCart();
         if (!stockSufficient()) {
             throw new CheckoutException("Sorry. The seller does not have sufficent stock.");
         }
-        return sellerIds;
+        return sellerUsernames;
     }
 
-    public Set<Integer> cleanCart() {
+    public Set<String> cleanCart() {
         Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
         String username = loggedInUser.getName();
         User user = userService.getUserByEmail(username);

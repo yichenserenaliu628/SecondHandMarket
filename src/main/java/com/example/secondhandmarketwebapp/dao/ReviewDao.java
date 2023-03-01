@@ -20,6 +20,7 @@ public class ReviewDao {
             Transaction tx = session.beginTransaction();
 
             if (review != null) {
+                review.getUser().getReviewList().size();
                 review.getUser().getReviewList().add(review);
                 tx.commit();
             }

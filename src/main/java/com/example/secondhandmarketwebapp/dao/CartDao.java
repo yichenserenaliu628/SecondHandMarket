@@ -44,10 +44,10 @@ public class CartDao {
         }
     }
 
-    public Set<Integer> removeAllCartItems(Cart cart) {
-        Set<Integer> sellerSets = new HashSet<>();
+    public Set<String> removeAllCartItems(Cart cart) {
+        Set<String> sellerSets = new HashSet<>();
         for (OrderItem item : cart.getOrderItemList()) {
-            sellerSets.add(item.getPost().getUser().getId());
+            sellerSets.add(item.getPost().getUser().getUsername());
             postDao.updatePostQuantity(item.getPost(), item.getQuantity());
             removeCartItem(item.getId());
         }

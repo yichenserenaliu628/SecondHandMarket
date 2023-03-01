@@ -1,6 +1,7 @@
 package com.example.secondhandmarketwebapp.dao;
 
 import com.example.secondhandmarketwebapp.entity.Post;
+import com.example.secondhandmarketwebapp.entity.Review;
 import com.example.secondhandmarketwebapp.entity.User;
 import com.example.secondhandmarketwebapp.payload.response.PostResponse;
 import org.hibernate.Session;
@@ -92,15 +93,19 @@ public class PostDao {
         List<PostResponse> listOfPostsNearby = new ArrayList<>();
         for (Post post : allPost) {
             if(calculateDistance(String.valueOf(post.getZipcode()), zipcode) <= distance) {
+                double rating = findAverageRating(post);
                 PostResponse response = PostResponse.builder()
-                        .postId(post.getId())
+                        .id(post.getId())
                         .title(post.getTitle())
                         .price(post.getPrice())
                         .description(post.getDescription())
                         .zipcode(String.valueOf(post.getZipcode()))
                         .quantity(post.getQuantity())
                         .category(post.getCategory())
-                        .isSold(post.isSold()).build();
+                        .isSold(post.isSold())
+                        .sellerEmail(post.getUser().getEmail())
+                        .sellerRating(rating)
+                        .build();
                 listOfPostsNearby.add(response);
             }
         }
@@ -125,20 +130,45 @@ public class PostDao {
         }
     }
 
+    public double findAverageRating(Post post) {
+//        System.out.println("debug11111");
+        User user = post.getUser();
+        int user_id = user.getId();
+        Session session = sessionFactory.openSession();
+        Query query = session.createQuery("SELECT r FROM Review r WHERE r.user.id = :user_id");
+        query.setParameter("user_id", user_id);
+        List<Review> userReviewList = query.getResultList();
+        if(userReviewList == null || userReviewList.size() == 0) {
+            //this user does not have any ratings yet!
+            return 0;
+        }
+        double averageRating = 0;
+        for(Review review : userReviewList) {
+            if(review != null && review.getRating() >= 0) {
+                averageRating += review.getRating();
+            }
+        }
+        return averageRating / userReviewList.size();
+    }
+
     public List<PostResponse> getAllProductsByKeyword(List<Post> allPost, String keyword) {
         List<PostResponse> listOfPostResponsesContainingKeyword = new ArrayList<>();
         List<Post> listOfPostsContainingKeyword = findByCategoryContaining(allPost, keyword);
 
         for (Post post : listOfPostsContainingKeyword) {
+            double rating = findAverageRating(post);
             PostResponse response = PostResponse.builder()
-                    .postId(post.getId())
+                    .id(post.getId())
                     .title(post.getTitle())
                     .price(post.getPrice())
                     .description(post.getDescription())
                     .zipcode(String.valueOf(post.getZipcode()))
                     .quantity(post.getQuantity())
                     .category(post.getCategory())
-                    .isSold(post.isSold()).build();
+                    .isSold(post.isSold())
+                    .sellerEmail(post.getUser().getEmail())
+                    .sellerRating(rating)
+                    .build();
             listOfPostResponsesContainingKeyword.add(response);
         }
         return listOfPostResponsesContainingKeyword;
@@ -159,15 +189,19 @@ public class PostDao {
         Collections.sort(allPost, Comparator.comparingDouble(Post::getPrice));
 
         for (Post post : allPost) {
+            double rating = findAverageRating(post);
             PostResponse response = PostResponse.builder()
-                    .postId(post.getId())
+                    .id(post.getId())
                     .title(post.getTitle())
                     .price(post.getPrice())
                     .description(post.getDescription())
                     .zipcode(String.valueOf(post.getZipcode()))
                     .quantity(post.getQuantity())
                     .category(post.getCategory())
-                    .isSold(post.isSold()).build();
+                    .isSold(post.isSold())
+                    .sellerEmail(post.getUser().getEmail())
+                    .sellerRating(rating)
+                    .build();
             sortedProductsByPrice.add(response);
         }
         return sortedProductsByPrice;
@@ -183,15 +217,19 @@ public class PostDao {
             }
         });
         for (Post post : allPost) {
+            double rating = findAverageRating(post);
             PostResponse response = PostResponse.builder()
-                    .postId(post.getId())
+                    .id(post.getId())
                     .title(post.getTitle())
                     .price(post.getPrice())
                     .description(post.getDescription())
                     .zipcode(String.valueOf(post.getZipcode()))
                     .quantity(post.getQuantity())
                     .category(post.getCategory())
-                    .isSold(post.isSold()).build();
+                    .isSold(post.isSold())
+                    .sellerEmail(post.getUser().getEmail())
+                    .sellerRating(rating)
+                    .build();
             sortedProductsByPriceHighToLow.add(response);
         }
         return sortedProductsByPriceHighToLow;
@@ -202,15 +240,19 @@ public class PostDao {
         List<Post> filteredProductByCategory = filterByCategory(allPost, category);
 
         for (Post post : filteredProductByCategory) {
+            double rating = findAverageRating(post);
             PostResponse response = PostResponse.builder()
-                    .postId(post.getId())
+                    .id(post.getId())
                     .title(post.getTitle())
                     .price(post.getPrice())
                     .description(post.getDescription())
                     .zipcode(String.valueOf(post.getZipcode()))
                     .quantity(post.getQuantity())
                     .category(post.getCategory())
-                    .isSold(post.isSold()).build();
+                    .isSold(post.isSold())
+                    .sellerEmail(post.getUser().getEmail())
+                    .sellerRating(rating)
+                    .build();
             listOfFilteredProductByCategory.add(response);
         }
         return listOfFilteredProductByCategory;
@@ -231,15 +273,19 @@ public class PostDao {
         List<Post> filteredProductByMaxPrice = filterByMaxPrice(allPost, max);
 
         for (Post post : filteredProductByMaxPrice) {
+            double rating = findAverageRating(post);
             PostResponse response = PostResponse.builder()
-                    .postId(post.getId())
+                    .id(post.getId())
                     .title(post.getTitle())
                     .price(post.getPrice())
                     .description(post.getDescription())
                     .zipcode(String.valueOf(post.getZipcode()))
                     .quantity(post.getQuantity())
                     .category(post.getCategory())
-                    .isSold(post.isSold()).build();
+                    .isSold(post.isSold())
+                    .sellerEmail(post.getUser().getEmail())
+                    .sellerRating(rating)
+                    .build();
             listOfFilteredProductByMaxPrice.add(response);
         }
         return listOfFilteredProductByMaxPrice;
@@ -254,21 +300,24 @@ public class PostDao {
         }
         return filteredProductByMaxPrice;
     }
-    // filterProductByPriceRange
     public List<PostResponse> filterProductByPriceRange(List<Post> allPost, Double min, Double max) {
         List<PostResponse> listOfFilteredProductByPriceRange = new ArrayList<>();
         List<Post> filteredProductByMaxPrice = filterByPriceRange(allPost, min, max);
 
         for (Post post : filteredProductByMaxPrice) {
+            double rating = findAverageRating(post);
             PostResponse response = PostResponse.builder()
-                    .postId(post.getId())
+                    .id(post.getId())
                     .title(post.getTitle())
                     .price(post.getPrice())
                     .description(post.getDescription())
                     .zipcode(String.valueOf(post.getZipcode()))
                     .quantity(post.getQuantity())
                     .category(post.getCategory())
-                    .isSold(post.isSold()).build();
+                    .isSold(post.isSold())
+                    .sellerEmail(post.getUser().getEmail())
+                    .sellerRating(rating)
+                    .build();
             listOfFilteredProductByPriceRange.add(response);
         }
         return listOfFilteredProductByPriceRange;
@@ -301,11 +350,19 @@ public class PostDao {
     public void updatePostQuantity(Post post, int quantity) {
         try (Session session = sessionFactory.openSession()) {
             Transaction tx = session.beginTransaction();
-            int newQuantity = post.getQuantity() - quantity;
+
+            int oldQuantity = post.getQuantity();
+            if (oldQuantity <= 0) {
+                post.setSold(true);
+                return;
+            }
+
+            int newQuantity = oldQuantity - quantity;
             post.setQuantity(newQuantity);
             if (newQuantity == 0) {
                 post.setSold(true);
             }
+
             session.update(post);
             tx.commit();
         } catch (Exception ex) {

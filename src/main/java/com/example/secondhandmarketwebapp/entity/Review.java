@@ -36,7 +36,6 @@ public class Review implements Serializable {
 			= "Comment should not be longer than 200 characters")
 	private String comment;
 	@ManyToOne
-	@JsonIgnore
 	private User user;
 
 }

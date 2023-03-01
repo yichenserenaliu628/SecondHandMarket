@@ -27,9 +27,9 @@ public class CheckoutController {
     @ResponseStatus(value = HttpStatus.OK)
     public String checkout(Model model, RedirectAttributes redirectAttributes) {
         try {
-            Set<Integer> sellerList = cartService.checkOut();
-            model.addAttribute("sellerIdLists", sellerList);
-            redirectAttributes.addFlashAttribute("sellerIdLists", sellerList);
+            Set<String> sellerUsernames = cartService.checkOut();
+            model.addAttribute("sellerIdLists", sellerUsernames);
+            redirectAttributes.addFlashAttribute("sellerIdLists", sellerUsernames);
             return "redirect:/review";
         } catch (CheckoutException e) {
             model.addAttribute("error", "Checkout failed: " + e.getMessage());
