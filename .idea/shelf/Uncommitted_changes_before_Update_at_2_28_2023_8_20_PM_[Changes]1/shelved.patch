@@ -1,0 +1,708 @@
+Index: src/main/java/com/example/secondhandmarketwebapp/clients/AmazonS3Client.java
+===================================================================
+diff --git a/src/main/java/com/example/secondhandmarketwebapp/clients/AmazonS3Client.java b/src/main/java/com/example/secondhandmarketwebapp/clients/AmazonS3Client.java
+deleted file mode 100644
+--- a/src/main/java/com/example/secondhandmarketwebapp/clients/AmazonS3Client.java	
++++ /dev/null	
+@@ -1,88 +0,0 @@
+-package com.example.secondhandmarketwebapp.clients;
+-
+-import com.amazonaws.auth.AWSCredentials;
+-import com.amazonaws.auth.AWSStaticCredentialsProvider;
+-import com.amazonaws.auth.BasicAWSCredentials;
+-import com.amazonaws.services.s3.AmazonS3;
+-import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+-import com.amazonaws.services.s3.model.S3Object;
+-import org.springframework.beans.factory.annotation.Value;
+-import org.springframework.context.annotation.PropertySource;
+-import org.springframework.stereotype.Repository;
+-import org.springframework.stereotype.Service;
+-import org.springframework.web.multipart.MultipartFile;
+-
+-import javax.annotation.PostConstruct;
+-import java.io.File;
+-import java.io.FileOutputStream;
+-import java.io.IOException;
+-import java.util.Date;
+-import java.util.Objects;
+-
+-import static java.util.UUID.randomUUID;
+-
+-@Service
+-@Repository
+-public class AmazonS3Client {
+-    private AmazonS3 s3client;
+-    @Value("${s3.endpointUrl}")
+-    private String endpointUrl;
+-    @Value("${s3.bucketName}")
+-    private String bucketName;
+-    @Value("${s3.accessKeyId}")
+-    private String accessKeyId;
+-    @Value("${s3.secretKey}")
+-    private String secretKey;
+-    @Value("${s3.region}")
+-    private String region;
+-
+-    @PostConstruct
+-    private void initializeAmazon() {
+-        AWSCredentials credentials
+-                = new BasicAWSCredentials(this.accessKeyId, this.secretKey);
+-        this.s3client = AmazonS3ClientBuilder
+-                .standard()
+-                .withRegion(region)
+-                .withCredentials(new AWSStaticCredentialsProvider(credentials))
+-                .build();
+-    }
+-
+-    public String uploadFile(MultipartFile multipartFile)
+-            throws Exception {
+-        File file = convertMultiPartToFile(multipartFile);
+-        String fileName = randomUUID().toString();
+-        uploadFileTos3bucket(fileName, file);
+-        file.delete();
+-        return fileName;
+-    }
+-
+-    public S3Object getFileFromS3Bucket(String fileName) {
+-        return s3client.getObject(bucketName, fileName);
+-    }
+-
+-    public void deleteFileFromS3Bucket(String fileUuid) {
+-        s3client.deleteObject(bucketName, fileUuid);
+-    }
+-
+-    private void uploadFileTos3bucket(String fileName, File file) {
+-        s3client.putObject(bucketName, fileName, file);
+-    }
+-
+-
+-    private File convertMultiPartToFile(MultipartFile file)
+-            throws IOException {
+-        File convFile = new File(Objects.requireNonNull(file.getOriginalFilename()));
+-        FileOutputStream fos = new FileOutputStream(convFile);
+-        fos.write(file.getBytes());
+-        fos.close();
+-        return convFile;
+-    }
+-
+-    private String generateFileName(MultipartFile multiPart) {
+-        return new Date().getTime() + "-" + Objects.requireNonNull(multiPart.getOriginalFilename()).replace(" ", "_");
+-    }
+-
+-    private String getFileNameFromFileURL(String fileUrl) {
+-        return fileUrl.substring(fileUrl.lastIndexOf("/") + 1);
+-    }
+-}
+\ No newline at end of file
+Index: src/main/java/com/example/secondhandmarketwebapp/controller/S3Controller.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/example/secondhandmarketwebapp/controller/S3Controller.java b/src/main/java/com/example/secondhandmarketwebapp/controller/S3Controller.java
+new file mode 100644
+--- /dev/null	
++++ b/src/main/java/com/example/secondhandmarketwebapp/controller/S3Controller.java	
+@@ -0,0 +1,48 @@
++package com.example.secondhandmarketwebapp.controller;
++
++import com.example.secondhandmarketwebapp.service.S3Service;
++import org.springframework.beans.factory.annotation.Autowired;
++import org.springframework.core.io.Resource;
++import org.springframework.http.ContentDisposition;
++import org.springframework.http.HttpHeaders;
++import org.springframework.http.MediaType;
++import org.springframework.http.ResponseEntity;
++import org.springframework.web.bind.annotation.*;
++import org.springframework.web.multipart.MultipartFile;
++
++@RestController
++@RequestMapping("/storage/")
++public class S3Controller {
++
++    private S3Service amazonClient;
++
++    @Autowired
++    S3Controller(S3Service amazonClient) {
++        this.amazonClient = amazonClient;
++    }
++
++    @PostMapping("/uploadFile")
++    public String uploadFile(@RequestPart(value = "file") MultipartFile file) {
++        return this.amazonClient.uploadFile(file);
++    }
++
++/*    @GetMapping("/getFile")
++    public ResponseEntity<Resource> getFile(@RequestParam(value = "fileUrl") String fileUrl) {
++        // Download the file from Amazon S3
++        Resource file = amazonClient.getFileFromS3Bucket(fileUrl);
++
++        // Set the headers for the HTTP response
++        HttpHeaders headers = new HttpHeaders();
++        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
++        headers.setContentDisposition(ContentDisposition.builder("attachment").filename(file.getFilename()).build());
++
++        // Return the file as an HTTP response
++        return ResponseEntity.ok().headers(headers).body(file);
++    }*/
++
++
++    @DeleteMapping("/deleteFile")
++        public String deleteFile(@RequestPart(value = "url") String fileUrl) {
++        return this.amazonClient.deleteFileFromS3Bucket(fileUrl);
++    }
++}
+\ No newline at end of file
+Index: .idea/artifacts/secondHandMarketWebApp_war_exploded.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><component name=\"ArtifactManager\">\r\n  <artifact type=\"exploded-war\" name=\"secondHandMarketWebApp:war exploded\">\r\n    <output-path>$PROJECT_DIR$/target/secondHandMarketWebApp-1.0-SNAPSHOT</output-path>\r\n    <properties id=\"maven-jee-properties\">\r\n      <options>\r\n        <exploded>true</exploded>\r\n        <module>secondHandMarketWebApp</module>\r\n        <packaging>war</packaging>\r\n      </options>\r\n    </properties>\r\n    <root id=\"root\">\r\n      <element id=\"directory\" name=\"WEB-INF\">\r\n        <element id=\"directory\" name=\"classes\">\r\n          <element id=\"module-output\" name=\"secondHandMarketWebApp\" />\r\n        </element>\r\n        <element id=\"directory\" name=\"lib\">\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.fasterxml.jackson.core:jackson-annotations:2.11.3\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: javax.json:javax.json-api:1.1.4\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: org.glassfish:javax.json:1.1.4\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.fasterxml.jackson.core:jackson-databind:2.11.3\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: commons-fileupload:commons-fileupload:1.4\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: org.slf4j:slf4j-api:1.7.21\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.fasterxml.jackson.core:jackson-core:2.11.3\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: org.json:json:20220924\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: commons-io:commons-io:2.11.0\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: javax.validation:validation-api:2.0.1.Final\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: org.springframework:spring-webmvc:5.3.9\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: org.springframework:spring-aop:5.3.9\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: org.springframework:spring-beans:5.3.9\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: org.springframework:spring-context:5.3.9\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: org.springframework:spring-core:5.3.9\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: org.springframework:spring-jcl:5.3.9\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: org.springframework:spring-expression:5.3.9\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: org.springframework:spring-web:5.3.9\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: org.springframework:spring-orm:5.3.9\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: org.springframework:spring-jdbc:5.3.9\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: org.springframework:spring-tx:5.3.9\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: org.hibernate:hibernate-core:5.4.25.Final\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: org.jboss.logging:jboss-logging:3.4.1.Final\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: javax.persistence:javax.persistence-api:2.2\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: org.javassist:javassist:3.27.0-GA\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: net.bytebuddy:byte-buddy:1.10.17\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: antlr:antlr:2.7.7\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: org.jboss.spec.javax.transaction:jboss-transaction-api_1.2_spec:1.1.1.Final\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: org.jboss:jandex:2.1.3.Final\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.fasterxml:classmate:1.5.1\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: javax.activation:javax.activation-api:1.2.0\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: org.dom4j:dom4j:2.1.3\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: org.hibernate.common:hibernate-commons-annotations:5.1.2.Final\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: javax.xml.bind:jaxb-api:2.3.1\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: org.glassfish.jaxb:jaxb-runtime:2.3.1\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: org.glassfish.jaxb:txw2:2.3.1\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.sun.istack:istack-commons-runtime:3.0.7\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: org.jvnet.staxex:stax-ex:1.8\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.sun.xml.fastinfoset:FastInfoset:1.2.15\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-synthetics:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:jmespath-java:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-codestarconnections:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-detective:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-kinesisvideosignalingchannels:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-ebs:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-augmentedairuntime:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-outposts:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-codeguruprofiler:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-codegurureviewer:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-frauddetector:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-kendra:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-networkmanager:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-computeoptimizer:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-accessanalyzer:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-schemas:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-imagebuilder:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-elasticinference:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-iotsecuretunneling:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-appconfig:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-wafv2:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-connectparticipant:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-migrationhubconfig:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-dataexchange:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-sesv2:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-marketplacecatalog:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-ssooidc:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-sso:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-savingsplans:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-codestarnotifications:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-workmailmessageflow:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-qldbsession:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-qldb:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-forecastquery:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-forecast:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-lakeformation:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-eventbridge:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-ec2instanceconnect:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-applicationinsights:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-servicequotas:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-personalizeevents:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-personalize:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-personalizeruntime:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-ioteventsdata:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-iotevents:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-iotthingsgraph:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-groundstation:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-mediapackagevod:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-managedblockchain:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-textract:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-worklink:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-backup:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-docdb:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-apigatewayv2:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-apigatewaymanagementapi:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-kafka:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-appmesh:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-licensemanager:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-securityhub:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-fsx:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-mediaconnect:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-kinesisanalyticsv2:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-comprehendmedical:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-globalaccelerator:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-transfer:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-datasync:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-robomaker:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-amplify:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-quicksight:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-rdsdata:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-route53resolver:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-ram:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-s3control:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-pinpointsmsvoice:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-pinpointemail:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-chime:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-signer:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-dlm:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-macie:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-eks:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-mediatailor:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-neptune:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-pi:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-iot1clickprojects:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-iot1clickdevices:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-iotanalytics:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-acmpca:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-secretsmanager:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-fms:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-connect:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-transcribe:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-autoscalingplans:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-workmail:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-servicediscovery:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-cloud9:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-serverlessapplicationrepository:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-alexaforbusiness:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-resourcegroups:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-comprehend:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-translate:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-sagemaker:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-iotjobsdataplane:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-sagemakerruntime:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-kinesisvideo:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: io.netty:netty-codec-http:4.1.44.Final\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: io.netty:netty-common:4.1.44.Final\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: io.netty:netty-buffer:4.1.44.Final\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: io.netty:netty-transport:4.1.44.Final\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: io.netty:netty-resolver:4.1.44.Final\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: io.netty:netty-codec:4.1.44.Final\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: io.netty:netty-handler:4.1.44.Final\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-appsync:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-guardduty:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-mq:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-mediaconvert:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-mediastore:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-mediastoredata:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-medialive:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-mediapackage:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-costexplorer:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-pricing:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-mobile:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-cloudhsmv2:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-glue:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-migrationhub:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-dax:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-greengrass:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-athena:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-marketplaceentitlement:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-codestar:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-lexmodelbuilding:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-resourcegroupstaggingapi:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-pinpoint:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-xray:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-opsworkscm:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-support:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-simpledb:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-servicecatalog:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-servermigration:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-simpleworkflow:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-storagegateway:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-route53:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-s3:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-importexport:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-sts:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-sqs:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-rds:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-redshift:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-elasticbeanstalk:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-glacier:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-iam:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-datapipeline:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-elasticloadbalancing:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-elasticloadbalancingv2:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-emr:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-elasticache:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-elastictranscoder:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-ec2:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-dynamodb:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-sns:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-budgets:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-cloudtrail:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-cloudwatch:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-logs:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-events:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-cognitoidentity:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-cognitosync:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-directconnect:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-cloudformation:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-cloudfront:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-clouddirectory:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-kinesis:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-opsworks:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-ses:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-autoscaling:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-cloudsearch:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-cloudwatchmetrics:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-codedeploy:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-codepipeline:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-kms:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-config:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-lambda:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-ecs:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-ecr:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-cloudhsm:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-ssm:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-workspaces:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-machinelearning:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-directory:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-efs:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-codecommit:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-devicefarm:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-elasticsearch:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-waf:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-marketplacecommerceanalytics:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-inspector:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-iot:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-api-gateway:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-acm:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-gamelift:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-dms:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-marketplacemeteringservice:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-cognitoidp:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-discovery:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-applicationautoscaling:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-snowball:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-rekognition:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-polly:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-lightsail:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-stepfunctions:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-health:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-costandusagereport:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-codebuild:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-appstream:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-shield:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-batch:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-lex:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-mechanicalturkrequester:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-organizations:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-workdocs:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-core:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: commons-logging:commons-logging:1.1.3\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: org.apache.httpcomponents:httpclient:4.5.9\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: org.apache.httpcomponents:httpcore:4.4.11\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: commons-codec:commons-codec:1.11\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: software.amazon.ion:ion-java:1.0.2\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.fasterxml.jackson.dataformat:jackson-dataformat-cbor:2.6.7\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: joda-time:joda-time:2.8.1\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-models:1.11.767\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.amazonaws:aws-java-sdk-swf-libraries:1.11.22\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: mysql:mysql-connector-java:8.0.18\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: com.google.protobuf:protobuf-java:3.6.1\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: org.springframework.security:spring-security-web:5.5.2\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: org.springframework.security:spring-security-core:5.5.2\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: org.springframework.security:spring-security-crypto:5.5.2\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: javax.annotation:javax.annotation-api:1.3.2\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: org.springframework.security:spring-security-config:5.5.2\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: org.springframework:spring-websocket:5.3.25\" />\r\n          <element id=\"library\" level=\"project\" name=\"Maven: org.springframework:spring-messaging:5.3.25\" />\r\n        </element>\r\n      </element>\r\n      <element id=\"directory\" name=\"META-INF\">\r\n        <element id=\"file-copy\" path=\"$PROJECT_DIR$/target/secondHandMarketWebApp-1.0-SNAPSHOT/META-INF/MANIFEST.MF\" />\r\n      </element>\r\n      <element id=\"javaee-facet-resources\" facet=\"secondHandMarketWebApp/web/Web\" />\r\n    </root>\r\n  </artifact>\r\n</component>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/artifacts/secondHandMarketWebApp_war_exploded.xml b/.idea/artifacts/secondHandMarketWebApp_war_exploded.xml
+--- a/.idea/artifacts/secondHandMarketWebApp_war_exploded.xml	
++++ b/.idea/artifacts/secondHandMarketWebApp_war_exploded.xml	
+@@ -53,236 +53,110 @@
+           <element id="library" level="project" name="Maven: com.sun.istack:istack-commons-runtime:3.0.7" />
+           <element id="library" level="project" name="Maven: org.jvnet.staxex:stax-ex:1.8" />
+           <element id="library" level="project" name="Maven: com.sun.xml.fastinfoset:FastInfoset:1.2.15" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-synthetics:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:jmespath-java:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-codestarconnections:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-detective:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-kinesisvideosignalingchannels:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-ebs:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-augmentedairuntime:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-outposts:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-codeguruprofiler:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-codegurureviewer:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-frauddetector:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-kendra:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-networkmanager:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-computeoptimizer:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-accessanalyzer:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-schemas:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-imagebuilder:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-elasticinference:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-iotsecuretunneling:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-appconfig:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-wafv2:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-connectparticipant:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-migrationhubconfig:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-dataexchange:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-sesv2:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-marketplacecatalog:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-ssooidc:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-sso:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-savingsplans:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-codestarnotifications:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-workmailmessageflow:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-qldbsession:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-qldb:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-forecastquery:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-forecast:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-lakeformation:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-eventbridge:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-ec2instanceconnect:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-applicationinsights:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-servicequotas:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-personalizeevents:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-personalize:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-personalizeruntime:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-ioteventsdata:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-iotevents:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-iotthingsgraph:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-groundstation:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-mediapackagevod:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-managedblockchain:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-textract:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-worklink:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-backup:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-docdb:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-apigatewayv2:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-apigatewaymanagementapi:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-kafka:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-appmesh:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-licensemanager:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-securityhub:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-fsx:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-mediaconnect:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-kinesisanalyticsv2:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-comprehendmedical:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-globalaccelerator:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-transfer:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-datasync:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-robomaker:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-amplify:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-quicksight:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-rdsdata:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-route53resolver:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-ram:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-s3control:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-pinpointsmsvoice:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-pinpointemail:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-chime:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-signer:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-dlm:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-macie:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-eks:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-mediatailor:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-neptune:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-pi:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-iot1clickprojects:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-iot1clickdevices:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-iotanalytics:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-acmpca:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-secretsmanager:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-fms:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-connect:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-transcribe:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-autoscalingplans:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-workmail:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-servicediscovery:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-cloud9:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-serverlessapplicationrepository:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-alexaforbusiness:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-resourcegroups:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-comprehend:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-translate:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-sagemaker:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-iotjobsdataplane:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-sagemakerruntime:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-kinesisvideo:1.11.767" />
+-          <element id="library" level="project" name="Maven: io.netty:netty-codec-http:4.1.44.Final" />
+-          <element id="library" level="project" name="Maven: io.netty:netty-common:4.1.44.Final" />
+-          <element id="library" level="project" name="Maven: io.netty:netty-buffer:4.1.44.Final" />
+-          <element id="library" level="project" name="Maven: io.netty:netty-transport:4.1.44.Final" />
+-          <element id="library" level="project" name="Maven: io.netty:netty-resolver:4.1.44.Final" />
+-          <element id="library" level="project" name="Maven: io.netty:netty-codec:4.1.44.Final" />
+-          <element id="library" level="project" name="Maven: io.netty:netty-handler:4.1.44.Final" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-appsync:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-guardduty:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-mq:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-mediaconvert:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-mediastore:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-mediastoredata:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-medialive:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-mediapackage:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-costexplorer:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-pricing:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-mobile:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-cloudhsmv2:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-glue:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-migrationhub:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-dax:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-greengrass:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-athena:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-marketplaceentitlement:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-codestar:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-lexmodelbuilding:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-resourcegroupstaggingapi:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-pinpoint:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-xray:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-opsworkscm:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-support:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-simpledb:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-servicecatalog:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-servermigration:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-simpleworkflow:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-storagegateway:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-route53:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-s3:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-importexport:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-sts:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-sqs:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-rds:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-redshift:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-elasticbeanstalk:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-glacier:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-iam:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-datapipeline:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-elasticloadbalancing:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-elasticloadbalancingv2:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-emr:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-elasticache:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-elastictranscoder:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-ec2:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-dynamodb:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-sns:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-budgets:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-cloudtrail:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-cloudwatch:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-logs:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-events:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-cognitoidentity:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-cognitosync:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-directconnect:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-cloudformation:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-cloudfront:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-clouddirectory:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-kinesis:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-opsworks:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-ses:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-autoscaling:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-cloudsearch:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-cloudwatchmetrics:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-codedeploy:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-codepipeline:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-kms:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-config:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-lambda:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-ecs:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-ecr:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-cloudhsm:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-ssm:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-workspaces:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-machinelearning:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-directory:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-efs:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-codecommit:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-devicefarm:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-elasticsearch:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-waf:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-marketplacecommerceanalytics:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-inspector:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-iot:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-api-gateway:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-acm:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-gamelift:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-dms:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-marketplacemeteringservice:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-cognitoidp:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-discovery:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-applicationautoscaling:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-snowball:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-rekognition:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-polly:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-lightsail:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-stepfunctions:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-health:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-costandusagereport:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-codebuild:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-appstream:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-shield:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-batch:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-lex:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-mechanicalturkrequester:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-organizations:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-workdocs:1.11.767" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-core:1.11.767" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-athena:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:jmespath-java:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-marketplaceentitlement:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-codestar:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-lexmodelbuilding:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-resourcegroupstaggingapi:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-pinpoint:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-xray:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-opsworkscm:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-support:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-simpledb:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-servicecatalog:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-servermigration:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-simpleworkflow:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-storagegateway:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-route53:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-s3:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-importexport:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-sts:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-sqs:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-rds:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-redshift:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-elasticbeanstalk:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-glacier:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-iam:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-datapipeline:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-elasticloadbalancing:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-elasticloadbalancingv2:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-emr:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-elasticache:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-elastictranscoder:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-ec2:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-dynamodb:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-sns:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-budgets:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-cloudtrail:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-cloudwatch:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-logs:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-events:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-cognitoidentity:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-cognitosync:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-directconnect:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-cloudformation:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-cloudfront:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-clouddirectory:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-kinesis:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-opsworks:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-ses:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-autoscaling:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-cloudsearch:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-cloudwatchmetrics:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-codedeploy:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-codepipeline:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-kms:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-config:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-lambda:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-ecs:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-ecr:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-cloudhsm:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-ssm:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-workspaces:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-machinelearning:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-directory:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-efs:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-codecommit:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-devicefarm:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-elasticsearch:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-waf:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-marketplacecommerceanalytics:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-inspector:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-iot:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-api-gateway:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-acm:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-gamelift:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-dms:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-marketplacemeteringservice:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-cognitoidp:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-discovery:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-applicationautoscaling:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-snowball:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-rekognition:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-polly:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-lightsail:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-stepfunctions:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-health:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-costandusagereport:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-codebuild:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-appstream:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-shield:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-batch:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-lex:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-mechanicalturkrequester:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-organizations:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-workdocs:1.11.133" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-core:1.11.133" />
+           <element id="library" level="project" name="Maven: commons-logging:commons-logging:1.1.3" />
+-          <element id="library" level="project" name="Maven: org.apache.httpcomponents:httpclient:4.5.9" />
+-          <element id="library" level="project" name="Maven: org.apache.httpcomponents:httpcore:4.4.11" />
+-          <element id="library" level="project" name="Maven: commons-codec:commons-codec:1.11" />
++          <element id="library" level="project" name="Maven: org.apache.httpcomponents:httpclient:4.5.2" />
++          <element id="library" level="project" name="Maven: org.apache.httpcomponents:httpcore:4.4.4" />
++          <element id="library" level="project" name="Maven: commons-codec:commons-codec:1.9" />
+           <element id="library" level="project" name="Maven: software.amazon.ion:ion-java:1.0.2" />
+-          <element id="library" level="project" name="Maven: com.fasterxml.jackson.dataformat:jackson-dataformat-cbor:2.6.7" />
++          <element id="library" level="project" name="Maven: com.fasterxml.jackson.dataformat:jackson-dataformat-cbor:2.6.6" />
+           <element id="library" level="project" name="Maven: joda-time:joda-time:2.8.1" />
+-          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-models:1.11.767" />
++          <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-models:1.11.133" />
+           <element id="library" level="project" name="Maven: com.amazonaws:aws-java-sdk-swf-libraries:1.11.22" />
+           <element id="library" level="project" name="Maven: mysql:mysql-connector-java:8.0.18" />
+           <element id="library" level="project" name="Maven: com.google.protobuf:protobuf-java:3.6.1" />
+Index: src/main/java/com/example/secondhandmarketwebapp/main.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/example/secondhandmarketwebapp/main.java b/src/main/java/com/example/secondhandmarketwebapp/main.java
+new file mode 100644
+--- /dev/null	
++++ b/src/main/java/com/example/secondhandmarketwebapp/main.java	
+@@ -0,0 +1,48 @@
++package com.example.secondhandmarketwebapp;
++
++import com.amazonaws.AmazonServiceException;
++import com.amazonaws.SdkClientException;
++import com.amazonaws.auth.AWSStaticCredentialsProvider;
++import com.amazonaws.auth.BasicAWSCredentials;
++import com.amazonaws.client.builder.AwsClientBuilder;
++import com.amazonaws.regions.Regions;
++import com.amazonaws.services.s3.AmazonS3;
++import com.amazonaws.services.s3.AmazonS3ClientBuilder;
++import com.amazonaws.services.s3.model.PutObjectRequest;
++import com.amazonaws.services.s3.model.PutObjectResult;
++
++import java.io.File;
++
++public class main {
++    public static void main(String[] args) {
++        // Define your AWS credentials and S3 endpoint URL
++        String accessKeyId = "AKIAVEQKSQRMGOXVWP5M";
++        String secretKey = "rAd8uKKgE5MZaxwFRvVFi4YSg9xqPcBisNb12smg";
++        String endpointUrl = "https://s3bucket-xuehang.s3-website-us-east-1.amazonaws.com";
++        String regionName = "us-east-1";
++        String bucketName = "s3bucket-xuehang";
++
++        // Create a client using the AWS SDK and your credentials
++        BasicAWSCredentials credentials = new BasicAWSCredentials(accessKeyId, secretKey);
++        System.out.println(1);
++        AmazonS3 s3Client = AmazonS3ClientBuilder.standard()
++                .withCredentials(new AWSStaticCredentialsProvider(credentials))
++                .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(endpointUrl, regionName))
++                .build();
++
++        try {
++            // Define the file you want to upload
++            File file = new File("C:\\Users\\57054\\OneDrive\\桌面\\download.jpg");
++            System.out.println(2);
++            // Upload the file to your S3 bucket
++            PutObjectRequest request = new PutObjectRequest(bucketName, file.getName(), file);
++            System.out.println(request.getFile().getName());
++            PutObjectResult result = s3Client.putObject(request);
++            System.out.println("File uploaded successfully: " + result.getETag());
++        } catch (AmazonServiceException e) {
++            System.err.println("Error uploading file to S3: " + e.getErrorMessage());
++        } catch (SdkClientException e) {
++            System.err.println("Error connecting to S3: " + e.getMessage());
++        }
++    }
++}
+Index: pom.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project xmlns=\"http://maven.apache.org/POM/4.0.0\"\r\n         xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\r\n         xsi:schemaLocation=\"http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd\">\r\n    <modelVersion>4.0.0</modelVersion>\r\n\r\n\r\n\r\n\r\n    <groupId>com.example</groupId>\r\n    <artifactId>secondHandMarketWebApp</artifactId>\r\n    <version>1.0-SNAPSHOT</version>\r\n    <name>secondHandMarketWebApp</name>\r\n    <packaging>war</packaging>\r\n\r\n\r\n    <properties>\r\n        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>\r\n        <maven.compiler.target>1.8</maven.compiler.target>\r\n        <maven.compiler.source>1.8</maven.compiler.source>\r\n        <junit.version>5.8.2</junit.version>\r\n        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>\r\n    </properties>\r\n\r\n    <dependencies>\r\n        <dependency>\r\n            <groupId>jakarta.servlet</groupId>\r\n            <artifactId>jakarta.servlet-api</artifactId>\r\n            <version>5.0.0</version>\r\n            <scope>provided</scope>\r\n        </dependency>\r\n        <dependency>\r\n            <groupId>com.fasterxml.jackson.core</groupId>\r\n            <artifactId>jackson-annotations</artifactId>\r\n            <version>2.11.3</version>\r\n        </dependency>\r\n        <dependency>\r\n            <groupId>javax.json</groupId>\r\n            <artifactId>javax.json-api</artifactId>\r\n            <version>1.1.4</version>\r\n        </dependency>\r\n\r\n        <dependency>\r\n            <groupId>org.glassfish</groupId>\r\n            <artifactId>javax.json</artifactId>\r\n            <version>1.1.4</version>\r\n        </dependency>\r\n        <dependency>\r\n            <groupId>com.fasterxml.jackson.core</groupId>\r\n            <artifactId>jackson-databind</artifactId>\r\n            <version>2.11.3</version>\r\n        </dependency>\r\n        <dependency>\r\n            <groupId>commons-fileupload</groupId>\r\n            <artifactId>commons-fileupload</artifactId>\r\n            <version>1.4</version>\r\n        </dependency>\r\n        <dependency>\r\n            <groupId>org.slf4j</groupId>\r\n            <artifactId>slf4j-api</artifactId>\r\n            <version>1.7.21</version>\r\n        </dependency>\r\n        <dependency>\r\n            <groupId>com.fasterxml.jackson.core</groupId>\r\n            <artifactId>jackson-core</artifactId>\r\n            <version>2.11.3</version>\r\n        </dependency>\r\n        <dependency>\r\n            <groupId>org.json</groupId>\r\n            <artifactId>json</artifactId>\r\n            <version>20220924</version>\r\n        </dependency>\r\n        <dependency>\r\n            <groupId>commons-io</groupId>\r\n            <artifactId>commons-io</artifactId>\r\n            <version>2.11.0</version>\r\n        </dependency>\r\n        <dependency>\r\n            <groupId>javax.servlet</groupId>\r\n            <artifactId>javax.servlet-api</artifactId>\r\n            <version>4.0.1</version>\r\n            <scope>provided</scope>\r\n        </dependency>\r\n        <dependency>\r\n            <groupId>javax.validation</groupId>\r\n            <artifactId>validation-api</artifactId>\r\n            <version>2.0.1.Final</version>\r\n        </dependency>\r\n        <dependency>\r\n            <groupId>org.projectlombok</groupId>\r\n            <artifactId>lombok</artifactId>\r\n            <version>1.18.20</version>\r\n            <scope>provided</scope>\r\n        </dependency>\r\n        <dependency>\r\n            <groupId>org.junit.jupiter</groupId>\r\n            <artifactId>junit-jupiter-api</artifactId>\r\n            <version>${junit.version}</version>\r\n            <scope>test</scope>\r\n        </dependency>\r\n        <dependency>\r\n            <groupId>org.junit.jupiter</groupId>\r\n            <artifactId>junit-jupiter-engine</artifactId>\r\n            <version>${junit.version}</version>\r\n            <scope>test</scope>\r\n        </dependency>\r\n        <dependency>\r\n            <groupId>org.springframework</groupId>\r\n            <artifactId>spring-webmvc</artifactId>\r\n            <version>5.3.9</version>\r\n        </dependency>\r\n        <dependency>\r\n            <groupId>org.springframework</groupId>\r\n            <artifactId>spring-orm</artifactId>\r\n            <version>5.3.9</version>\r\n        </dependency>\r\n        <dependency>\r\n            <groupId>org.hibernate</groupId>\r\n            <artifactId>hibernate-core</artifactId>\r\n            <version>5.4.25.Final</version>\r\n        </dependency>\r\n        <dependency>\r\n            <groupId>com.amazonaws</groupId>\r\n            <artifactId>aws-java-sdk</artifactId>\r\n            <version>1.11.767</version>\r\n        </dependency>\r\n        <dependency>\r\n            <groupId>mysql</groupId>\r\n            <artifactId>mysql-connector-java</artifactId>\r\n            <version>8.0.18</version>\r\n        </dependency>\r\n        <dependency>\r\n            <groupId>org.springframework.security</groupId>\r\n            <artifactId>spring-security-web</artifactId>\r\n            <version>5.5.2</version>\r\n        </dependency>\r\n        <dependency>\r\n            <groupId>javax.annotation</groupId>\r\n            <artifactId>javax.annotation-api</artifactId>\r\n            <version>1.3.2</version>\r\n        </dependency>\r\n        <dependency>\r\n            <groupId>org.springframework.security</groupId>\r\n            <artifactId>spring-security-config</artifactId>\r\n            <version>5.5.2</version>\r\n        </dependency>\r\n        <dependency>\r\n            <groupId>org.springframework</groupId>\r\n            <artifactId>spring-websocket</artifactId>\r\n            <version>5.3.25</version>\r\n        </dependency>\r\n        <dependency>\r\n            <groupId>org.springframework</groupId>\r\n            <artifactId>spring-messaging</artifactId>\r\n            <version>5.3.25</version>\r\n        </dependency>\r\n\r\n    </dependencies>\r\n\r\n\r\n\r\n\r\n    <build>\r\n        <plugins>\r\n            <plugin>\r\n                <groupId>org.apache.maven.plugins</groupId>\r\n                <artifactId>maven-war-plugin</artifactId>\r\n                <version>3.3.2</version>\r\n            </plugin>\r\n        </plugins>\r\n    </build>\r\n</project>\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/pom.xml b/pom.xml
+--- a/pom.xml	
++++ b/pom.xml	
+@@ -122,7 +122,7 @@
+         <dependency>
+             <groupId>com.amazonaws</groupId>
+             <artifactId>aws-java-sdk</artifactId>
+-            <version>1.11.767</version>
++            <version>1.11.133</version>
+         </dependency>
+         <dependency>
+             <groupId>mysql</groupId>
+Index: src/main/resources/applicaiton.properties
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>s3.endpointUrl=http://serenaliuawsbucket.s3-website-us-west-1.amazonaws.com\r\ns3.accessKeyId=AKIARHORSLJOXTQCKYRM\r\ns3.secretKey=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\r\ns3.bucketName=serenaliuawsbucket\r\ns3.region=us-west-1\r\nspring.servlet.multipart.max-file-size=128KB\r\nspring.servlet.multipart.max-request-size=128KB\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>ISO-8859-1
+===================================================================
+diff --git a/src/main/resources/applicaiton.properties b/src/main/resources/applicaiton.properties
+--- a/src/main/resources/applicaiton.properties	
++++ b/src/main/resources/applicaiton.properties	
+@@ -1,8 +1,8 @@
+-s3.endpointUrl=http://serenaliuawsbucket.s3-website-us-west-1.amazonaws.com
+-s3.accessKeyId=AKIARHORSLJOXTQCKYRM
+-s3.secretKey=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
+-s3.bucketName=serenaliuawsbucket
+-s3.region=us-west-1
++s3.endpointUrl= https://s3.us-east-1.amazonaws.com
++s3.accessKeyId= AKIAVEQKSQRMGOXVWP5M
++s3.secretKey= rrAd8uKKgE5MZaxwFRvVFi4YSg9xqPcBisNb12smg
++s3.bucketName= s3bucket-xuehang
++s3.region= us-east-1
+ spring.servlet.multipart.max-file-size=128KB
+ spring.servlet.multipart.max-request-size=128KB
+ 
+Index: src/main/java/com/example/secondhandmarketwebapp/service/S3Service.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/example/secondhandmarketwebapp/service/S3Service.java b/src/main/java/com/example/secondhandmarketwebapp/service/S3Service.java
+new file mode 100644
+--- /dev/null	
++++ b/src/main/java/com/example/secondhandmarketwebapp/service/S3Service.java	
+@@ -0,0 +1,93 @@
++package com.example.secondhandmarketwebapp.service;
++
++import com.amazonaws.auth.AWSCredentials;
++import com.amazonaws.auth.BasicAWSCredentials;
++import com.amazonaws.services.s3.AmazonS3;
++import com.amazonaws.services.s3.AmazonS3Client;
++import com.amazonaws.services.s3.model.*;
++import com.example.secondhandmarketwebapp.storage.StorageFileNotFoundException;
++import com.example.secondhandmarketwebapp.storage.StorageService;
++import org.springframework.beans.factory.annotation.Value;
++import org.springframework.core.io.InputStreamResource;
++import org.springframework.core.io.Resource;
++import org.springframework.core.io.UrlResource;
++import org.springframework.stereotype.Service;
++import org.springframework.web.multipart.MultipartFile;
++
++import javax.annotation.PostConstruct;
++import java.io.File;
++import java.io.FileOutputStream;
++import java.io.IOException;
++import java.net.MalformedURLException;
++import java.nio.file.Path;
++import java.util.Date;
++
++@Service
++public class S3Service {
++
++
++    private AmazonS3 s3client;
++
++    private String endpointUrl = "https://s3.us-east-1.amazonaws.com";
++
++    private String bucketName = "s3bucket-xuehang";
++
++    private String accessKey = "AKIAVEQKSQRMHK7YYM5G";
++
++    private String secretKey = "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";
++    @PostConstruct
++    private void initializeAmazon() {
++        AWSCredentials credentials = new BasicAWSCredentials(this.accessKey, this.secretKey);
++        this.s3client = new AmazonS3Client(credentials);
++    }
++
++    public String uploadFile(MultipartFile multipartFile) {
++
++        String fileUrl = "";
++        try {
++            File file = convertMultiPartToFile(multipartFile);
++            String fileName = generateFileName(multipartFile);
++            fileUrl = endpointUrl + "/" + bucketName + "/" + fileName;
++            uploadFileTos3bucket(fileName, file);
++            file.delete();
++        } catch (Exception e) {
++            e.printStackTrace();
++        }
++        return fileUrl;
++    }
++
++    private void uploadFileTos3bucket(String fileName, File file) {
++        s3client.putObject(new PutObjectRequest(bucketName, fileName, file)
++                .withCannedAcl(CannedAccessControlList.PublicRead));
++    }
++
++    private String generateFileName(MultipartFile multiPart) {
++        return new Date().getTime() + "-" + multiPart.getOriginalFilename().replace(" ", "_");
++    }
++    public String deleteFileFromS3Bucket(String fileUrl) {
++        String fileName = fileUrl.substring(fileUrl.lastIndexOf("/") + 1);
++        s3client.deleteObject(new DeleteObjectRequest(bucketName + "/", fileName));
++        return "Successfully deleted";
++    }
++
++    private File convertMultiPartToFile(MultipartFile file) throws IOException {
++        File convFile = new File(file.getOriginalFilename());
++        FileOutputStream fos = new FileOutputStream(convFile);
++        fos.write(file.getBytes());
++        fos.close();
++        return convFile;
++    }
++
++
++
++/*
++    public Resource getFileFromS3Bucket(String fileUrl) {
++        String fileName = fileUrl.substring(fileUrl.lastIndexOf("/") + 1);
++        S3Object s3Object = s3client.getObject(new GetObjectRequest(bucketName, fileName));
++        S3ObjectInputStream inputStream = s3Object.getObjectContent();
++        return new InputStreamResource(inputStream);
++    }
++*/
++
++
++}
+\ No newline at end of file
