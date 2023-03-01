@@ -122,7 +122,7 @@
         <dependency>
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-java-sdk</artifactId>
-            <version>1.11.133</version>
+            <version>1.11.767</version>
         </dependency>
         <dependency>
             <groupId>mysql</groupId>
