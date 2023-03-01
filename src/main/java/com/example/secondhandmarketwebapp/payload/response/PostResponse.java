@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @Getter
 public class PostResponse {
-    int postId;
+    int id;
     String title;
     double price;
     String description;
@@ -17,5 +17,7 @@ public class PostResponse {
     int quantity;
     String category;
     boolean isSold;
+    String sellerEmail;
+    double sellerRating;
     //ProductImage image;
 }
