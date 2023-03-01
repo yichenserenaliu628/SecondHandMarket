@@ -54,4 +54,17 @@ public class FilterItemController {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @GetMapping("/filterBySellerRating/{minRating}")
+    public ResponseEntity<List<PostResponse>> filterProductBySellerRating(@PathVariable Double minRating) {
+        try {
+            List<PostResponse> products = postService.filterProductBySellerRating(minRating);
+            if (products.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+            return new ResponseEntity<>(products, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

@@ -115,4 +115,9 @@ public class PostService {
             return false;
         }
     }
+
+    public List<PostResponse> filterProductBySellerRating(Double minRating) {
+        List<Post> allPost = getAllPost();
+        return postDao.filterProductBySellerRating(allPost, minRating);
+    }
 }

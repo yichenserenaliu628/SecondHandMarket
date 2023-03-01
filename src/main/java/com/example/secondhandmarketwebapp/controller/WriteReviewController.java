@@ -20,7 +20,6 @@ public class WriteReviewController {
     @ResponseStatus(value = HttpStatus.OK)
     public void writeReview(@RequestBody List<Review> reviewList){
         reviewService.addReview(reviewList);
-
     }
 
 }

@@ -21,16 +21,14 @@ import java.util.Set;
 public class CheckoutController {
     @Autowired
     private CartService cartService;
-    @Autowired
-    private ReviewService reviewService;
     @RequestMapping(value = "/checkout", method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
-    public String checkout(Model model, RedirectAttributes redirectAttributes) {
+    public String checkout(Model model, RedirectAttributes redirectAttributes) throws CheckoutException{
         try {
             Set<String> sellerUsernames = cartService.checkOut();
-            model.addAttribute("sellerIdLists", sellerUsernames);
-            redirectAttributes.addFlashAttribute("sellerIdLists", sellerUsernames);
-            return "redirect:/review";
+            model.addAttribute("sellerUserNameLists", sellerUsernames);
+            redirectAttributes.addFlashAttribute("sellerUserNameLists", sellerUsernames);
+            return "redirect:/checkout?review";
         } catch (CheckoutException e) {
             model.addAttribute("error", "Checkout failed: " + e.getMessage());
             return "checkout";

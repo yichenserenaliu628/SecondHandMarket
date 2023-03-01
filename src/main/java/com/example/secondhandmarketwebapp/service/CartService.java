@@ -14,7 +14,6 @@ import java.util.Set;
 
 @Service
 public class CartService {
-
     @Autowired
     private UserService userService;
     @Autowired
@@ -40,12 +39,12 @@ public class CartService {
     public Set<String> checkOut() throws CheckoutException {
         Set<String> sellerUsernames = cleanCart();
         if (!stockSufficient()) {
-            throw new CheckoutException("Sorry. The seller does not have sufficent stock.");
+            throw new CheckoutException("Sorry. The seller does not have sufficient stock.");
         }
         return sellerUsernames;
     }
 
-    public Set<String> cleanCart() {
+    public Set<String> cleanCart()  {
         Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
         String username = loggedInUser.getName();
         User user = userService.getUserByEmail(username);

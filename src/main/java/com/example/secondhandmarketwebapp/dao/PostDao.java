@@ -3,6 +3,7 @@ package com.example.secondhandmarketwebapp.dao;
 import com.example.secondhandmarketwebapp.entity.Post;
 import com.example.secondhandmarketwebapp.entity.Review;
 import com.example.secondhandmarketwebapp.entity.User;
+import com.example.secondhandmarketwebapp.exception.CheckoutException;
 import com.example.secondhandmarketwebapp.payload.response.PostResponse;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -131,7 +132,6 @@ public class PostDao {
     }
 
     public double findAverageRating(Post post) {
-//        System.out.println("debug11111");
         User user = post.getUser();
         int user_id = user.getId();
         Session session = sessionFactory.openSession();
@@ -347,14 +347,18 @@ public class PostDao {
         }
     }
 
-    public void updatePostQuantity(Post post, int quantity) {
+    public void updatePostQuantity(Post post, int quantity) throws CheckoutException  {
         try (Session session = sessionFactory.openSession()) {
             Transaction tx = session.beginTransaction();
 
             int oldQuantity = post.getQuantity();
             if (oldQuantity <= 0) {
                 post.setSold(true);
-                return;
+                throw new CheckoutException("Sorry. The product is sold out.");
+            }
+
+            if (oldQuantity < quantity) {
+                throw new CheckoutException("Sorry. The seller does not have sufficient stock of the item. Please reduce quantity.");
             }
 
             int newQuantity = oldQuantity - quantity;
@@ -389,5 +393,29 @@ public class PostDao {
         Post post = (Post) query.getSingleResult();
         session.close();
         return post;
+    }
+
+    public List<PostResponse> filterProductBySellerRating(List<Post> allPost, Double minRating) {
+        List<PostResponse> listOfPostResponsesBySellerRating = new ArrayList<>();
+
+        for (Post post : allPost) {
+            double rating = findAverageRating(post);
+            if (rating >= minRating) {
+                PostResponse response = PostResponse.builder()
+                        .id(post.getId())
+                        .title(post.getTitle())
+                        .price(post.getPrice())
+                        .description(post.getDescription())
+                        .zipcode(String.valueOf(post.getZipcode()))
+                        .quantity(post.getQuantity())
+                        .category(post.getCategory())
+                        .isSold(post.isSold())
+                        .sellerEmail(post.getUser().getEmail())
+                        .sellerRating(rating)
+                        .build();
+                listOfPostResponsesBySellerRating.add(response);
+            }
+        }
+        return listOfPostResponsesBySellerRating;
     }
 }

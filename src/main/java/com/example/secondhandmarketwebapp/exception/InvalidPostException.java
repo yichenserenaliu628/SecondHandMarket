@@ -6,7 +6,6 @@ public class InvalidPostException extends RuntimeException {
     public InvalidPostException(String errorMessage) {
         this.errorMessage = errorMessage;
     }
-
     public String getErrorMessage() {
         return errorMessage;
     }
