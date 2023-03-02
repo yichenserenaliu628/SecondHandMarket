@@ -9,10 +9,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0a06f4f4-a254-403f-8cce-253e9c414866" name="Changes" comment="1. getAllPostsUnderOneUser, no longer need user to enter email to get posts&#10;2. for Travis: getPostByPostID&#10;3. change all return List&lt;Post&gt; to List&lt;PostResponse&gt; so the post can have seller email and ratings">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+    <list default="true" id="0a06f4f4-a254-403f-8cce-253e9c414866" name="Changes" comment="Checkout now return a set of string for frontend to fill out the review form">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/controller/CheckoutController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/controller/CheckoutController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/controller/WriteReviewController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/controller/WriteReviewController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/service/ReviewService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/service/ReviewService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -295,7 +295,7 @@
       <workItem from="1677579829525" duration="13318000" />
       <workItem from="1677643340211" duration="3595000" />
       <workItem from="1677653985050" duration="11338000" />
-      <workItem from="1677711013249" duration="11149000" />
+      <workItem from="1677711013249" duration="13188000" />
     </task>
     <task id="LOCAL-00001" summary="dao and most entity finish">
       <created>1676598500478</created>
@@ -479,7 +479,14 @@
       <option name="project" value="LOCAL" />
       <updated>1677725679197</updated>
     </task>
-    <option name="localTasksCounter" value="27" />
+    <task id="LOCAL-00027" summary="Checkout now return a set of string for frontend to fill out the review form">
+      <created>1677738184966</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1677738184966</updated>
+    </task>
+    <option name="localTasksCounter" value="28" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -561,6 +568,7 @@
     <MESSAGE value="S3 storage upload, delete, download" />
     <MESSAGE value="filter items by sellers rating" />
     <MESSAGE value="1. getAllPostsUnderOneUser, no longer need user to enter email to get posts&#10;2. for Travis: getPostByPostID&#10;3. change all return List&lt;Post&gt; to List&lt;PostResponse&gt; so the post can have seller email and ratings" />
-    <option name="LAST_COMMIT_MESSAGE" value="1. getAllPostsUnderOneUser, no longer need user to enter email to get posts&#10;2. for Travis: getPostByPostID&#10;3. change all return List&lt;Post&gt; to List&lt;PostResponse&gt; so the post can have seller email and ratings" />
+    <MESSAGE value="Checkout now return a set of string for frontend to fill out the review form" />
+    <option name="LAST_COMMIT_MESSAGE" value="Checkout now return a set of string for frontend to fill out the review form" />
   </component>
 </project>

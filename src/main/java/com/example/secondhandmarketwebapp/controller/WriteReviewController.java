@@ -18,8 +18,8 @@ public class WriteReviewController {
     // TO DO
     @RequestMapping(value = "/review", method = RequestMethod.POST)
     @ResponseStatus(value = HttpStatus.OK)
-    public void writeReview(@RequestBody List<Review> reviewList){
-        reviewService.addReview(reviewList);
+    public void writeReview(@RequestBody Review review){
+        reviewService.addReview(review);
     }
 
 }
