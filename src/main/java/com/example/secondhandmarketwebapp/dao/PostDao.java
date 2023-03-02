@@ -507,7 +507,6 @@ public class PostDao {
             Transaction tx = session.beginTransaction();
             User user = session.get(User.class, userId);
             if (user != null) {
-                ProductImage image = new ProductImage().toBuilder().uuid(addProductRequest.getUuid()).build();
 
                 user.getPostList().size();
                 Post newPost = Post.builder()
@@ -519,7 +518,7 @@ public class PostDao {
                         .isSold(false)
                         .user(user)
                         .category(addProductRequest.getCategory())
-                        .image(image).build();
+                        .keyName(addProductRequest.getKeyName()).build();
 
                 user.getPostList().add(newPost);
                 session.save(newPost);

@@ -7,6 +7,7 @@ import com.example.secondhandmarketwebapp.payload.request.AddProductRequest;
 import com.example.secondhandmarketwebapp.payload.response.MessageResponse;
 import com.example.secondhandmarketwebapp.payload.response.PostResponse;
 import com.example.secondhandmarketwebapp.service.PostService;
+import com.example.secondhandmarketwebapp.service.S3Service;
 import com.example.secondhandmarketwebapp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,15 +18,21 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.UUID;
+
 @Controller
 public class PostController {
 
     private static final Logger logger = LoggerFactory.getLogger(PostController.class);
     @Autowired
     private PostService postService;
+
+    @Autowired
+    private S3Service amazonClient;
     @Autowired
     private UserService userService;
     @RequestMapping(value = "/users", method = RequestMethod.GET)
@@ -92,16 +99,35 @@ public class PostController {
         }
     }
 
-    @RequestMapping(value = "/addPost", method = RequestMethod.POST)
+    @RequestMapping(value = "/addPostOld", method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<String> addPost(@AuthenticationPrincipal UserDetails userDetails, @RequestBody Post post) {
         return postService.addPost(userDetails.getUsername(), post);
     }
 
-    // new addPost method that enables uploading an image S3
-    @PostMapping("/createPost")
-    public ResponseEntity<?> createPost(@Valid @AuthenticationPrincipal UserDetails userDetails, @RequestBody AddProductRequest addProductRequest) {
+    // new version of addPost method that enables uploading an image S3
+    @PostMapping("/addPost")
+    public ResponseEntity<?> createPostNew(@Valid @AuthenticationPrincipal UserDetails userDetails,
+                                           @RequestParam("file") MultipartFile file,
+                                           @RequestParam("zipcode") int zipcode,
+                                           @RequestParam("description") String description,
+                                           @RequestParam("price") Double price,
+                                           @RequestParam("quantity") int quantity,
+                                           @RequestParam("title") String title,
+                                           @RequestParam("category") String category) {
         try {
+            // create add post request
+            AddProductRequest addProductRequest = new AddProductRequest();
+            addProductRequest.setTitle(title);
+            addProductRequest.setZipcode(zipcode);
+            addProductRequest.setDescription(description);
+            addProductRequest.setPrice(price);
+            addProductRequest.setQuantity(quantity);
+            addProductRequest.setCategory(category);
+            // Upload image to S3
+            String keyName = amazonClient.uploadFile(file);
+            addProductRequest.setKeyName(keyName);
+
             postService.createPost(userDetails.getUsername(), addProductRequest);
             return ResponseEntity.ok(new MessageResponse("Product Added successfully!"));
         } catch (RuntimeException e) {

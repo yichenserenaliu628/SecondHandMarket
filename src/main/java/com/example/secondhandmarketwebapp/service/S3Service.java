@@ -36,13 +36,18 @@ public class S3Service {
 
     private AmazonS3 s3client;
 
-    private String endpointUrl = "https://s3.us-east-1.amazonaws.com";
+    //private String endpointUrl = "https://s3.us-east-1.amazonaws.com";
+    private String endpointUrl = "https://s3.us-west-1.amazonaws.com";
 
-    private String bucketName = "s3bucket-xuehang";
+    //private String bucketName = "s3bucket-xuehang";
+    private String bucketName = "serenaliuawsbucket";
 
-    private String accessKey = "AKIAVEQKSQRMHK7YYM5G";
+    //private String accessKey = "AKIAVEQKSQRMHK7YYM5G";
+    private String accessKey = "AKIARHORSLJOXTQCKYRM";
 
-    private String secretKey = "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";
+    //private String secretKey = "26f14qsrXrf0/w3vVAeO7FkXQaQXtBMsI0zkaJhd";
+
+    private String secretKey = "9f7wlLUL04gIyR4tBsRoy6SmkUq22Wx7l4inz3zT";
 
     @PostConstruct
     private void initializeAmazon() {
@@ -52,17 +57,17 @@ public class S3Service {
 
     public String uploadFile(MultipartFile multipartFile) {
 
-        String fileUrl = "";
+        String fileName = "";
         try {
             File file = convertMultiPartToFile(multipartFile);
-            String fileName = generateFileName(multipartFile);
-            fileUrl = endpointUrl + "/" + bucketName + "/" + fileName;
+            fileName = generateFileName(multipartFile);
+            String fileUrl = endpointUrl + "/" + bucketName + "/" + fileName;
             uploadFileTos3bucket(fileName, file);
             file.delete();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return fileUrl;
+        return fileName;
     }
 
     private void uploadFileTos3bucket(String fileName, File file) {

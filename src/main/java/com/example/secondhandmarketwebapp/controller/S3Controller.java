@@ -26,7 +26,7 @@ public class S3Controller {
 
 
     @GetMapping(value= "/download")
-    public ResponseEntity<ByteArrayResource> downloadFile(@RequestParam(value= "fileName") final String keyName) {
+    public ResponseEntity<ByteArrayResource> downloadFile(@RequestParam(value= "keyName") final String keyName) {
         final byte[] data = amazonClient.downloadFile(keyName);
         final ByteArrayResource resource = new ByteArrayResource(data);
         return ResponseEntity

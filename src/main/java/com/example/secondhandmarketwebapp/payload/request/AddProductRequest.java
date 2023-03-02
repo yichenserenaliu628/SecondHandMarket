@@ -31,6 +31,8 @@ public class AddProductRequest {
     private boolean isSold;
 
     @NotNull
+    private String keyName;
+
     private String uuid;
 
 }

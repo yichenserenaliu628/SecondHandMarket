@@ -56,8 +56,11 @@ public class Post implements Serializable {
 	private User user;
 
 	/*@OneToMany(mappedBy ="post", cascade = CascadeType.ALL)
-	private List<OrderItem> orderItem;*/
-	@OneToOne(cascade = CascadeType.ALL /*, fetch = FetchType.LAZY*/)
+	private List<OrderItem> orderItem;
+	@OneToOne(cascade = CascadeType.ALL , fetch = FetchType.LAZY)
 	@JoinColumn(unique = true)
-	private ProductImage image;
+	private ProductImage image;*/
+
+	private String keyName;
+
 }
