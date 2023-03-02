@@ -7,6 +7,7 @@ import com.example.secondhandmarketwebapp.entity.User;
 import com.example.secondhandmarketwebapp.exception.CheckoutException;
 import com.example.secondhandmarketwebapp.payload.request.AddProductRequest;
 import com.example.secondhandmarketwebapp.payload.response.PostResponse;
+import com.example.secondhandmarketwebapp.service.S3Service;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -33,6 +34,9 @@ import javax.json.JsonReader;
 public class PostDao {
     @Autowired
     private SessionFactory sessionFactory;
+    @Autowired
+    private S3Service amazonClient;
+
     // https://www.baeldung.com/hibernate-criteria-queries
     public List<User> getUsers() {
         try (Session session = sessionFactory.openSession()) {
@@ -66,6 +70,12 @@ public class PostDao {
             List<Post> posts = session.createQuery(criteria).getResultList();
             for(Post post : posts) {
                 double rating = findAverageRating(post);
+                // download post image from s3
+                byte[] imageData = new byte[]{};
+                if (post.getKeyName() != null) {
+                    imageData = amazonClient.downloadFile(post.getKeyName());
+                }
+                // generate post repsonse
                 PostResponse response = PostResponse.builder()
                         .id(post.getId())
                         .title(post.getTitle())
@@ -77,7 +87,7 @@ public class PostDao {
                         .isSold(post.isSold())
                         .sellerEmail(post.getUser().getEmail())
                         .sellerRating(rating)
-                        //.uuid(post.getImage().getUuid())
+                        .imageData(imageData)
                         .build();
                 listOfPostResponses.add(response);
             }
@@ -88,12 +98,19 @@ public class PostDao {
     }
     public List<PostResponse> getAllPostUnderOneUser(int userId) {
         List<PostResponse> listOfPostsUnderOneUser = new ArrayList<>();
+
         try (Session session = sessionFactory.openSession()) {
             User user = session.get(User.class, userId);
             if (user != null) {
                 user.getPostList().size();
                 for(Post post : user.getPostList()) {
                     double rating = findAverageRating(post);
+                    // download post image from s3
+                    byte[] imageData = new byte[]{};
+                    if (post.getKeyName() != null) {
+                        imageData = amazonClient.downloadFile(post.getKeyName());
+                    }
+                    // generate post repsonse
                     PostResponse response = PostResponse.builder()
                             .id(post.getId())
                             .title(post.getTitle())
@@ -105,7 +122,7 @@ public class PostDao {
                             .isSold(post.isSold())
                             .sellerEmail(post.getUser().getEmail())
                             .sellerRating(rating)
-                            //.uuid(post.getImage().getUuid())
+                            .imageData(imageData)
                             .build();
                     listOfPostsUnderOneUser.add(response);
                 }
@@ -130,6 +147,12 @@ public class PostDao {
                 return null;
             }
             double rating = findAverageRating(post);
+            // download post image from s3
+            byte[] imageData = new byte[]{};
+            if (post.getKeyName() != null) {
+                imageData = amazonClient.downloadFile(post.getKeyName());
+            }
+            // generate post repsonse
             PostResponse response = PostResponse.builder()
                     .id(post.getId())
                     .title(post.getTitle())
@@ -141,7 +164,7 @@ public class PostDao {
                     .isSold(post.isSold())
                     .sellerEmail(post.getUser().getEmail())
                     .sellerRating(rating)
-                    //.uuid(post.getImage().getUuid())
+                    .imageData(imageData)
                     .build();
             return response;
         } catch (Exception ex) {
@@ -170,6 +193,12 @@ public class PostDao {
         for (Post post : allPost) {
             if(calculateDistance(String.valueOf(post.getZipcode()), zipcode) <= distance) {
                 double rating = findAverageRating(post);
+                // download post image from s3
+                byte[] imageData = new byte[]{};
+                if (post.getKeyName() != null) {
+                    imageData = amazonClient.downloadFile(post.getKeyName());
+                }
+                // generate post repsonse
                 PostResponse response = PostResponse.builder()
                         .id(post.getId())
                         .title(post.getTitle())
@@ -181,7 +210,7 @@ public class PostDao {
                         .isSold(post.isSold())
                         .sellerEmail(post.getUser().getEmail())
                         .sellerRating(rating)
-                        //.uuid(post.getImage().getUuid())
+                        .imageData(imageData)
                         .build();
                 listOfPostsNearby.add(response);
             }
@@ -233,6 +262,12 @@ public class PostDao {
 
         for (Post post : listOfPostsContainingKeyword) {
             double rating = findAverageRating(post);
+            // download post image from s3
+            byte[] imageData = new byte[]{};
+            if (post.getKeyName() != null) {
+                imageData = amazonClient.downloadFile(post.getKeyName());
+            }
+            // generate post repsonse
             PostResponse response = PostResponse.builder()
                     .id(post.getId())
                     .title(post.getTitle())
@@ -244,7 +279,7 @@ public class PostDao {
                     .isSold(post.isSold())
                     .sellerEmail(post.getUser().getEmail())
                     .sellerRating(rating)
-                    //.uuid(post.getImage().getUuid())
+                    .imageData(imageData)
                     .build();
             listOfPostResponsesContainingKeyword.add(response);
         }
@@ -267,6 +302,12 @@ public class PostDao {
 
         for (Post post : allPost) {
             double rating = findAverageRating(post);
+            // download post image from s3
+            byte[] imageData = new byte[]{};
+            if (post.getKeyName() != null) {
+                imageData = amazonClient.downloadFile(post.getKeyName());
+            }
+            // generate post repsonse
             PostResponse response = PostResponse.builder()
                     .id(post.getId())
                     .title(post.getTitle())
@@ -278,7 +319,7 @@ public class PostDao {
                     .isSold(post.isSold())
                     .sellerEmail(post.getUser().getEmail())
                     .sellerRating(rating)
-                    //.uuid(post.getImage().getUuid())
+                    .imageData(imageData)
                     .build();
             sortedProductsByPrice.add(response);
         }
@@ -296,6 +337,12 @@ public class PostDao {
         });
         for (Post post : allPost) {
             double rating = findAverageRating(post);
+            // download post image from s3
+            byte[] imageData = new byte[]{};
+            if (post.getKeyName() != null) {
+                imageData = amazonClient.downloadFile(post.getKeyName());
+            }
+            // generate post repsonse
             PostResponse response = PostResponse.builder()
                     .id(post.getId())
                     .title(post.getTitle())
@@ -307,7 +354,7 @@ public class PostDao {
                     .isSold(post.isSold())
                     .sellerEmail(post.getUser().getEmail())
                     .sellerRating(rating)
-                    //.uuid(post.getImage().getUuid())
+                    .imageData(imageData)
                     .build();
             sortedProductsByPriceHighToLow.add(response);
         }
@@ -320,6 +367,12 @@ public class PostDao {
 
         for (Post post : filteredProductByCategory) {
             double rating = findAverageRating(post);
+            // download post image from s3
+            byte[] imageData = new byte[]{};
+            if (post.getKeyName() != null) {
+                imageData = amazonClient.downloadFile(post.getKeyName());
+            }
+            // generate post repsonse
             PostResponse response = PostResponse.builder()
                     .id(post.getId())
                     .title(post.getTitle())
@@ -331,7 +384,7 @@ public class PostDao {
                     .isSold(post.isSold())
                     .sellerEmail(post.getUser().getEmail())
                     .sellerRating(rating)
-                    //.uuid(post.getImage().getUuid())
+                    .imageData(imageData)
                     .build();
             listOfFilteredProductByCategory.add(response);
         }
@@ -354,6 +407,12 @@ public class PostDao {
 
         for (Post post : filteredProductByMaxPrice) {
             double rating = findAverageRating(post);
+            // download post image from s3
+            byte[] imageData = new byte[]{};
+            if (post.getKeyName() != null) {
+                imageData = amazonClient.downloadFile(post.getKeyName());
+            }
+            // generate post repsonse
             PostResponse response = PostResponse.builder()
                     .id(post.getId())
                     .title(post.getTitle())
@@ -365,7 +424,7 @@ public class PostDao {
                     .isSold(post.isSold())
                     .sellerEmail(post.getUser().getEmail())
                     .sellerRating(rating)
-                    //.uuid(post.getImage().getUuid())
+                    .imageData(imageData)
                     .build();
             listOfFilteredProductByMaxPrice.add(response);
         }
@@ -387,6 +446,12 @@ public class PostDao {
 
         for (Post post : filteredProductByMaxPrice) {
             double rating = findAverageRating(post);
+            // download post image from s3
+            byte[] imageData = new byte[]{};
+            if (post.getKeyName() != null) {
+                imageData = amazonClient.downloadFile(post.getKeyName());
+            }
+            // generate post repsonse
             PostResponse response = PostResponse.builder()
                     .id(post.getId())
                     .title(post.getTitle())
@@ -398,7 +463,7 @@ public class PostDao {
                     .isSold(post.isSold())
                     .sellerEmail(post.getUser().getEmail())
                     .sellerRating(rating)
-                    //.uuid(post.getImage().getUuid())
+                    .imageData(imageData)
                     .build();
             listOfFilteredProductByPriceRange.add(response);
         }
@@ -421,6 +486,8 @@ public class PostDao {
             Transaction tx = session.beginTransaction();
             Post post = session.get(Post.class, postId);
             if (post != null && post.getUser().getId() == userId) {
+                String keyName = post.getKeyName();
+                amazonClient.deleteFile(keyName);
                 session.delete(post);
                 tx.commit();
             }
@@ -482,6 +549,12 @@ public class PostDao {
 
         for (Post post : allPost) {
             double rating = findAverageRating(post);
+            // download post image from s3
+            byte[] imageData = new byte[]{};
+            if (post.getKeyName() != null) {
+                imageData = amazonClient.downloadFile(post.getKeyName());
+            }
+            // generate post repsonse
             if (rating >= minRating) {
                 PostResponse response = PostResponse.builder()
                         .id(post.getId())
@@ -494,7 +567,7 @@ public class PostDao {
                         .isSold(post.isSold())
                         .sellerEmail(post.getUser().getEmail())
                         .sellerRating(rating)
-                        //.uuid(post.getImage().getUuid())
+                        .imageData(imageData)
                         .build();
                 listOfPostResponsesBySellerRating.add(response);
             }

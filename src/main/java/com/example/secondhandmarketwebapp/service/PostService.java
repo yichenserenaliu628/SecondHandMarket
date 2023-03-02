@@ -1,5 +1,6 @@
 package com.example.secondhandmarketwebapp.service;
 
+import com.amazonaws.services.s3.AmazonS3;
 import com.example.secondhandmarketwebapp.dao.PostDao;
 import com.example.secondhandmarketwebapp.dao.UserDao;
 import com.example.secondhandmarketwebapp.entity.Post;
@@ -27,6 +28,8 @@ public class PostService {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private S3Service amazonClient;
 
     public List<User> getUsers() {
         return postDao.getUsers();
