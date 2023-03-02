@@ -37,11 +37,11 @@ public class CartService {
     }
 
     public Set<String> checkOut() throws CheckoutException {
-        Set<String> sellerUsernames = cleanCart();
+        Set<String> sellerEmails = cleanCart();
         if (!stockSufficient()) {
             throw new CheckoutException("Sorry. The seller does not have sufficient stock.");
         }
-        return sellerUsernames;
+        return sellerEmails;
     }
 
     public Set<String> cleanCart()  {

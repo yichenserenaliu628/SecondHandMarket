@@ -19,5 +19,5 @@ public class PostResponse {
     boolean isSold;
     String sellerEmail;
     double sellerRating;
-    private byte[] imageData;
+    private String imageUrl;
 }

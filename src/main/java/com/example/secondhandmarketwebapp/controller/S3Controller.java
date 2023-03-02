@@ -8,6 +8,8 @@ import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+
 @RestController
 @RequestMapping("/storage/")
 public class S3Controller {
@@ -38,9 +40,12 @@ public class S3Controller {
     }
 
     @DeleteMapping(value= "/delete")
-    public ResponseEntity<String> deleteFile(@RequestParam(value= "fileName") final String keyName) {
+    public ResponseEntity<String> deleteFile(@RequestParam(value= "keyName") final String keyName) {
         amazonClient.deleteFile(keyName);
         final String response = "[" + keyName + "] deleted successfully.";
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+
+
 }

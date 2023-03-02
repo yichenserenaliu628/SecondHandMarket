@@ -23,15 +23,12 @@ public class CheckoutController {
     private CartService cartService;
     @RequestMapping(value = "/checkout", method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
-    public String checkout(Model model, RedirectAttributes redirectAttributes) throws CheckoutException{
+    public Set<String> checkout() throws CheckoutException{
         try {
-            Set<String> sellerUsernames = cartService.checkOut();
-            model.addAttribute("sellerUserNameLists", sellerUsernames);
-            redirectAttributes.addFlashAttribute("sellerUserNameLists", sellerUsernames);
-            return "redirect:/checkout?review";
+            Set<String> sellerEmails = cartService.checkOut();
+            return sellerEmails;
         } catch (CheckoutException e) {
-            model.addAttribute("error", "Checkout failed: " + e.getMessage());
-            return "checkout";
+            return null;
         }
     }
 }
