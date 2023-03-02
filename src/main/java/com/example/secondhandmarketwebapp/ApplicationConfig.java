@@ -28,12 +28,12 @@ public class ApplicationConfig {
 
     @Bean(name = "dataSource")
     public DataSource dataSource() {
-        String RDS_ENDPOINT = "laiflagcomp-instance.cfs56ldxvzwh.us-west-1.rds.amazonaws.com";
+        String RDS_ENDPOINT = "laiofferflagcamp.ctylibiexpui.us-west-1.rds.amazonaws.com";
         String USERNAME = "admin";
         String PASSWORD = "12345678";
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
-        dataSource.setUrl("jdbc:mysql://" + RDS_ENDPOINT + ":3306/secondhandMarket?createDatabaseIfNotExist=true&serverTimezone=UTC");
+        dataSource.setUrl("jdbc:mysql://" + RDS_ENDPOINT + ":3306/secondHand?createDatabaseIfNotExist=true&serverTimezone=UTC");
         dataSource.setUsername(USERNAME);
         dataSource.setPassword(PASSWORD);
 

@@ -1,7 +1,6 @@
 package com.example.secondhandmarketwebapp.controller;
 
 import com.example.secondhandmarketwebapp.payload.request.ReviewSellerRequest;
-import com.example.secondhandmarketwebapp.payload.request.AddProductRequest;
 import com.example.secondhandmarketwebapp.payload.response.MessageResponse;
 import com.example.secondhandmarketwebapp.service.ReviewService;
 import org.slf4j.Logger;
@@ -12,18 +11,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-
 @Controller
 public class WriteReviewController {
     @Autowired
     private ReviewService reviewService;
     private static final Logger logger = LoggerFactory.getLogger(WriteReviewController.class);
-    // TO DO
     @RequestMapping(value = "/review", method = RequestMethod.POST)
     @ResponseStatus(value = HttpStatus.OK)
     public ResponseEntity<?> writeReview(@RequestParam("sellerUserName") String sellerUserName,
-                            @RequestParam("rating") double rating,
-                            @RequestParam("comment") String comment){
+                                         @RequestParam("rating") double rating,
+                                         @RequestParam("comment") String comment){
         try {
             // create review request
             ReviewSellerRequest reviewSellerRequest = new ReviewSellerRequest();

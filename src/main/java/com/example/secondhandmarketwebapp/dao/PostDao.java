@@ -36,14 +36,11 @@ public class PostDao {
     private SessionFactory sessionFactory;
     @Autowired
     private S3Service amazonClient;
-
     private String endpointUrl = "https://s3.us-west-1.amazonaws.com";
     private String bucketName = "serenaliuawsbucket";
-
     private String accessKey = "AKIARHORSLJOXTQCKYRM";
     private String secretKey = "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";
 
-    // https://www.baeldung.com/hibernate-criteria-queries
     public List<User> getUsers() {
         try (Session session = sessionFactory.openSession()) {
             CriteriaBuilder builder = session.getCriteriaBuilder();
