@@ -36,15 +36,60 @@ public class PostController {
 
     @RequestMapping(value = "/posts", method = RequestMethod.GET)
     @ResponseBody
-    public List<Post> getPost() {
-        return postService.getAllPost();
+    public ResponseEntity<List<PostResponse>> getAllPost() {
+        try {
+            List<PostResponse> allPosts = postService.getAllPostResponse();
+            if (allPosts.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+            return new ResponseEntity<>(allPosts, HttpStatus.OK);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @RequestMapping(value = "/user/{email}/post", method = RequestMethod.GET)
     @ResponseBody
-    public List<Post> getPosts(@PathVariable(value = "email") String email) {
-        User user = userService.getUserByEmail(email);
-        return postService.getAllPostUnderOneUser(user.getId());
+    public ResponseEntity<List<PostResponse>> getPostsUnderSpecificUser(@PathVariable(value = "email") String email) {
+        try {
+            User user = userService.getUserByEmail(email);
+            List<PostResponse> allPostsUnderCurUser = postService.getAllPostUnderOneUser(user.getId());
+            if (allPostsUnderCurUser.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+            return new ResponseEntity<>(allPostsUnderCurUser, HttpStatus.OK);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @RequestMapping(value = "/user/post/{post_id}", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseEntity<PostResponse> getPostsByPostId(@PathVariable(value = "post_id") int post_id) {
+        try {
+            PostResponse response = postService.getPostByPostId(post_id);
+            if (response == null) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @RequestMapping(value = "/user/allposts", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseEntity<List<PostResponse>> getAllPostsUnderCurrentUser(@AuthenticationPrincipal UserDetails userDetails) {
+        try {
+            User user = userService.getUserByEmail(userDetails.getUsername());
+            List<PostResponse> allPostsUnderCurUser = postService.getAllPostUnderOneUser(user.getId());
+            if (allPostsUnderCurUser.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+            return new ResponseEntity<>(allPostsUnderCurUser, HttpStatus.OK);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @RequestMapping(value = "/addPost", method = RequestMethod.POST)

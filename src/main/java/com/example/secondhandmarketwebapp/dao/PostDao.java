@@ -11,6 +11,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 
 import javax.json.Json;
@@ -55,22 +56,94 @@ public class PostDao {
         }
         return new ArrayList<>();
     }
-    public List<Post> getAllPostUnderOneUser(int userId) {
+
+    public List<PostResponse> getPostResponses() {
+        List<PostResponse> listOfPostResponses = new ArrayList<>();
         try (Session session = sessionFactory.openSession()) {
-            User user = session.get(User.class, userId);
-            if (user != null) {
-                user.getPostList().size();
-                return user.getPostList();
+            CriteriaBuilder builder = session.getCriteriaBuilder();
+            CriteriaQuery<Post> criteria = builder.createQuery(Post.class);
+            criteria.from(Post.class);
+            List<Post> posts = session.createQuery(criteria).getResultList();
+            for(Post post : posts) {
+                double rating = findAverageRating(post);
+                PostResponse response = PostResponse.builder()
+                        .id(post.getId())
+                        .title(post.getTitle())
+                        .price(post.getPrice())
+                        .description(post.getDescription())
+                        .zipcode(String.valueOf(post.getZipcode()))
+                        .quantity(post.getQuantity())
+                        .category(post.getCategory())
+                        .isSold(post.isSold())
+                        .sellerEmail(post.getUser().getEmail())
+                        .sellerRating(rating)
+                        //.uuid(post.getImage().getUuid())
+                        .build();
+                listOfPostResponses.add(response);
             }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-        return new ArrayList<>();
+        return listOfPostResponses;
     }
-
+    public List<PostResponse> getAllPostUnderOneUser(int userId) {
+        List<PostResponse> listOfPostsUnderOneUser = new ArrayList<>();
+        try (Session session = sessionFactory.openSession()) {
+            User user = session.get(User.class, userId);
+            if (user != null) {
+                user.getPostList().size();
+                for(Post post : user.getPostList()) {
+                    double rating = findAverageRating(post);
+                    PostResponse response = PostResponse.builder()
+                            .id(post.getId())
+                            .title(post.getTitle())
+                            .price(post.getPrice())
+                            .description(post.getDescription())
+                            .zipcode(String.valueOf(post.getZipcode()))
+                            .quantity(post.getQuantity())
+                            .category(post.getCategory())
+                            .isSold(post.isSold())
+                            .sellerEmail(post.getUser().getEmail())
+                            .sellerRating(rating)
+                            //.uuid(post.getImage().getUuid())
+                            .build();
+                    listOfPostsUnderOneUser.add(response);
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return listOfPostsUnderOneUser;
+    }
     public Post getPost(int postId) {
         try (Session session = sessionFactory.openSession()) {
             return session.get(Post.class, postId);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return null;
+    }
+    public PostResponse getPostByPostId(int postId) {
+        try (Session session = sessionFactory.openSession()) {
+            Post post = session.get(Post.class, postId);
+            if(post == null) {
+                return null;
+            }
+            double rating = findAverageRating(post);
+            PostResponse response = PostResponse.builder()
+                    .id(post.getId())
+                    .title(post.getTitle())
+                    .price(post.getPrice())
+                    .description(post.getDescription())
+                    .zipcode(String.valueOf(post.getZipcode()))
+                    .quantity(post.getQuantity())
+                    .category(post.getCategory())
+                    .isSold(post.isSold())
+                    .sellerEmail(post.getUser().getEmail())
+                    .sellerRating(rating)
+                    //.uuid(post.getImage().getUuid())
+                    .build();
+            return response;
         } catch (Exception ex) {
             ex.printStackTrace();
         }

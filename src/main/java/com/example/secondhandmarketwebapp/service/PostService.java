@@ -31,13 +31,16 @@ public class PostService {
     public List<User> getUsers() {
         return postDao.getUsers();
     }
-    public List<Post> getAllPostUnderOneUser(int userId) {
+    public List<PostResponse> getAllPostUnderOneUser(int userId) {
         return postDao.getAllPostUnderOneUser(userId);
     }
     public List<Post> getAllPost() { return postDao.getPosts(); }
-
+    public List<PostResponse> getAllPostResponse() { return postDao.getPostResponses(); }
     public Post getPost (int postId) {
         return postDao.getPost(postId);
+    }
+    public PostResponse getPostByPostId (int postId) {
+        return postDao.getPostByPostId(postId);
     }
     public ResponseEntity<String> addPost(String userEmail, Post post) throws InvalidPostException {
         if (!isValidZipCode(String.valueOf(post.getZipcode()))) {
