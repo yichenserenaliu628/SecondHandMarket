@@ -56,8 +56,14 @@ public class UserService {
         if (user.getEmail() == null || !isValidEmail(user.getEmail())) {
             throw new InvalidUserException("Email is invalid");
         }
-        if (user.getUsername() == null || user.getUsername().isEmpty() || !isValidUserName(user.getUsername())) {
+        if (!isDupEmail((user.getEmail()))) {
+            throw new InvalidUserException("Email is already registered.");
+        }
+        if (user.getUsername() == null || user.getUsername().isEmpty()) {
             throw new InvalidUserException("Username is invalid.");
+        }
+        if (!isValidUserName(user.getUsername())) {
+            throw new InvalidUserException("Username is already used.");
         }
         if (user.getFirstname() == null || user.getFirstname().isEmpty()) {
             throw new InvalidUserException("First name is required");
@@ -82,8 +88,8 @@ public class UserService {
         return userDao.isValidUserName(username);
     }
 
-    public User getUser(String email) {
-        return userDao.getUser(email);
+    private boolean isDupEmail(String email) {
+        return userDao.isDupEmail(email);
     }
 
     public User getUserByEmail(String email) {

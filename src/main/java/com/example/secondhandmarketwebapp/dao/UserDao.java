@@ -86,4 +86,13 @@ public class UserDao {
         Long count = (Long) criteria.uniqueResult();
         return count == 0;
     }
+
+    public boolean isDupEmail(String email) {
+        Session session = sessionFactory.openSession();
+        Criteria criteria = session.createCriteria(User.class);
+        criteria.add(Restrictions.eq("email", email));
+        criteria.setProjection(Projections.rowCount());
+        Long count = (Long) criteria.uniqueResult();
+        return count == 0;
+    }
 }
