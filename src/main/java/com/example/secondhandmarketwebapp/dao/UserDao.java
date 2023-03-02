@@ -2,12 +2,17 @@ package com.example.secondhandmarketwebapp.dao;
 
 import com.example.secondhandmarketwebapp.entity.Authorities;
 import com.example.secondhandmarketwebapp.entity.User;
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
 
 @Repository
 public class UserDao {
@@ -62,5 +67,23 @@ public class UserDao {
         User user = (User) query.getSingleResult();
         session.close();
         return user;
+    }
+
+    public User getUserByUserName(String username) {
+        Session session = sessionFactory.openSession();
+        Query query = session.createQuery("SELECT u FROM User u WHERE u.username = :username");
+        query.setParameter("username", username);
+        User user = (User) query.getSingleResult();
+        session.close();
+        return user;
+    }
+
+    public boolean isValidUserName(String username) {
+        Session session = sessionFactory.openSession();
+        Criteria criteria = session.createCriteria(User.class);
+        criteria.add(Restrictions.eq("username", username));
+        criteria.setProjection(Projections.rowCount());
+        Long count = (Long) criteria.uniqueResult();
+        return count == 0;
     }
 }

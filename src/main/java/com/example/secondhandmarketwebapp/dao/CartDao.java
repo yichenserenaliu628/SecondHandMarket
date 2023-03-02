@@ -47,7 +47,7 @@ public class CartDao {
     public Set<String> removeAllCartItems(Cart cart) {
         Set<String> sellerSets = new HashSet<>();
         for (OrderItem item : cart.getOrderItemList()) {
-            sellerSets.add(item.getPost().getUser().getEmail());
+            sellerSets.add(item.getPost().getUser().getUsername());
             postDao.updatePostQuantity(item.getPost(), item.getQuantity());
             removeCartItem(item.getId());
         }

@@ -37,17 +37,19 @@ public class CartService {
     }
 
     public Set<String> checkOut() throws CheckoutException {
-        Set<String> sellerEmails = cleanCart();
+        Set<String> sellerUserNames = cleanCart();
         if (!stockSufficient()) {
             throw new CheckoutException("Sorry. The seller does not have sufficient stock.");
         }
-        return sellerEmails;
+        return sellerUserNames;
     }
 
     public Set<String> cleanCart()  {
         Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
         String username = loggedInUser.getName();
         User user = userService.getUserByEmail(username);
+        System.out.println(1);
+        System.out.println(user.getCart());
         if (user != null) return cartDao.removeAllCartItems(user.getCart());
         return null;
     }

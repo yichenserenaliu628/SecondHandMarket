@@ -26,11 +26,9 @@ import java.util.UUID;
 
 @Controller
 public class PostController {
-
     private static final Logger logger = LoggerFactory.getLogger(PostController.class);
     @Autowired
     private PostService postService;
-
     @Autowired
     private S3Service amazonClient;
     @Autowired

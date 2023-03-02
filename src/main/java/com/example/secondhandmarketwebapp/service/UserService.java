@@ -56,6 +56,9 @@ public class UserService {
         if (user.getEmail() == null || !isValidEmail(user.getEmail())) {
             throw new InvalidUserException("Email is invalid");
         }
+        if (user.getUsername() == null || user.getUsername().isEmpty() || !isValidUserName(user.getUsername())) {
+            throw new InvalidUserException("Username is invalid.");
+        }
         if (user.getFirstname() == null || user.getFirstname().isEmpty()) {
             throw new InvalidUserException("First name is required");
         }
@@ -68,14 +71,15 @@ public class UserService {
         if (user.getPhone() == null || !isValidPhoneNumber(user.getPhone())) {
             throw new InvalidUserException("Phone number is invalid");
         }
-        if (user.getUsername() == null || user.getUsername().isEmpty()) {
-            throw new InvalidUserException("Username is required");
-        }
         if (user.getAddress() == null || user.getAddress().isEmpty()) {
             throw new InvalidUserException("Address is required");
         }
         userDao.signUp(user);
         return ResponseEntity.ok("User created successfully");
+    }
+
+    private boolean isValidUserName(String username) {
+        return userDao.isValidUserName(username);
     }
 
     public User getUser(String email) {
@@ -84,6 +88,10 @@ public class UserService {
 
     public User getUserByEmail(String email) {
         return userDao.getUserByEmail(email);
+    }
+
+    public User getUserByUserName(String userName) {
+        return userDao.getUserByUserName(userName);
     }
 
     public boolean isValidEmail(String email) {

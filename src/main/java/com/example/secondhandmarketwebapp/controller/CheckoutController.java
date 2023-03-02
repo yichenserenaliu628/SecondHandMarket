@@ -16,7 +16,7 @@ import org.springframework.ui.Model;
 
 import java.util.List;
 import java.util.Set;
-
+// to do fix bug
 @Controller
 public class CheckoutController {
     @Autowired
@@ -25,8 +25,8 @@ public class CheckoutController {
     @ResponseStatus(value = HttpStatus.OK)
     public Set<String> checkout() throws CheckoutException{
         try {
-            Set<String> sellerEmails = cartService.checkOut();
-            return sellerEmails;
+            Set<String> sellerUserNames = cartService.checkOut();
+            return sellerUserNames;
         } catch (CheckoutException e) {
             return null;
         }

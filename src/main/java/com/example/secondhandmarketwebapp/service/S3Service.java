@@ -5,18 +5,8 @@ import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.*;
-import com.example.secondhandmarketwebapp.storage.StorageFileNotFoundException;
-import com.example.secondhandmarketwebapp.storage.StorageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.InputStreamResource;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
-import org.springframework.http.ContentDisposition;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,8 +15,6 @@ import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.nio.file.Path;
 import java.util.Date;
 import com.amazonaws.util.IOUtils;
 
@@ -46,7 +34,6 @@ public class S3Service {
     private String accessKey = "AKIARHORSLJOXTQCKYRM";
 
     //private String secretKey = "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";
-
     private String secretKey = "9f7wlLUL04gIyR4tBsRoy6SmkUq22Wx7l4inz3zT";
 
     @PostConstruct
@@ -61,7 +48,7 @@ public class S3Service {
         try {
             File file = convertMultiPartToFile(multipartFile);
             fileName = generateFileName(multipartFile);
-            String fileUrl = endpointUrl + "/" + bucketName + "/" + fileName;
+            //String fileUrl = endpointUrl + "/" + bucketName + "/" + fileName;
             uploadFileTos3bucket(fileName, file);
             file.delete();
         } catch (Exception e) {

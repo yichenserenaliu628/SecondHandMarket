@@ -29,7 +29,6 @@ public class AddProductRequest {
     private String category;
 
     private boolean isSold;
-
     @NotNull
     private String keyName;
 
