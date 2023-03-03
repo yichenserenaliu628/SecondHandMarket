@@ -1,5 +1,6 @@
 package com.example.secondhandmarketwebapp.controller;
 
+import com.example.secondhandmarketwebapp.exception.ImageFormatException;
 import com.example.secondhandmarketwebapp.service.S3Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
@@ -22,7 +23,7 @@ public class S3Controller {
     }
 
     @PostMapping("/uploadFile")
-    public String uploadFile(@RequestPart(value = "file") MultipartFile file) {
+    public String uploadFile(@RequestPart(value = "file") MultipartFile file) throws ImageFormatException {
         return this.amazonClient.uploadFile(file);
     }
 

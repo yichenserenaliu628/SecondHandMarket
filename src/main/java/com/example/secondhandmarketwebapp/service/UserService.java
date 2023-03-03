@@ -115,7 +115,6 @@ public class UserService {
     }
 
     public boolean isValidPhoneNumber(String phoneNumber) {
-        String pattern = "\\(\\d{3}\\)\\d{3}-\\d{4}";
-        return Pattern.matches(pattern, phoneNumber);
+        return phoneNumber.length() == 10;
     }
 }

@@ -2,6 +2,7 @@ package com.example.secondhandmarketwebapp.controller;
 
 import com.example.secondhandmarketwebapp.entity.Post;
 import com.example.secondhandmarketwebapp.entity.User;
+import com.example.secondhandmarketwebapp.exception.ImageFormatException;
 import com.example.secondhandmarketwebapp.exception.InvalidPostException;
 import com.example.secondhandmarketwebapp.payload.request.AddProductRequest;
 import com.example.secondhandmarketwebapp.payload.response.MessageResponse;
@@ -131,6 +132,9 @@ public class PostController {
         } catch (RuntimeException e) {
             logger.error("Failed to add new product " + e);
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(e.getMessage());
+        } catch (ImageFormatException e) {
+            logger.error("Failed to add new product " + e);
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(e.getErrorMessage());
         }
     }
 

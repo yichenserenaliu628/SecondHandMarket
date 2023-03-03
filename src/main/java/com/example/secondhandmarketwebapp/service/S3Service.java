@@ -5,6 +5,7 @@ import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.*;
+import com.example.secondhandmarketwebapp.exception.ImageFormatException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Async;
@@ -42,16 +43,21 @@ public class S3Service {
         this.s3client = new AmazonS3Client(credentials);
     }
 
-    public String uploadFile(MultipartFile multipartFile) {
+    public String uploadFile(MultipartFile multipartFile) throws ImageFormatException{
 
         String fileName = "";
         try {
             File file = convertMultiPartToFile(multipartFile);
             fileName = generateFileName(multipartFile);
-            //String fileUrl = endpointUrl + "/" + bucketName + "/" + fileName;
-            uploadFileTos3bucket(fileName, file);
-            file.delete();
-        } catch (Exception e) {
+            String[] suffix = fileName.split("\\.");
+            if (suffix[suffix.length-1].equals("jpg") || suffix[suffix.length-1].equals("jpeg")  || suffix[suffix.length-1].equals("png") ){
+                //String fileUrl = endpointUrl + "/" + bucketName + "/" + fileName;
+                uploadFileTos3bucket(fileName, file);
+                file.delete();
+            }else {
+                throw new ImageFormatException("Image Format Invalid");
+            }
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return fileName;
