@@ -9,23 +9,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0a06f4f4-a254-403f-8cce-253e9c414866" name="Changes" comment="added email duplication check">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/exception/ImageFormatException.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/db68f6ca-27be-4a78-8053-4ce1d3b5bb42/storage_v2/_src_/schema/information_schema.FNRwLQ.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/db68f6ca-27be-4a78-8053-4ce1d3b5bb42/storage_v2/_src_/schema/mysql.osA4Bg.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/db68f6ca-27be-4a78-8053-4ce1d3b5bb42/storage_v2/_src_/schema/performance_schema.kIw0nw.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/db68f6ca-27be-4a78-8053-4ce1d3b5bb42/storage_v2/_src_/schema/sys.zb4BAA.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Reset_at_2_28_2023_6_07_PM__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Reset_at_2_28_2023_6_07_PM__Changes_.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2023_2_26_13_41__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2023_2_26_13_41__Changes_.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2_28_2023_8_20_PM__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2_28_2023_8_20_PM__Changes_.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2_28_2023_8_20_PM__Changes_1.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2_28_2023_8_20_PM__Changes_1.xml" afterDir="false" />
+    <list default="true" id="0a06f4f4-a254-403f-8cce-253e9c414866" name="Changes" comment="addpost exception and phone">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/controller/PostController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/controller/PostController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/controller/S3Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/controller/S3Controller.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/service/S3Service.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/service/S3Service.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/controller/CheckoutController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/controller/CheckoutController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/entity/Post.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/entity/Post.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/exception/CheckoutException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/exception/CheckoutException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/service/CartService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/secondhandmarketwebapp/service/CartService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -333,7 +322,7 @@
       <workItem from="1677653985050" duration="11338000" />
       <workItem from="1677711013249" duration="6911000" />
       <workItem from="1677740305644" duration="22308000" />
-      <workItem from="1677798527155" duration="4870000" />
+      <workItem from="1677798527155" duration="7216000" />
     </task>
     <task id="LOCAL-00001" summary="dao and most entity finish">
       <created>1676598500478</created>
@@ -545,7 +534,14 @@
       <option name="project" value="LOCAL" />
       <updated>1677767113501</updated>
     </task>
-    <option name="localTasksCounter" value="31" />
+    <task id="LOCAL-00031" summary="addpost exception and phone">
+      <created>1677803690756</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1677803690756</updated>
+    </task>
+    <option name="localTasksCounter" value="32" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -595,7 +591,6 @@
     <ignored-roots>
       <path value="$USER_HOME$" />
     </ignored-roots>
-    <MESSAGE value="dao and most entity finish" />
     <MESSAGE value="merge dao and entity" />
     <MESSAGE value="Sample of service and controller. Update dao" />
     <MESSAGE value="CheckoutController, orderitem dao controller service" />
@@ -620,6 +615,7 @@
     <MESSAGE value="new version of getPost that return image url from S3" />
     <MESSAGE value="added username duplication check; created ReviewSellerRequest, revised reviewSellerService and reviewDao" />
     <MESSAGE value="added email duplication check" />
-    <option name="LAST_COMMIT_MESSAGE" value="added email duplication check" />
+    <MESSAGE value="addpost exception and phone" />
+    <option name="LAST_COMMIT_MESSAGE" value="addpost exception and phone" />
   </component>
 </project>

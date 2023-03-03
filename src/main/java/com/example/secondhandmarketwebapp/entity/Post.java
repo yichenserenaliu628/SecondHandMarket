@@ -8,6 +8,8 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -55,12 +57,14 @@ public class Post implements Serializable {
 	@JsonIgnore
 	private User user;
 
-	/*@OneToMany(mappedBy ="post", cascade = CascadeType.ALL)
-	private List<OrderItem> orderItem;
-	@OneToOne(cascade = CascadeType.ALL , fetch = FetchType.LAZY)
+	@OneToMany(mappedBy ="post", cascade = CascadeType.ALL)
+	@JsonIgnore
+	private Collection<OrderItem> orderItem;
+
+
+	/*@OneToOne(cascade = CascadeType.ALL , fetch = FetchType.LAZY)
 	@JoinColumn(unique = true)
 	private ProductImage image;*/
 
 	private String keyName;
-
 }
