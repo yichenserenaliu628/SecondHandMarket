@@ -37,7 +37,8 @@ public class Post implements Serializable {
 	@NotBlank
 	@Min(0)
 	private double price;
-	//private String imageUrl;
+
+	private String imageUrl;
 	@NotBlank
 	@Min(1)
 	private int quantity;

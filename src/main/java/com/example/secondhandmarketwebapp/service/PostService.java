@@ -36,41 +36,17 @@ public class PostService {
     public List<User> getUsers() {
         return postDao.getUsers();
     }
-    public List<PostResponse> getAllPostUnderOneUser(int userId) {
-        return postDao.getAllPostUnderOneUser(userId);
-    }
-    public List<Post> getAllPost() { return postDao.getPosts(); }
-    @Cacheable(value = CacheConfig.POSTS_CACHE)
-    public List<PostResponse> getAllPostResponse() { return postDao.getPostResponses(); }
+
+
+    //@Cacheable(value = CacheConfig.POSTS_CACHE)
+    public List<Post> getAllPostResponse() { return postDao.getPosts(); }
     public Post getPost (int postId) {
         return postDao.getPost(postId);
     }
-    public PostResponse getPostByPostId (int postId) {
-        return postDao.getPostByPostId(postId);
+    public Post getPostByPostId (int postId) {
+        return postDao.getPostById(postId);
     }
-    public ResponseEntity<String> addPost(String userEmail, Post post) throws InvalidPostException {
-        if (!isValidZipCode(String.valueOf(post.getZipcode()))) {
-            throw new InvalidPostException("Invalid zipcode");
-        }
-        if (post.getDescription() == null || post.getDescription().isEmpty()) {
-            throw new InvalidPostException("Description is required");
-        }
-        if (post.getPrice() < 0) {
-            throw new InvalidPostException("Price must be greater than or equal to zero");
-        }
-        if (post.getQuantity() <= 0) {
-            throw new InvalidPostException("Quantity must be greater than zero");
-        }
-        if (post.getTitle() == null || post.getTitle().isEmpty()) {
-            throw new InvalidPostException("Title is required");
-        }
-        if (post.getCategory() == null || post.getCategory().isEmpty()) {
-            throw new InvalidPostException("Category is required");
-        }
-        int userId = userDao.getUserIdByEmail(userEmail);
-        postDao.addPost(userId, post);
-        return ResponseEntity.ok("Post added successfully.");
-    }
+
     public List<PostResponse> listAllProductsNearby(String zipcode, int distance) {
         return postDao.listAllProductsNearby(zipcode, distance);
     }
@@ -131,28 +107,28 @@ public class PostService {
     }
 
     @Transactional
-    public ResponseEntity<String> createPost(String userEmail, AddProductRequest addProductRequest) throws InvalidPostException {
-        if (!isValidZipCode((addProductRequest.getZipcode()))) {
+    public ResponseEntity<String> createPost(String userEmail, Post post) throws InvalidPostException {
+        if (!isValidZipCode((post.getZipcode()))) {
             throw new InvalidPostException("Invalid zipcode");
         }
-        if (addProductRequest.getDescription() == null || addProductRequest.getDescription().isEmpty()) {
+        if (post.getDescription() == null || post.getDescription().isEmpty()) {
             throw new InvalidPostException("Description is required");
         }
-        if (addProductRequest.getPrice() < 0) {
+        if (post.getPrice() < 0) {
             throw new InvalidPostException("Price must be greater than or equal to zero");
         }
-        if (addProductRequest.getQuantity() <= 0) {
+        if (post.getQuantity() <= 0) {
             throw new InvalidPostException("Quantity must be greater than zero");
         }
-        if (addProductRequest.getTitle() == null || addProductRequest.getTitle().isEmpty()) {
+        if (post.getTitle() == null || post.getTitle().isEmpty()) {
             throw new InvalidPostException("Title is required");
         }
-        if (addProductRequest.getCategory() == null || addProductRequest.getCategory().isEmpty()) {
+        if (post.getCategory() == null || post.getCategory().isEmpty()) {
             throw new InvalidPostException("Category is required");
         }
 
         int userId = userDao.getUserIdByEmail(userEmail);
-        postDao.createPost(userId, addProductRequest);
+        postDao.createPost(userId, post);
         return ResponseEntity.ok("Post added successfully.");
     }
 

@@ -88,7 +88,7 @@ public class PostDao {
         }
         return null;
     }
-    public PostResponse getPostByPostId(int postId) {
+/*    public PostResponse getPostByPostId(int postId) {
         try (Session session = sessionFactory.openSession()) {
             Post post = session.get(Post.class, postId);
             if (post != null) return generateOnePostResponse(post);
@@ -96,7 +96,7 @@ public class PostDao {
             ex.printStackTrace();
         }
         return null;
-    }
+    }*/
 
     public void addPost(int userId, Post post) {
         try (Session session = sessionFactory.openSession()) {
@@ -323,26 +323,16 @@ public class PostDao {
         return listOfPostResponsesBySellerRating;
     }
 
-    public void createPost(int userId, AddProductRequest addProductRequest) {
+    public void createPost(int userId, Post post) {
         try (Session session = sessionFactory.openSession()) {
             Transaction tx = session.beginTransaction();
             User user = session.get(User.class, userId);
             if (user != null) {
-
                 user.getPostList().size();
-                Post newPost = Post.builder()
-                        .zipcode(addProductRequest.getZipcode())
-                        .description(addProductRequest.getDescription())
-                        .price(addProductRequest.getPrice())
-                        .quantity(addProductRequest.getQuantity())
-                        .title(addProductRequest.getTitle())
-                        .isSold(false)
-                        .user(user)
-                        .category(addProductRequest.getCategory())
-                        .keyName(addProductRequest.getKeyName()).build();
-
-                user.getPostList().add(newPost);
-                session.save(newPost);
+                post.setImageUrl(generateImageUrl(post.getKeyName()));
+                post.setSold(false);
+                user.getPostList().add(post);
+                session.save(post);
                 tx.commit();
             }
         } catch (Exception ex) {
@@ -350,19 +340,19 @@ public class PostDao {
         }
     }
 
-    public String generateImageUrl(Post post) {
-        return post.getKeyName() != null ? endpointUrl + "/" + bucketName + "/" + post.getKeyName() : null;
+    public String generateImageUrl(String keyname) {
+        return keyname != null ? endpointUrl + "/" + bucketName + "/" + keyname : null;
     }
 
     public List<PostResponse> generatePostResponses (List<Post> posts) {
         List<PostResponse> results = new ArrayList<>();
         for (Post post : posts) {
-            results.add(generateOnePostResponse(post));
+            //results.add(generateOnePostResponse(post));
         }
         return results;
     }
 
-    public PostResponse generateOnePostResponse (Post post) {
+  /*  public PostResponse generateOnePostResponse (Post post) {
         double rating = findAverageRating(post);
         String imageUrl = generateImageUrl(post);
         PostResponse response = PostResponse.builder()
@@ -379,6 +369,6 @@ public class PostDao {
                 .imageUrl(imageUrl)
                 .build();
         return response;
-    }
+    }*/
 
 }

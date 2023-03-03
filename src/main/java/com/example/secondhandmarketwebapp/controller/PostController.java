@@ -1,6 +1,7 @@
 package com.example.secondhandmarketwebapp.controller;
 
 import com.example.secondhandmarketwebapp.config.CacheConfig;
+import com.example.secondhandmarketwebapp.dao.PostDao;
 import com.example.secondhandmarketwebapp.entity.Post;
 import com.example.secondhandmarketwebapp.entity.User;
 import com.example.secondhandmarketwebapp.exception.ImageFormatException;
@@ -45,9 +46,9 @@ public class PostController {
     @RequestMapping(value = "/posts", method = RequestMethod.GET)
     @Cacheable(value = CacheConfig.POSTS_CACHE)
     @ResponseBody
-    public ResponseEntity<List<PostResponse>> getAllPost() {
+    public ResponseEntity<List<Post>> getAllPost() {
         try {
-            List<PostResponse> allPosts = postService.getAllPostResponse();
+            List<Post> allPosts = postService.getAllPostResponse();
             if (allPosts.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
@@ -59,24 +60,23 @@ public class PostController {
 
     @RequestMapping(value = "/user/{email}/post", method = RequestMethod.GET)
     @ResponseBody
-    public ResponseEntity<List<PostResponse>> getPostsUnderSpecificUser(@PathVariable(value = "email") String email) {
+    public ResponseEntity<User> getPostsUnderSpecificUser(@PathVariable(value = "email") String email) {
         try {
             User user = userService.getUserByEmail(email);
-            List<PostResponse> allPostsUnderCurUser = postService.getAllPostUnderOneUser(user.getId());
-            if (allPostsUnderCurUser.isEmpty()) {
+            if (user == null) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
-            return new ResponseEntity<>(allPostsUnderCurUser, HttpStatus.OK);
+            return new ResponseEntity<>(user, HttpStatus.OK);
         } catch (RuntimeException e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    @RequestMapping(value = "/user/post/{post_id}", method = RequestMethod.GET)
+   /* @RequestMapping(value = "/user/post/{post_id}", method = RequestMethod.GET)
     @ResponseBody
-    public ResponseEntity<PostResponse> getPostsByPostId(@PathVariable(value = "post_id") int post_id) {
+    public ResponseEntity<Post> getPostsByPostId(@PathVariable(value = "post_id") int post_id) {
         try {
-            PostResponse response = postService.getPostByPostId(post_id);
+            Post response = postService.getPostByPostId(post_id);
             if (response == null) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
@@ -84,13 +84,13 @@ public class PostController {
         } catch (RuntimeException e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-    }
+    }*/
 
-    @RequestMapping(value = "/user/allposts", method = RequestMethod.GET)
+/*    @RequestMapping(value = "/user/allposts", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<List<PostResponse>> getAllPostsUnderCurrentUser(@AuthenticationPrincipal UserDetails userDetails) {
         try {
-            User user = userService.getUserByEmail(userDetails.getUsername());
+            User user = userService.getUserByUserName(userDetails.getUsername());
             List<PostResponse> allPostsUnderCurUser = postService.getAllPostUnderOneUser(user.getId());
             if (allPostsUnderCurUser.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -99,13 +99,21 @@ public class PostController {
         } catch (RuntimeException e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-    }
+    }*/
 
-    @RequestMapping(value = "/addPostOld", method = RequestMethod.POST)
+/*    @GetMapping("/averageRating")
     @ResponseBody
-    public ResponseEntity<String> addPost(@AuthenticationPrincipal UserDetails userDetails, @RequestBody Post post) {
-        return postService.addPost(userDetails.getUsername(), post);
-    }
+    public ResponseEntity<Double> getRating(@PathVariable(value = "user") User user) {
+        try {
+            User user = userService.getUserByEmail(email);
+            if (user == null) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+            return new ResponseEntity<>(user, HttpStatus.OK);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }*/
 
     // new version of addPost method that enables uploading an image to S3
     @PostMapping("/addPost")
@@ -118,19 +126,19 @@ public class PostController {
                                            @RequestParam("title") String title,
                                            @RequestParam("category") String category) {
         try {
+            //todo why we need addProductRequest
             // create add post request
-            AddProductRequest addProductRequest = new AddProductRequest();
-            addProductRequest.setTitle(title);
-            addProductRequest.setZipcode(zipcode);
-            addProductRequest.setDescription(description);
-            addProductRequest.setPrice(price);
-            addProductRequest.setQuantity(quantity);
-            addProductRequest.setCategory(category);
+            Post post = new Post();
+            post.setTitle(title);
+            post.setZipcode(zipcode);
+            post.setDescription(description);
+            post.setPrice(price);
+            post.setQuantity(quantity);
+            post.setCategory(category);
             // Upload image to S3
             String keyName = amazonClient.uploadFile(file);
-            addProductRequest.setKeyName(keyName);
-
-            postService.createPost(userDetails.getUsername(), addProductRequest);
+            post.setKeyName(keyName);
+            postService.createPost(userDetails.getUsername(), post);
             return ResponseEntity.ok(new MessageResponse("Product Added successfully!"));
         } catch (InvalidPostException e) {
             logger.error("Failed to add new product " + e);
@@ -148,8 +156,8 @@ public class PostController {
 
     @DeleteMapping("/deletePost/{id}")
     @ResponseBody
-    public void deletePostById(@AuthenticationPrincipal UserDetails userDetails, @PathVariable int id) {
-        System.out.println(userDetails.getUsername());
+    public ResponseEntity<?> deletePostById(@AuthenticationPrincipal UserDetails userDetails, @PathVariable int id) {
         postService.deletePost(userDetails.getUsername(), id);
+        return ResponseEntity.ok(new MessageResponse("Product delete successfully!"));
     }
 }

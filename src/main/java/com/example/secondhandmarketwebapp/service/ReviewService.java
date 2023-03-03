@@ -6,6 +6,7 @@ import com.example.secondhandmarketwebapp.entity.User;
 import com.example.secondhandmarketwebapp.payload.request.ReviewSellerRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -16,11 +17,13 @@ public class ReviewService {
 
     @Autowired
     private UserService userService;
-    public void addReview(ReviewSellerRequest reviewSellerRequest){
-        String sellerName = reviewSellerRequest.getSellerUserName();
-        User seller = userService.getUserByUserName(sellerName);
-        reviewDao.addReview(seller, reviewSellerRequest);
+    public void addReview(String sellerUserName, double rating, String comment){
+
+        User seller = userService.getUserByUserName(sellerUserName);
+        reviewDao.addReview(seller, rating, comment);
     }
+
+
 
 
 }

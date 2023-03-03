@@ -32,16 +32,15 @@ public class S3Service {
     private String bucketName = "serenaliuawsbucket";
 
     //private String accessKey = "AKIAVEQKSQRMHK7YYM5G";
-    private String accessKey = <accesskey>;
 
     //private String secretKey = <secretkey>;
-    private String secretKey = <secretkey>;
 
-    @PostConstruct
+
+/*    @PostConstruct
     private void initializeAmazon() {
         AWSCredentials credentials = new BasicAWSCredentials(this.accessKey, this.secretKey);
         this.s3client = new AmazonS3Client(credentials);
-    }
+    }*/
 
     public String uploadFile(MultipartFile multipartFile) throws ImageFormatException{
 

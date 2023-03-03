@@ -23,11 +23,7 @@ public class WriteReviewController {
                                          @RequestParam("comment") String comment){
         try {
             // create review request
-            ReviewSellerRequest reviewSellerRequest = new ReviewSellerRequest();
-            reviewSellerRequest.setSellerUserName(sellerUserName);
-            reviewSellerRequest.setRating(rating);
-            reviewSellerRequest.setComment(comment);
-            reviewService.addReview(reviewSellerRequest);
+            reviewService.addReview(sellerUserName, rating, comment);
             return ResponseEntity.ok(new MessageResponse("Seller review added successfully!"));
         } catch (RuntimeException e) {
             logger.error("Failed to review seller " + e);

@@ -16,20 +16,37 @@ public class ReviewDao {
 
     @Autowired
     private SessionFactory sessionFactory;
-    public void addReview(User seller, ReviewSellerRequest reviewSellerRequest) {
+    public void addReview(User seller,  double rating, String comment) {
         try (Session session = sessionFactory.openSession()) {
             Transaction tx = session.beginTransaction();
-
-            if (reviewSellerRequest != null) {
-                Review review = new Review();
-                review.setUser(seller);
-                review.setRating(reviewSellerRequest.getRating());
-                review.setComment(reviewSellerRequest.getComment());
-                session.save(review);
-                tx.commit();
-            }
+            Review review = new Review();
+            review.setUser(seller);
+            review.setRating(rating);
+            review.setComment(comment);
+            session.save(review);
+            updateRating(seller);
+            tx.commit();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
+
+    private void updateRating(User seller) {
+        try (Session session = sessionFactory.openSession()) {
+            Transaction tx = session.beginTransaction();
+            List<Review> lists = seller.getReviewList();
+            double rating = 0;
+            for(Review list : lists){
+                rating += list.getRating();
+            }
+            seller.setAverageRating(rating/lists.size());
+            session.save(seller);
+            tx.commit();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+    }
+
+
 }
