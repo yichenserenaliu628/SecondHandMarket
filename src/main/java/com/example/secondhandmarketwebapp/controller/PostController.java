@@ -104,7 +104,7 @@ public class PostController {
         return postService.addPost(userDetails.getUsername(), post);
     }
 
-    // new version of addPost method that enables uploading an image S3
+    // new version of addPost method that enables uploading an image to S3
     @PostMapping("/addPost")
     public ResponseEntity<?> createPostNew(@Valid @AuthenticationPrincipal UserDetails userDetails,
                                            @RequestParam("file") MultipartFile file,
@@ -131,9 +131,9 @@ public class PostController {
             return ResponseEntity.ok(new MessageResponse("Product Added successfully!"));
         } catch (InvalidPostException e) {
             logger.error("Failed to add new product " + e);
-            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(e.getErrorMessage());
         } catch (ImageFormatException e) {
-            logger.error("Failed to add new product " + e);
+            logger.error("Image format invalid " + e);
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(e.getErrorMessage());
         }
     }
@@ -146,6 +146,7 @@ public class PostController {
     @DeleteMapping("/deletePost/{id}")
     @ResponseBody
     public void deletePostById(@AuthenticationPrincipal UserDetails userDetails, @PathVariable int id) {
+        System.out.println(userDetails.getUsername());
         postService.deletePost(userDetails.getUsername(), id);
     }
 }

@@ -54,7 +54,7 @@ public class Post implements Serializable {
 	@JsonIgnore
 	private User user;
 
-	@OneToMany(mappedBy ="post", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy ="post", cascade = CascadeType.ALL, orphanRemoval = true)
 	@JsonIgnore
 	private Collection<OrderItem> orderItem;
 

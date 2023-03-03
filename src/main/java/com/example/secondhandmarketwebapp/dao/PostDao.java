@@ -1,9 +1,6 @@
 package com.example.secondhandmarketwebapp.dao;
 
-import com.example.secondhandmarketwebapp.entity.Post;
-import com.example.secondhandmarketwebapp.entity.ProductImage;
-import com.example.secondhandmarketwebapp.entity.Review;
-import com.example.secondhandmarketwebapp.entity.User;
+import com.example.secondhandmarketwebapp.entity.*;
 import com.example.secondhandmarketwebapp.exception.CheckoutException;
 import com.example.secondhandmarketwebapp.payload.request.AddProductRequest;
 import com.example.secondhandmarketwebapp.payload.response.PostResponse;
@@ -24,10 +21,7 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import javax.json.JsonReader;
 
 @Repository
@@ -36,6 +30,9 @@ public class PostDao {
     private SessionFactory sessionFactory;
     @Autowired
     private S3Service amazonClient;
+
+    @Autowired
+    private CartDao cartDao;
     private String endpointUrl = "https://s3.us-west-1.amazonaws.com";
     private String bucketName = "serenaliuawsbucket";
     private String accessKey = "AKIARHORSLJOXTQCKYRM";
@@ -490,8 +487,11 @@ public class PostDao {
             Transaction tx = session.beginTransaction();
             Post post = session.get(Post.class, postId);
             if (post != null && post.getUser().getId() == userId) {
-                String keyName = post.getKeyName();
-                amazonClient.deleteFile(keyName);
+                for (OrderItem orderItem : post.getOrderItem()) {
+                    cartDao.removeCartItem(orderItem.getId());
+                    OrderItem orderItemOriginalEntry = session.get(OrderItem.class, orderItem.getId());
+                    session.delete(orderItemOriginalEntry);
+                }
                 session.delete(post);
                 tx.commit();
             }
