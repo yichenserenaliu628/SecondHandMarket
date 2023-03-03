@@ -12,7 +12,7 @@ import java.util.List;
 public class AddProductRequest {
 
     @NotBlank
-    private int zipcode;
+    private String zipcode;
 
     @NotBlank
     private String description;

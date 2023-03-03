@@ -3,10 +3,7 @@ package com.example.secondhandmarketwebapp.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
-import javax.validation.constraints.Digits;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -30,8 +27,8 @@ public class Post implements Serializable {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
 	@NotBlank
-	@Digits(integer = 5, fraction = 0)
-	private int zipcode;
+	@Pattern(regexp = "^[0-9]{5}$")
+	private String zipcode;
 	@NotBlank
 	@Size(max = 200, message
 			= "Description should not be longer than 200 characters")

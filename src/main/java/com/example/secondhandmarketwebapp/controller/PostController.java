@@ -108,7 +108,7 @@ public class PostController {
     @PostMapping("/addPost")
     public ResponseEntity<?> createPostNew(@Valid @AuthenticationPrincipal UserDetails userDetails,
                                            @RequestParam("file") MultipartFile file,
-                                           @RequestParam("zipcode") int zipcode,
+                                           @RequestParam("zipcode") String zipcode,
                                            @RequestParam("description") String description,
                                            @RequestParam("price") Double price,
                                            @RequestParam("quantity") int quantity,
@@ -129,7 +129,7 @@ public class PostController {
 
             postService.createPost(userDetails.getUsername(), addProductRequest);
             return ResponseEntity.ok(new MessageResponse("Product Added successfully!"));
-        } catch (RuntimeException e) {
+        } catch (InvalidPostException e) {
             logger.error("Failed to add new product " + e);
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(e.getMessage());
         } catch (ImageFormatException e) {

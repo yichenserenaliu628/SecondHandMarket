@@ -113,6 +113,9 @@ public class PostService {
 
     public boolean isValidZipCode(String zipCode) {
         try {
+            if(zipCode.length() != 5) {
+                return false;
+            }
             String url = "https://www.mapquestapi.com/geocoding/v1/address?key=2EsrDBJE7aeBUgday06d7Grj84ccUvfY&postalCode=" + zipCode;
             HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
             connection.setRequestMethod("GET");
@@ -134,7 +137,7 @@ public class PostService {
 
     @Transactional
     public ResponseEntity<String> createPost(String userEmail, AddProductRequest addProductRequest) throws InvalidPostException {
-        if (!isValidZipCode(String.valueOf(addProductRequest.getZipcode()))) {
+        if (!isValidZipCode((addProductRequest.getZipcode()))) {
             throw new InvalidPostException("Invalid zipcode");
         }
         if (addProductRequest.getDescription() == null || addProductRequest.getDescription().isEmpty()) {
