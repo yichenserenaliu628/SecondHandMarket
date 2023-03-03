@@ -25,6 +25,7 @@ public class ReviewDao {
                 review.setUser(seller);
                 review.setRating(reviewSellerRequest.getRating());
                 review.setComment(reviewSellerRequest.getComment());
+                session.save(review);
                 tx.commit();
             }
         } catch (Exception ex) {
