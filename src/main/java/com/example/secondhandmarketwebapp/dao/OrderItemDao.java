@@ -96,5 +96,19 @@ public class OrderItemDao {
             ex.printStackTrace();
         }
     }
-
+    public void deleteOrderItem(int orderItemId) {
+        try (Session session = sessionFactory.openSession()) {
+            Transaction tx = session.beginTransaction();
+            OrderItem orderItem = session.get(OrderItem.class, orderItemId);
+            Cart cart = orderItem.getCart();
+            if (orderItem != null) {
+                cart.setTotalPrice(cart.getTotalPrice() - orderItem.getQuantity() * orderItem.getPrice());
+                cart.getOrderItemList().remove(orderItem); // remove the order item from the cart
+                session.delete(orderItem);
+                tx.commit();
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
 }

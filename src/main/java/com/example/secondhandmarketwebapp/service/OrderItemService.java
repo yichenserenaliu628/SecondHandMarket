@@ -38,7 +38,7 @@ public class OrderItemService {
         User user = userService.getUserByEmail(username);
         for (OrderItem item : user.getCart().getOrderItemList()) {
             if (item.getId() == orderItemId) {
-                orderItemDao.updateOrderItem(orderItemId);
+                orderItemDao.deleteOrderItem(orderItemId);
                 return;
             }
         }
