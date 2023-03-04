@@ -1,4 +1,4 @@
-package com.example.secondhandmarketwebapp;
+package com.example.secondhandmarketwebapp.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

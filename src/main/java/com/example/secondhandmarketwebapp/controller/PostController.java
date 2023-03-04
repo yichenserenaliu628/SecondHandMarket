@@ -1,5 +1,6 @@
 package com.example.secondhandmarketwebapp.controller;
 
+import com.example.secondhandmarketwebapp.config.CacheConfig;
 import com.example.secondhandmarketwebapp.entity.Post;
 import com.example.secondhandmarketwebapp.entity.User;
 import com.example.secondhandmarketwebapp.exception.ImageFormatException;
@@ -11,6 +12,7 @@ import com.example.secondhandmarketwebapp.service.PostService;
 import com.example.secondhandmarketwebapp.service.S3Service;
 import com.example.secondhandmarketwebapp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -41,6 +43,7 @@ public class PostController {
     }
 
     @RequestMapping(value = "/posts", method = RequestMethod.GET)
+    @Cacheable(value = CacheConfig.POSTS_CACHE)
     @ResponseBody
     public ResponseEntity<List<PostResponse>> getAllPost() {
         try {

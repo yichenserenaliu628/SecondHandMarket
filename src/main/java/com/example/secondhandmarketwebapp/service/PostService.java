@@ -1,6 +1,7 @@
 package com.example.secondhandmarketwebapp.service;
 
 import com.amazonaws.services.s3.AmazonS3;
+import com.example.secondhandmarketwebapp.config.CacheConfig;
 import com.example.secondhandmarketwebapp.dao.PostDao;
 import com.example.secondhandmarketwebapp.dao.UserDao;
 import com.example.secondhandmarketwebapp.entity.Post;
@@ -10,6 +11,7 @@ import com.example.secondhandmarketwebapp.exception.InvalidPostException;
 import com.example.secondhandmarketwebapp.payload.request.AddProductRequest;
 import com.example.secondhandmarketwebapp.payload.response.PostResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,6 +39,8 @@ public class PostService {
     public List<PostResponse> getAllPostUnderOneUser(int userId) {
         return postDao.getAllPostUnderOneUser(userId);
     }
+
+    @Cacheable(value = CacheConfig.POSTS_CACHE)
     public List<Post> getAllPost() { return postDao.getPosts(); }
     public List<PostResponse> getAllPostResponse() { return postDao.getPostResponses(); }
     public Post getPost (int postId) {
