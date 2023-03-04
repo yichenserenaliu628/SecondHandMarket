@@ -4,17 +4,15 @@ import com.example.secondhandmarketwebapp.entity.*;
 import com.example.secondhandmarketwebapp.exception.CheckoutException;
 import com.example.secondhandmarketwebapp.payload.request.AddProductRequest;
 import com.example.secondhandmarketwebapp.payload.response.PostResponse;
-import com.example.secondhandmarketwebapp.service.S3Service;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 
 import javax.json.Json;
 import javax.json.JsonObject;
-import javax.persistence.Query;
 import javax.persistence.criteria.*;
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,9 +26,6 @@ import javax.json.JsonReader;
 public class PostDao {
     @Autowired
     private SessionFactory sessionFactory;
-    @Autowired
-    private S3Service amazonClient;
-
     @Autowired
     private CartDao cartDao;
     private String endpointUrl = "https://s3.us-west-1.amazonaws.com";
@@ -63,34 +58,9 @@ public class PostDao {
 
     public List<PostResponse> getPostResponses() {
         List<PostResponse> listOfPostResponses = new ArrayList<>();
-        try (Session session = sessionFactory.openSession()) {
-            CriteriaBuilder builder = session.getCriteriaBuilder();
-            CriteriaQuery<Post> criteria = builder.createQuery(Post.class);
-            criteria.from(Post.class);
-            List<Post> posts = session.createQuery(criteria).getResultList();
-            for(Post post : posts) {
-                double rating = findAverageRating(post);
-                // download post image from s3
-                String keyName = post.getKeyName();
-                String imageUrl = "";
-                if (keyName != null) {
-                    imageUrl = endpointUrl + "/" + bucketName + "/" + keyName;
-                }
-                PostResponse response = PostResponse.builder()
-                        .id(post.getId())
-                        .title(post.getTitle())
-                        .price(post.getPrice())
-                        .description(post.getDescription())
-                        .zipcode(post.getZipcode())
-                        .quantity(post.getQuantity())
-                        .category(post.getCategory())
-                        .isSold(post.isSold())
-                        .sellerEmail(post.getUser().getEmail())
-                        .sellerRating(rating)
-                        .imageUrl(imageUrl)
-                        .build();
-                listOfPostResponses.add(response);
-            }
+        try  {
+            List<Post> posts = getPosts();
+            listOfPostResponses = generatePostResponses(posts);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -98,35 +68,12 @@ public class PostDao {
     }
     public List<PostResponse> getAllPostUnderOneUser(int userId) {
         List<PostResponse> listOfPostsUnderOneUser = new ArrayList<>();
-
         try (Session session = sessionFactory.openSession()) {
             User user = session.get(User.class, userId);
             if (user != null) {
                 user.getPostList().size();
-                for(Post post : user.getPostList()) {
-                    double rating = findAverageRating(post);
-                    // download post image from s3
-                    String keyName = post.getKeyName();
-                    String imageUrl = "";
-                    if (keyName != null) {
-                        imageUrl = endpointUrl + "/" + bucketName + "/" + keyName;
-                    }
-                    // generate post repsonse
-                    PostResponse response = PostResponse.builder()
-                            .id(post.getId())
-                            .title(post.getTitle())
-                            .price(post.getPrice())
-                            .description(post.getDescription())
-                            .zipcode(post.getZipcode())
-                            .quantity(post.getQuantity())
-                            .category(post.getCategory())
-                            .isSold(post.isSold())
-                            .sellerEmail(post.getUser().getEmail())
-                            .sellerRating(rating)
-                            .imageUrl(imageUrl)
-                            .build();
-                    listOfPostsUnderOneUser.add(response);
-                }
+                List<Post> postsUnderOneUser = user.getPostList();
+                listOfPostsUnderOneUser = generatePostResponses(postsUnderOneUser);
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -144,30 +91,7 @@ public class PostDao {
     public PostResponse getPostByPostId(int postId) {
         try (Session session = sessionFactory.openSession()) {
             Post post = session.get(Post.class, postId);
-            if(post == null) {
-                return null;
-            }
-            double rating = findAverageRating(post);
-            // download post image from s3
-            String keyName = post.getKeyName();
-            String imageUrl = "";
-            if (keyName != null) {
-                imageUrl = endpointUrl + "/" + bucketName + "/" + keyName;
-            }
-            PostResponse response = PostResponse.builder()
-                    .id(post.getId())
-                    .title(post.getTitle())
-                    .price(post.getPrice())
-                    .description(post.getDescription())
-                    .zipcode(post.getZipcode())
-                    .quantity(post.getQuantity())
-                    .category(post.getCategory())
-                    .isSold(post.isSold())
-                    .sellerEmail(post.getUser().getEmail())
-                    .sellerRating(rating)
-                    .imageUrl(imageUrl)
-                    .build();
-            return response;
+            if (post != null) return generateOnePostResponse(post);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -189,31 +113,12 @@ public class PostDao {
             ex.printStackTrace();
         }
     }
-    public List<PostResponse> listAllProductsNearby(List<Post> allPost, String zipcode, int distance) {
+    public List<PostResponse> listAllProductsNearby(String zipcode, int distance) {
         List<PostResponse> listOfPostsNearby = new ArrayList<>();
-        for (Post post : allPost) {
+        List<PostResponse> listOfAllPostResponses = getPostResponses();
+        for (PostResponse post : listOfAllPostResponses) {
             if(calculateDistance(post.getZipcode(), zipcode) <= distance) {
-                double rating = findAverageRating(post);
-                // download post image from s3
-                String keyName = post.getKeyName();
-                String imageUrl = "";
-                if (keyName != null) {
-                    imageUrl = endpointUrl + "/" + bucketName + "/" + keyName;
-                }
-                PostResponse response = PostResponse.builder()
-                        .id(post.getId())
-                        .title(post.getTitle())
-                        .price(post.getPrice())
-                        .description(post.getDescription())
-                        .zipcode(post.getZipcode())
-                        .quantity(post.getQuantity())
-                        .category(post.getCategory())
-                        .isSold(post.isSold())
-                        .sellerEmail(post.getUser().getEmail())
-                        .sellerRating(rating)
-                        .imageUrl(imageUrl)
-                        .build();
-                listOfPostsNearby.add(response);
+                listOfPostsNearby.add(post);
             }
         }
         return listOfPostsNearby;
@@ -245,7 +150,6 @@ public class PostDao {
         query.setParameter("user_id", user_id);
         List<Review> userReviewList = query.getResultList();
         if(userReviewList == null || userReviewList.size() == 0) {
-            //this user does not have any ratings yet!
             return 0;
         }
         double averageRating = 0;
@@ -257,230 +161,90 @@ public class PostDao {
         return averageRating / userReviewList.size();
     }
 
-    public List<PostResponse> getAllProductsByKeyword(List<Post> allPost, String keyword) {
-        List<PostResponse> listOfPostResponsesContainingKeyword = new ArrayList<>();
-        List<Post> listOfPostsContainingKeyword = findByCategoryContaining(allPost, keyword);
-
-        for (Post post : listOfPostsContainingKeyword) {
-            double rating = findAverageRating(post);
-            // download post image from s3
-            String keyName = post.getKeyName();
-            String imageUrl = "";
-            if (keyName != null) {
-                imageUrl = endpointUrl + "/" + bucketName + "/" + keyName;
-            }
-            PostResponse response = PostResponse.builder()
-                    .id(post.getId())
-                    .title(post.getTitle())
-                    .price(post.getPrice())
-                    .description(post.getDescription())
-                    .zipcode(post.getZipcode())
-                    .quantity(post.getQuantity())
-                    .category(post.getCategory())
-                    .isSold(post.isSold())
-                    .sellerEmail(post.getUser().getEmail())
-                    .sellerRating(rating)
-                    .imageUrl(imageUrl)
-                    .build();
-            listOfPostResponsesContainingKeyword.add(response);
-        }
-        return listOfPostResponsesContainingKeyword;
-    }
-
-    public List<Post> findByCategoryContaining(List<Post> allPost, String keyword) {
-        List<Post> listOfPostsCategoryContainingKeyword = new ArrayList<>();
-        for (Post post : allPost) {
-            if (post.getCategory().contains(keyword)) {
-                listOfPostsCategoryContainingKeyword.add(post);
+    public List<PostResponse> searchProductByKeyword(String keyword) {
+        keyword = keyword.toLowerCase();
+        List<PostResponse> matchingPosts = new ArrayList<>();
+        List<PostResponse> listOfAllPostResponses = getPostResponses();
+        for (PostResponse post : listOfAllPostResponses) {
+            if (post.getTitle().toLowerCase().contains(keyword)
+                    || post.getDescription().toLowerCase().contains(keyword)
+                    || post.getCategory().toLowerCase().contains(keyword)) {
+                matchingPosts.add(post);
             }
         }
-        return listOfPostsCategoryContainingKeyword;
+        return matchingPosts;
+
+        /*Session session = sessionFactory.openSession();
+        String hql = "FROM Post p WHERE p.title LIKE :searchKeyword " +
+                "OR p.category LIKE :searchKeyword " +
+                "OR p.description LIKE :searchKeyword";
+        Query query = session.createQuery(hql);
+        query.setParameter("searchKeyword", "%" + keyword + "%");
+        List<Post> results = query.list();
+        return generatePostResponses(results);*/
     }
 
-    public List<PostResponse> sortProductByPriceLowToHigh(List<Post> allPost) {
-        List<PostResponse> sortedProductsByPrice = new ArrayList<>();
-        Collections.sort(allPost, Comparator.comparingDouble(Post::getPrice));
 
-        for (Post post : allPost) {
-            double rating = findAverageRating(post);
-            // download post image from s3
-            String keyName = post.getKeyName();
-            String imageUrl = "";
-            if (keyName != null) {
-                imageUrl = endpointUrl + "/" + bucketName + "/" + keyName;
-            }
-            PostResponse response = PostResponse.builder()
-                    .id(post.getId())
-                    .title(post.getTitle())
-                    .price(post.getPrice())
-                    .description(post.getDescription())
-                    .zipcode(post.getZipcode())
-                    .quantity(post.getQuantity())
-                    .category(post.getCategory())
-                    .isSold(post.isSold())
-                    .sellerEmail(post.getUser().getEmail())
-                    .sellerRating(rating)
-                    .imageUrl(imageUrl)
-                    .build();
-            sortedProductsByPrice.add(response);
-        }
-        return sortedProductsByPrice;
-    }
-
-    public List<PostResponse> sortProductByPriceHighToLow(List<Post> allPost) {
-        List<PostResponse> sortedProductsByPriceHighToLow = new ArrayList<>();
-        Collections.sort(allPost, new Comparator<Post>() {
-            @Override
-            public int compare(Post o1, Post o2) {
-                if (o1.getPrice() == o2.getPrice()) return 0;
-                return o1.getPrice() < o2.getPrice() ? 1 : -1;
-            }
+    public List<PostResponse> sortProductByPriceLowToHigh() {
+        /*List<PostResponse> listOfAllPostResponses = getPostResponses();
+        List<PostResponse> results = new ArrayList<>(listOfAllPostResponses);
+        Collections.sort(results, (o1, o2) -> {
+            if (o1.getPrice() == o2.getPrice()) return 0;
+            return o1.getPrice() < o2.getPrice() ? -1 : 1;
         });
-        for (Post post : allPost) {
-            double rating = findAverageRating(post);
-            // download post image from s3
-            String keyName = post.getKeyName();
-            String imageUrl = "";
-            if (keyName != null) {
-                imageUrl = endpointUrl + "/" + bucketName + "/" + keyName;
-            }
-            PostResponse response = PostResponse.builder()
-                    .id(post.getId())
-                    .title(post.getTitle())
-                    .price(post.getPrice())
-                    .description(post.getDescription())
-                    .zipcode(post.getZipcode())
-                    .quantity(post.getQuantity())
-                    .category(post.getCategory())
-                    .isSold(post.isSold())
-                    .sellerEmail(post.getUser().getEmail())
-                    .sellerRating(rating)
-                    .imageUrl(imageUrl)
-                    .build();
-            sortedProductsByPriceHighToLow.add(response);
-        }
-        return sortedProductsByPriceHighToLow;
+        return results;*/
+        Session session = sessionFactory.openSession();
+        String hql = "FROM Post p ORDER BY p.price ASC";
+        Query query = session.createQuery(hql);
+        List<Post> results = query.list();
+        return generatePostResponses(results);
     }
 
-    public List<PostResponse> filterProductByCategory(List<Post> allPost, String category) {
-        List<PostResponse> listOfFilteredProductByCategory = new ArrayList<>();
-        List<Post> filteredProductByCategory = filterByCategory(allPost, category);
-
-        for (Post post : filteredProductByCategory) {
-            double rating = findAverageRating(post);
-            // download post image from s3
-            String keyName = post.getKeyName();
-            String imageUrl = "";
-            if (keyName != null) {
-                imageUrl = endpointUrl + "/" + bucketName + "/" + keyName;
-            }
-            PostResponse response = PostResponse.builder()
-                    .id(post.getId())
-                    .title(post.getTitle())
-                    .price(post.getPrice())
-                    .description(post.getDescription())
-                    .zipcode(post.getZipcode())
-                    .quantity(post.getQuantity())
-                    .category(post.getCategory())
-                    .isSold(post.isSold())
-                    .sellerEmail(post.getUser().getEmail())
-                    .sellerRating(rating)
-                    .imageUrl(imageUrl)
-                    .build();
-            listOfFilteredProductByCategory.add(response);
-        }
-        return listOfFilteredProductByCategory;
+    public List<PostResponse> sortProductByPriceHighToLow() {
+        /*List<PostResponse> listOfAllPostResponses = getPostResponses();
+        List<PostResponse> results = new ArrayList<>(listOfAllPostResponses);
+        Collections.sort(results, (o1, o2) -> {
+            if (o1.getPrice() == o2.getPrice()) return 0;
+            return o1.getPrice() < o2.getPrice() ? 1 : -1;
+        });
+        return results;*/
+        Session session = sessionFactory.openSession();
+        String hql = "FROM Post p ORDER BY p.price DESC";
+        Query query = session.createQuery(hql);
+        List<Post> results = query.list();
+        return generatePostResponses(results);
     }
 
-    public List<Post> filterByCategory(List<Post> allPost, String category) {
-        List<Post> filteredProductByCategory = new ArrayList<>();
-        for (Post post : allPost) {
-            if (post.getCategory().equals(category)) {
-                filteredProductByCategory.add(post);
-            }
-        }
-        return filteredProductByCategory;
+    public List<PostResponse> filterProductByCategory(String keyword) {
+        Session session = sessionFactory.openSession();
+        String keywordFirstLetterLowerCase = keyword.substring(0, 1).toLowerCase() + keyword.substring(1);
+        String keywordFirstLetterUpperCase = keyword.substring(0, 1).toUpperCase() + keyword.substring(1);
+        String hql = "FROM Post p WHERE p.category IN (:keywords)";
+        Query query = session.createQuery(hql);
+        query.setParameterList("keywords", new String[]{keywordFirstLetterLowerCase, keywordFirstLetterUpperCase});
+        List<Post> results = query.list();
+        return generatePostResponses(results);
     }
 
-    public List<PostResponse> filterProductByMaxPrice(List<Post> allPost, Double max) {
-        List<PostResponse> listOfFilteredProductByMaxPrice = new ArrayList<>();
-        List<Post> filteredProductByMaxPrice = filterByMaxPrice(allPost, max);
 
-        for (Post post : filteredProductByMaxPrice) {
-            double rating = findAverageRating(post);
-            // download post image from s3
-            String keyName = post.getKeyName();
-            String imageUrl = "";
-            if (keyName != null) {
-                imageUrl = endpointUrl + "/" + bucketName + "/" + keyName;
-            }
-            PostResponse response = PostResponse.builder()
-                    .id(post.getId())
-                    .title(post.getTitle())
-                    .price(post.getPrice())
-                    .description(post.getDescription())
-                    .zipcode(post.getZipcode())
-                    .quantity(post.getQuantity())
-                    .category(post.getCategory())
-                    .isSold(post.isSold())
-                    .sellerEmail(post.getUser().getEmail())
-                    .sellerRating(rating)
-                    .imageUrl(imageUrl)
-                    .build();
-            listOfFilteredProductByMaxPrice.add(response);
-        }
-        return listOfFilteredProductByMaxPrice;
+    public List<PostResponse> filterProductByMaxPrice(Double maxPrice) {
+        Session session = sessionFactory.openSession();
+        Query<Post> query = session.createQuery(
+                "FROM Post WHERE price <= :maxPrice", Post.class);
+        query.setParameter("maxPrice", maxPrice);
+        List<Post> posts = query.list();
+        return generatePostResponses(posts);
     }
 
-    public List<Post> filterByMaxPrice(List<Post> allPost, Double max) {
-        List<Post> filteredProductByMaxPrice = new ArrayList<>();
-        for (Post post : allPost) {
-            if (post.getPrice() <= max) {
-                filteredProductByMaxPrice.add(post);
-            }
-        }
-        return filteredProductByMaxPrice;
+    public List<PostResponse> filterProductByPriceRange(Double minPrice, Double maxPrice) {
+        Session session = sessionFactory.openSession();
+        Query<Post> query = session.createQuery(
+                "FROM Post WHERE price BETWEEN :minPrice AND :maxPrice", Post.class);
+        query.setParameter("minPrice", minPrice);
+        query.setParameter("maxPrice", maxPrice);
+        List<Post> posts = query.list();
+        return generatePostResponses(posts);
     }
-    public List<PostResponse> filterProductByPriceRange(List<Post> allPost, Double min, Double max) {
-        List<PostResponse> listOfFilteredProductByPriceRange = new ArrayList<>();
-        List<Post> filteredProductByMaxPrice = filterByPriceRange(allPost, min, max);
-
-        for (Post post : filteredProductByMaxPrice) {
-            double rating = findAverageRating(post);
-            // download post image from s3
-            String keyName = post.getKeyName();
-            String imageUrl = "";
-            if (keyName != null) {
-                imageUrl = endpointUrl + "/" + bucketName + "/" + keyName;
-            }
-            PostResponse response = PostResponse.builder()
-                    .id(post.getId())
-                    .title(post.getTitle())
-                    .price(post.getPrice())
-                    .description(post.getDescription())
-                    .zipcode(post.getZipcode())
-                    .quantity(post.getQuantity())
-                    .category(post.getCategory())
-                    .isSold(post.isSold())
-                    .sellerEmail(post.getUser().getEmail())
-                    .sellerRating(rating)
-                    .imageUrl(imageUrl)
-                    .build();
-            listOfFilteredProductByPriceRange.add(response);
-        }
-        return listOfFilteredProductByPriceRange;
-    }
-
-    public List<Post> filterByPriceRange(List<Post> allPost, Double min, Double max) {
-        List<Post> filteredProductByPriceRange = new ArrayList<>();
-        for (Post post : allPost) {
-            if (post.getPrice() <= max && post.getPrice() >= min) {
-                filteredProductByPriceRange.add(post);
-            }
-        }
-        return filteredProductByPriceRange;
-    }
-
 
     public void deletePost(int userId, int postId) {
         try (Session session = sessionFactory.openSession()) {
@@ -548,32 +312,12 @@ public class PostDao {
         return post;
     }
 
-    public List<PostResponse> filterProductBySellerRating(List<Post> allPost, Double minRating) {
+    public List<PostResponse> filterProductBySellerRating(Double minRating) {
         List<PostResponse> listOfPostResponsesBySellerRating = new ArrayList<>();
-
-        for (Post post : allPost) {
-            double rating = findAverageRating(post);
-            // download post image from s3
-            String keyName = post.getKeyName();
-            String imageUrl = "";
-            if (keyName != null) {
-                imageUrl = endpointUrl + "/" + bucketName + "/" + keyName;
-            }
-            if (rating >= minRating) {
-                PostResponse response = PostResponse.builder()
-                        .id(post.getId())
-                        .title(post.getTitle())
-                        .price(post.getPrice())
-                        .description(post.getDescription())
-                        .zipcode(post.getZipcode())
-                        .quantity(post.getQuantity())
-                        .category(post.getCategory())
-                        .isSold(post.isSold())
-                        .sellerEmail(post.getUser().getEmail())
-                        .sellerRating(rating)
-                        .imageUrl(imageUrl)
-                        .build();
-                listOfPostResponsesBySellerRating.add(response);
+        List<PostResponse> listOfAllPostResponses = getPostResponses();
+        for (PostResponse post : listOfAllPostResponses) {
+            if (post.getSellerRating() >= minRating) {
+                listOfPostResponsesBySellerRating.add(post);
             }
         }
         return listOfPostResponsesBySellerRating;
@@ -605,4 +349,36 @@ public class PostDao {
             ex.printStackTrace();
         }
     }
+
+    public String generateImageUrl(Post post) {
+        return post.getKeyName() != null ? endpointUrl + "/" + bucketName + "/" + post.getKeyName() : null;
+    }
+
+    public List<PostResponse> generatePostResponses (List<Post> posts) {
+        List<PostResponse> results = new ArrayList<>();
+        for (Post post : posts) {
+            results.add(generateOnePostResponse(post));
+        }
+        return results;
+    }
+
+    public PostResponse generateOnePostResponse (Post post) {
+        double rating = findAverageRating(post);
+        String imageUrl = generateImageUrl(post);
+        PostResponse response = PostResponse.builder()
+                .id(post.getId())
+                .title(post.getTitle())
+                .price(post.getPrice())
+                .description(post.getDescription())
+                .zipcode(post.getZipcode())
+                .quantity(post.getQuantity())
+                .category(post.getCategory())
+                .isSold(post.isSold())
+                .sellerEmail(post.getUser().getEmail())
+                .sellerRating(rating)
+                .imageUrl(imageUrl)
+                .build();
+        return response;
+    }
+
 }

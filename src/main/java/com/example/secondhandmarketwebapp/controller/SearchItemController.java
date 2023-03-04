@@ -34,7 +34,7 @@ public class SearchItemController {
     @GetMapping("/products/search/{keyword}")
     public ResponseEntity<List<PostResponse>> searchProductByKeyword(@PathVariable String keyword) {
         try {
-            List<PostResponse> products = postService.getProductByKeyword(keyword);
+            List<PostResponse> products = postService.searchProductByKeyword(keyword);
             if (products.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }

@@ -39,9 +39,8 @@ public class PostService {
     public List<PostResponse> getAllPostUnderOneUser(int userId) {
         return postDao.getAllPostUnderOneUser(userId);
     }
-
-    @Cacheable(value = CacheConfig.POSTS_CACHE)
     public List<Post> getAllPost() { return postDao.getPosts(); }
+    @Cacheable(value = CacheConfig.POSTS_CACHE)
     public List<PostResponse> getAllPostResponse() { return postDao.getPostResponses(); }
     public Post getPost (int postId) {
         return postDao.getPost(postId);
@@ -73,37 +72,30 @@ public class PostService {
         return ResponseEntity.ok("Post added successfully.");
     }
     public List<PostResponse> listAllProductsNearby(String zipcode, int distance) {
-        List<Post> allPost = getAllPost();
-        return postDao.listAllProductsNearby(allPost, zipcode, distance);
+        return postDao.listAllProductsNearby(zipcode, distance);
     }
 
-    public List<PostResponse> getProductByKeyword(String keyword) {
-        List<Post> allPost = getAllPost();
-        return postDao.getAllProductsByKeyword(allPost, keyword);
+    public List<PostResponse> searchProductByKeyword(String keyword) {
+        return postDao.searchProductByKeyword(keyword);
     }
 
     public List<PostResponse> sortProductByPriceLowToHigh() {
-        List<Post> allPost = getAllPost();
-        return postDao.sortProductByPriceLowToHigh(allPost);
+        return postDao.sortProductByPriceLowToHigh();
     }
 
     public List<PostResponse> sortProductByPriceHighToLow() {
-        List<Post> allPost = getAllPost();
-        return postDao.sortProductByPriceHighToLow(allPost);
+        return postDao.sortProductByPriceHighToLow();
     }
 
     public List<PostResponse> filterProductByCategory(String category) {
-        List<Post> allPost = getAllPost();
-        return postDao.filterProductByCategory(allPost, category);
+        return postDao.filterProductByCategory(category);
     }
 
     public List<PostResponse> filterProductByMaxPrice(Double max) {
-        List<Post> allPost = getAllPost();
-        return postDao.filterProductByMaxPrice(allPost, max);
+        return postDao.filterProductByMaxPrice(max);
     }
     public List<PostResponse> filterProductByPriceRange(Double min, Double max) {
-        List<Post> allPost = getAllPost();
-        return postDao.filterProductByPriceRange(allPost, min, max);
+        return postDao.filterProductByPriceRange(min, max);
     }
 
     public void deletePost(String userEmail, int id) {
@@ -135,8 +127,7 @@ public class PostService {
     }
 
     public List<PostResponse> filterProductBySellerRating(Double minRating) {
-        List<Post> allPost = getAllPost();
-        return postDao.filterProductBySellerRating(allPost, minRating);
+        return postDao.filterProductBySellerRating(minRating);
     }
 
     @Transactional
@@ -164,4 +155,5 @@ public class PostService {
         postDao.createPost(userId, addProductRequest);
         return ResponseEntity.ok("Post added successfully.");
     }
+
 }
