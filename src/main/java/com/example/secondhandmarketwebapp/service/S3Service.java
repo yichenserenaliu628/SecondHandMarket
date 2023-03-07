@@ -32,10 +32,10 @@ public class S3Service {
     private String bucketName = "serenaliuawsbucket";
 
     //private String accessKey = "AKIAVEQKSQRMHK7YYM5G";
-    private String accessKey = "AKIARHORSLJOXTQCKYRM";
+    private String accessKey = <accesskey>;
 
-    //private String secretKey = "26f14qsrXrf0/w3vVAeO7FkXQaQXtBMsI0zkaJhd";
-    private String secretKey = "9f7wlLUL04gIyR4tBsRoy6SmkUq22Wx7l4inz3zT";
+    //private String secretKey = <secretkey>;
+    private String secretKey = <secretkey>;
 
     @PostConstruct
     private void initializeAmazon() {
